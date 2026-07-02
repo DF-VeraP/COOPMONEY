@@ -1,0 +1,307 @@
+/* Overlay oscuro para fondo */
+.login-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(2px);
+  z-index: 1000;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.login-overlay.open {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Branding text al lado del login */
+.login-branding {
+  position: absolute;
+  top: 50%;
+  left: calc((100% - 380px) / 2); /* Centrado en el espacio restante a la izquierda */
+  transform: translate(-50%, -50%);
+  text-align: center;
+  color: white;
+  opacity: 0;
+  transform: translate(-50%, -40%);
+  transition: opacity 0.5s ease 0.2s, transform 0.5s ease 0.2s;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.branding-logo {
+  width: 280px; /* Tamaño grande para el logo */
+  max-width: 90vw;
+  margin-bottom: 1.5rem;
+  filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.4)); /* Sombra para que resalte sobre el fondo */
+}
+
+.login-overlay.open .login-branding {
+  opacity: 1;
+  transform: translate(-50%, -50%);
+}
+
+.login-branding h1 {
+  font-size: 3.5rem;
+  font-weight: 700;
+  line-height: 1.2;
+  margin: 0;
+  text-shadow: 0 4px 15px rgba(0, 0, 0, 0.8); /* Sombra negra más fuerte para el texto base */
+  color: white;
+}
+
+.login-branding h1 span {
+  color: var(--color-primary); /* Resaltar CoopMoney con el color principal */
+  display: inline-block;
+  margin-top: 0.5rem;
+  font-size: 4rem; /* Hacerlo ligeramente más grande */
+  text-shadow: 0 0 15px rgba(255, 255, 255, 0.6), /* Resplandor blanco cercano */
+               0 0 30px rgba(255, 255, 255, 0.4); /* Resplandor blanco más amplio */
+}
+
+@media (max-width: 850px) {
+  .login-branding {
+    display: none; /* Ocultar si la pantalla es muy pequeña para mostrar ambos */
+  }
+}
+
+/* Panel Off-canvas (Sidebar) */
+.login-sidebar {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 100%;
+  max-width: 380px; /* Reducido de 450px para ser menos ancho */
+  height: 100vh;
+  background-color: var(--color-surface);
+  box-shadow: -5px 0 25px rgba(0, 0, 0, 0.15);
+  z-index: 1001;
+  padding: 1.5rem; /* Reducido para ser más compacto */
+  overflow-y: auto; /* Permitir scroll solo si es estrictamente necesario */
+  display: flex;
+  flex-direction: column;
+  
+  /* Estado inicial: oculto a la derecha */
+  transform: translateX(100%);
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.login-sidebar.open {
+  transform: translateX(0); /* Estado final: visible */
+}
+
+/* Botón cerrar */
+.login-close-btn {
+  position: absolute;
+  top: 1rem;
+  right: 1.5rem;
+  background: none;
+  border: none;
+  font-size: 2rem;
+  line-height: 1;
+  color: var(--color-text-muted);
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.login-close-btn:hover {
+  color: var(--color-error);
+}
+
+/* Estilos internos del panel */
+.login-header {
+  text-align: center;
+  margin-top: 0;
+  margin-bottom: 1rem; /* Reducido */
+}
+
+.login-header h2 {
+  font-size: 1.2rem; /* Reducido */
+  color: var(--color-secondary);
+  margin-bottom: 0.25rem; /* Reducido */
+}
+
+.login-header p {
+  color: var(--color-text-muted);
+  font-size: 0.85rem; /* Reducido */
+  margin-bottom: 0;
+}
+
+.password-container {
+  position: relative;
+}
+
+.toggle-password {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  margin-top: 0.25rem;
+  font-size: 0.8rem; /* Reducido */
+  color: var(--color-text-muted);
+  cursor: pointer;
+  user-select: none;
+}
+
+.login-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem; /* Reducido */
+  margin-top: 1rem; /* Reducido */
+}
+
+.login-links {
+  text-align: center;
+  margin-top: 0.75rem; /* Reducido */
+}
+
+.login-links a {
+  color: var(--color-primary);
+  font-size: 0.85rem; /* Reducido */
+  font-weight: 500;
+}
+
+.login-links a:hover {
+  text-decoration: underline;
+}
+
+/* Alert Component for Errors */
+.alert {
+  padding: 0.5rem 0.75rem; /* Reducido */
+  border-radius: var(--border-radius-md);
+  margin-bottom: 0.5rem; /* Reducido */
+  font-size: 0.85rem; /* Reducido */
+  display: none; /* Hidden by default */
+}
+
+.alert.show {
+  display: block;
+}
+
+.alert-danger {
+  background-color: #FED7D7;
+  color: #C53030;
+  border: 1px solid #FC8181;
+}
+
+.alert-success {
+  background-color: #C6F6D5;
+  color: #276749;
+  border: 1px solid #68D391;
+}
+
+/* Clear icon for autocomplete */
+.input-with-clear {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.input-with-clear .form-control {
+  padding-right: 2.5rem;
+}
+
+.btn-clear {
+  position: absolute;
+  right: 10px;
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  color: var(--color-text-muted);
+  cursor: pointer;
+  display: none; /* Hidden when empty */
+}
+
+.btn-clear:hover {
+  color: var(--color-error);
+}
+
+/* Autocomplete Custom Dropdown */
+.autocomplete-suggestions {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius-md);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  z-index: 10;
+  max-height: 180px;
+  overflow-y: auto;
+  display: none;
+  margin-top: 4px;
+}
+
+.login-sidebar .form-group {
+  margin-bottom: 0.75rem; /* Reducido */
+}
+
+.login-sidebar .form-label {
+  margin-bottom: 0.25rem; /* Reducido */
+  font-size: 0.85rem; /* Reducido */
+}
+
+.login-sidebar .form-control {
+  padding: 0.5rem 0.75rem; /* Reducido */
+  font-size: 0.9rem; /* Reducido */
+}
+
+.login-sidebar #login-form {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+}
+
+.login-sidebar .login-actions {
+  margin-top: auto;
+}
+
+.autocomplete-suggestions.show {
+  display: block;
+}
+
+/* Elementos de autocompletado */
+.suggestion-item {
+  padding: 0.4rem 0.75rem;
+  cursor: pointer;
+  font-size: 0.85rem;
+  color: var(--color-text-main);
+  transition: background-color 0.2s ease;
+}
+
+.suggestion-item:hover {
+  background-color: var(--color-background);
+  color: var(--color-primary);
+}
+
+/* Ajustes Responsivos */
+@media (max-height: 700px) {
+  .login-sidebar {
+    padding: 1rem;
+  }
+
+  .login-header {
+    margin-bottom: 0.5rem;
+  }
+
+  .login-sidebar .form-group {
+    margin-bottom: 0.5rem;
+  }
+
+  .login-actions {
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+  }
+}
+
+@media (max-width: 380px) {
+  .login-sidebar {
+    padding: 1.25rem;
+  }
+}

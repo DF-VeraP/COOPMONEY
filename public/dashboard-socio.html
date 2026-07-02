@@ -1,0 +1,1882 @@
+<!DOCTYPE html>
+<html lang="es" class="session-pending">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Socio | COOPMONEY</title>
+    <style>
+        .session-pending body {
+            display: none !important;
+        }
+    </style>
+    <script>
+        (function () {
+            function checkSession() {
+                var raw = sessionStorage.getItem('currentUser') || localStorage.getItem('currentUser');
+                var currentUser = null;
+                try { currentUser = JSON.parse(raw); } catch (e) { }
+                if (!currentUser || !currentUser.token || currentUser.rol !== 'socio') {
+                    sessionStorage.removeItem('currentUser');
+                    localStorage.removeItem('currentUser');
+                    window.location.replace('index.html');
+                    return;
+                }
+                document.documentElement.classList.remove('session-pending');
+            }
+            checkSession();
+            window.addEventListener('pageshow', function (event) {
+                if (event.persisted || (window.performance && window.performance.navigation.type === 2)) {
+                    checkSession();
+                }
+            });
+        })();
+    </script>
+    <!-- Google Fonts - Carga Asíncrona Optimizada -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preload" as="style"
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+        media="print" onload="this.media='all'">
+    <noscript>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+    </noscript>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="./css/main.css">
+    <style>
+        /* === CUSTOM SCROLLBAR === */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background-color: rgba(0, 0, 0, 0.15);
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background-color: rgba(0, 0, 0, 0.3);
+        }
+
+        /* === HORIZONTAL HEADER LAYOUT OVERRIDES === */
+        body.dashboard-layout {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            overflow-x: hidden;
+            background-color: var(--color-dashboard-bg);
+        }
+
+        .dash-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 70px;
+            background-color: #ffffff;
+            border-bottom: 1px solid var(--color-border);
+            box-shadow: var(--shadow-sm);
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 var(--spacing-xl);
+            z-index: 1000;
+            box-sizing: border-box;
+        }
+
+        .header-brand {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .dash-logo-container {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0;
+            width: auto;
+        }
+
+        .dash-logo-container img {
+            height: 40px;
+            width: auto;
+            object-fit: contain;
+            margin: 0;
+        }
+
+        .coop-header-info {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 0;
+            padding: 0;
+            background-color: transparent;
+            border: none;
+            box-sizing: border-box;
+            width: auto;
+            border-left: 1px solid var(--color-border);
+            padding-left: 15px;
+        }
+
+        .coop-header-info span {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--color-primary-dark);
+            line-height: 1.2;
+        }
+
+        .coop-header-info small {
+            font-size: 0.65rem;
+            color: var(--color-text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-secondary {
+            background-color: #f1f5f9;
+            color: var(--color-text-main);
+            border: none;
+            font-size: 0.85rem;
+            box-sizing: border-box;
+        }
+
+        .dash-nav {
+            display: flex;
+            flex-direction: row;
+            gap: 8px;
+            width: auto;
+            height: 100%;
+            align-items: center;
+        }
+
+        .dash-nav-item {
+            width: auto;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            padding: 0 var(--spacing-md) !important;
+            border-radius: 8px;
+            color: var(--color-text-muted) !important;
+            border: none !important;
+            transition: all 0.2s ease;
+            font-size: 0.9rem;
+            font-weight: 500;
+            box-sizing: border-box;
+            gap: 8px;
+            cursor: pointer;
+        }
+
+        .dash-nav-item i {
+            font-size: 1.05rem;
+            transition: transform 0.2s;
+        }
+
+        .dash-nav-item:hover {
+            background-color: #f1f5f9;
+            color: var(--color-primary) !important;
+        }
+
+        .dash-nav-item:hover i {
+            transform: translateY(-2px);
+        }
+
+        .dash-nav-item.active {
+            background-color: #ecfdf5 !important;
+            color: var(--color-primary-dark) !important;
+            border: none !important;
+            font-weight: 600 !important;
+        }
+
+        .header-action-container {
+            margin-top: 0;
+            width: auto;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            gap: var(--spacing-lg);
+            border: none;
+            padding-top: 0;
+            margin-right: 0 !important;
+            box-sizing: border-box;
+        }
+
+        .notif-bell-container {
+            width: auto;
+            display: flex;
+            justify-content: flex-start;
+            position: relative;
+        }
+
+        .notif-dropdown {
+            position: absolute;
+            top: 55px !important;
+            bottom: auto !important;
+            left: auto !important;
+            right: -10px !important;
+            width: 330px;
+            background: #ffffff;
+            border: 1px solid var(--color-border);
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1) !important;
+            z-index: 10000;
+            display: none;
+            overflow: hidden;
+            transform-origin: top right;
+        }
+
+        .notif-dropdown.show {
+            display: block !important;
+            animation: slideDown 0.2s ease-out;
+        }
+
+        .dash-user-profile {
+            width: auto;
+            display: flex;
+            flex-direction: row;
+            justify-content: flex-end;
+            align-items: center;
+            gap: var(--spacing-sm);
+            padding: 4px;
+            box-sizing: border-box;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .dash-user-profile>div {
+            text-align: right !important;
+        }
+
+        .avatar-label {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.95rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+
+        /* PERFIL DROPDOWN MENU */
+        .profile-dropdown-menu {
+            position: absolute;
+            top: 60px;
+            right: 0;
+            width: 220px;
+            background: #ffffff;
+            border: 1px solid var(--color-border);
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            z-index: 10000;
+            display: none;
+            flex-direction: column;
+            overflow: hidden;
+            padding: 8px 0;
+        }
+
+        .profile-dropdown-menu.show {
+            display: flex;
+            animation: slideDown 0.2s ease-out;
+        }
+
+        .profile-dropdown-item {
+            padding: 10px 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--color-text-main);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.2s;
+            border: none;
+            background: transparent;
+            width: 100%;
+            text-align: left;
+        }
+
+        .profile-dropdown-item:hover {
+            background-color: #f8fafc;
+            color: var(--color-primary);
+        }
+
+        .profile-dropdown-divider {
+            height: 1px;
+            background-color: var(--color-border);
+            margin: 8px 0;
+        }
+
+        .dash-main-content {
+            margin-left: 0;
+            width: 100%;
+            padding: var(--spacing-lg) var(--spacing-3xl);
+            margin-top: 70px;
+            min-height: calc(100vh - 70px);
+            box-sizing: border-box;
+            background-color: var(--color-dashboard-bg);
+            transition: all 0.3s ease;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .dash-header {
+                padding: 0 var(--spacing-md);
+            }
+
+            .dash-nav {
+                display: none;
+            }
+
+            .dash-main-content {
+                padding: var(--spacing-xl) var(--spacing-md);
+            }
+        }
+
+        .kpi-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: var(--spacing-lg);
+            margin-bottom: var(--spacing-xl);
+        }
+
+        .kpi-socio-card {
+            background-color: var(--color-primary-dark, #155539);
+            border: none;
+            border-radius: 16px;
+            padding: var(--spacing-lg);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s, box-shadow 0.2s;
+            position: relative;
+            overflow: hidden;
+            color: #ffffff !important;
+        }
+
+        .kpi-socio-card * {
+            color: inherit !important;
+        }
+
+        .kpi-socio-card .kpi-label,
+        .kpi-socio-card .kpi-meta {
+            color: rgba(255, 255, 255, 0.8) !important;
+        }
+
+        .kpi-socio-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.15);
+        }
+
+        .kpi-socio-card.savings,
+        .kpi-socio-card.loans {
+            background-color: var(--color-primary-dark, #155539);
+        }
+
+        .kpi-socio-card.savings .kpi-icon,
+        .kpi-socio-card.loans .kpi-icon,
+        .kpi-socio-card .kpi-icon {
+            color: #ffffff !important;
+            opacity: 0.1;
+            font-size: 2.4rem;
+            right: 15px;
+            bottom: 15px;
+            top: auto;
+        }
+
+        .kpi-icon {
+            position: absolute;
+            right: 16px;
+            bottom: 16px;
+            top: auto;
+            font-size: 2.4rem;
+            color: var(--color-text-muted);
+            opacity: 0.8;
+        }
+
+        .kpi-label {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            opacity: 0.9;
+        }
+
+        .kpi-value {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin: var(--spacing-sm) 0;
+            position: relative;
+            z-index: 2;
+            padding-right: 40px;
+            /* Evitar colisión con el icono de fondo */
+        }
+
+        .kpi-meta {
+            font-size: 0.8rem;
+            opacity: 0.85;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        /* Notifications Bell and Dropdown */
+        .header-action-container {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-md);
+            margin-right: var(--spacing-lg);
+        }
+
+        .notif-bell-container {
+            position: relative;
+            cursor: pointer;
+        }
+
+        .notif-bell-btn {
+            font-size: 1.3rem;
+            color: var(--color-text-main);
+            background: #f1f5f9;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background-color 0.2s;
+        }
+
+        .notif-bell-btn:hover {
+            background: #e2e8f0;
+        }
+
+        .notif-badge {
+            position: absolute;
+            top: -2px;
+            right: -2px;
+            background: var(--color-danger);
+            color: white;
+            font-size: 0.65rem;
+            font-weight: 700;
+            border-radius: 50%;
+            padding: 2px 6px;
+            border: 2px solid white;
+        }
+
+
+
+
+
+        .notif-header {
+            padding: 12px var(--spacing-md);
+            background: #f8fafc;
+            border-bottom: 1px solid var(--color-border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .notif-header h4 {
+            margin: 0;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--color-text-main);
+        }
+
+        .notif-list {
+            max-height: 280px;
+            overflow-y: auto;
+        }
+
+        .notif-item {
+            padding: 12px var(--spacing-md);
+            border-bottom: 1px solid #f1f5f9;
+            transition: background 0.15s;
+        }
+
+        .notif-item:hover {
+            background: #f8fafc;
+        }
+
+        .notif-item.unread {
+            background: #f0fdf4;
+        }
+
+        .notif-item-title {
+            font-weight: 600;
+            font-size: 0.8rem;
+            margin-bottom: 2px;
+            color: var(--color-text-main);
+        }
+
+        .notif-item-desc {
+            font-size: 0.75rem;
+            color: var(--color-text-muted);
+            line-height: 1.4;
+        }
+
+        .notif-item-time {
+            font-size: 0.65rem;
+            color: var(--color-text-muted);
+            margin-top: 4px;
+            display: block;
+        }
+
+        /* Generic Modals */
+        .coop-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(4px);
+            z-index: 2000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .coop-modal.show {
+            display: flex;
+        }
+
+        .coop-modal-content {
+            background: #fff;
+            border-radius: 20px;
+            width: 90%;
+            max-width: 480px;
+            max-height: 90vh;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            overflow: hidden;
+            animation: modalScale 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .coop-modal-header {
+            padding: var(--spacing-lg);
+            background: #f8fafc;
+            border-bottom: 1px solid var(--color-border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-shrink: 0;
+        }
+
+        .coop-modal-header h3 {
+            margin: 0;
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--color-text-main);
+        }
+
+        .coop-modal-close {
+            background: none;
+            border: none;
+            font-size: 1.25rem;
+            color: var(--color-text-muted);
+            cursor: pointer;
+        }
+
+        .coop-modal-close:hover {
+            color: var(--color-text-main);
+        }
+
+        .coop-modal-body {
+            padding: var(--spacing-lg);
+            overflow-y: auto;
+            flex-grow: 1;
+        }
+
+        /* Nequi Custom Mock Modal */
+        .nequi-banner {
+            background: #501d56;
+            color: white;
+            padding: 12px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            margin-bottom: var(--spacing-lg);
+        }
+
+        /* Amortization and status */
+        .status-badge.paid {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        /* Alert block banner */
+        .alert-banner {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: var(--spacing-md) var(--spacing-lg);
+            border-radius: 12px;
+            margin-bottom: var(--spacing-xl);
+            font-size: 0.9rem;
+            font-weight: 500;
+            border: 1px solid transparent;
+        }
+
+        .alert-banner.error {
+            background-color: #fef2f2;
+            border-color: #fca5a5;
+            color: #991b1b;
+        }
+
+        .alert-banner.warning {
+            background-color: #fffbeb;
+            border-color: #fcd34d;
+            color: #92400e;
+        }
+
+        @keyframes modalScale {
+            from {
+                transform: scale(0.95);
+                opacity: 0;
+            }
+
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideDown {
+            from {
+                transform: translateY(-10px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .payment-method-card input:checked+.method-card-content {
+            border-color: var(--color-primary) !important;
+            background-color: #f0fdf4;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+
+        /* ============================================================
+           SOLICITAR CRÉDITO — DISEÑO INSTITUCIONAL COOPMONEY
+           ============================================================ */
+
+        /* Contenedor principal de la sección */
+        #tab-simulador .dash-card {
+            background-color: #ffffff;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
+            border-radius: 20px;
+            padding: 2rem 2.2rem;
+        }
+
+        /* Título del card */
+        #tab-simulador .card-title {
+            color: var(--color-text-main, #2D3748);
+            font-size: 1.25rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 700;
+        }
+
+        #tab-simulador .card-title i {
+            color: var(--color-primary, #1F7C54);
+            font-size: 1.4rem;
+        }
+
+        /* ---- ALERTA REGLA DEL 15% ---- */
+        #tab-simulador [style*="background-color: #eff6ff"] {
+            background-color: #F0FDF4 !important;
+            /* Soft green background */
+            border: none !important;
+            border-radius: 8px !important;
+            color: #166534 !important;
+            /* Darker green text */
+            padding: 14px 18px !important;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+        }
+
+        #tab-simulador [style*="background-color: #eff6ff"] i {
+            display: none !important;
+        }
+
+        #tab-simulador [style*="background-color: #eff6ff"] strong {
+            color: var(--color-primary-dark, #155539) !important;
+            font-weight: 700;
+        }
+
+        #tab-simulador #sim-cupo-maximo {
+            color: var(--color-primary, #1F7C54) !important;
+            font-size: 1.05rem;
+            font-weight: 700;
+        }
+
+        /* ---- GRID DEL SIMULADOR ---- */
+        .simulator-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-top: 1.5rem;
+        }
+
+        @media (max-width: 768px) {
+            .simulator-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* ---- GRUPOS DE SLIDERS ---- */
+        .range-slider-group {
+            margin-bottom: 1.6rem;
+        }
+
+        .range-slider-label {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            font-size: 0.9rem;
+            color: var(--color-text-main, #2D3748);
+            font-weight: 600;
+        }
+
+        .range-slider-label span:first-child {
+            color: var(--color-text-muted, #718096);
+            font-weight: 500;
+        }
+
+        .range-slider-label #sim-monto-txt,
+        .range-slider-label #sim-plazo-txt,
+        .range-slider-label #sim-tasa-label {
+            color: var(--color-primary, #1F7C54) !important;
+            font-size: 1.05rem !important;
+            font-weight: 700 !important;
+        }
+
+        /* SLIDERS MODERNOS INSTITUCIONALES */
+        .range-slider {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 100%;
+            height: 8px;
+            background: linear-gradient(to right,
+                    var(--color-primary, #1F7C54) var(--val, 30%),
+                    #E2E8F0 var(--val, 30%));
+            border-radius: 50px;
+            outline: none;
+            border: none;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .range-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            background: #ffffff;
+            border: 3px solid var(--color-primary, #1F7C54);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .range-slider::-webkit-slider-thumb:hover {
+            transform: scale(1.15);
+            box-shadow: 0 3px 8px rgba(31, 124, 84, 0.3);
+        }
+
+        .range-slider::-moz-range-thumb {
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            background: #ffffff;
+            border: 3px solid var(--color-primary, #1F7C54);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+            cursor: pointer;
+        }
+
+        /* ---- FORM LABELS Y INPUTS ---- */
+        #tab-simulador .form-label {
+            color: var(--color-text-muted, #718096);
+            font-size: 0.9rem;
+            font-weight: 500;
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        #tab-simulador .form-input {
+            width: 100%;
+            padding: 12px 14px;
+            background: #ffffff;
+            border: 1px solid #E2E8F0;
+            border-radius: 8px;
+            color: var(--color-text-main, #2D3748);
+            font-size: 0.95rem;
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            box-sizing: border-box;
+            box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.02);
+        }
+
+        #tab-simulador .form-input::placeholder {
+            color: #A0AEC0;
+        }
+
+        #tab-simulador .form-input:focus {
+            border-color: var(--color-primary, #1F7C54);
+            box-shadow: 0 0 0 3px rgba(31, 124, 84, 0.15);
+        }
+
+        #tab-simulador select.form-input option {
+            background: #ffffff;
+            color: var(--color-text-main, #2D3748);
+        }
+
+        /* ---- INDICADOR ADVERTENCIA 15% ---- */
+        #sim-val-warning {
+            border: none !important;
+            border-radius: 8px !important;
+            padding: 12px 16px !important;
+            font-weight: 600 !important;
+            font-size: 0.85rem !important;
+            margin-top: -5px;
+        }
+
+        /* ---- BOTÓN ENVIAR SOLICITUD ---- */
+        #btn-socio-solicitar {
+            background-color: var(--color-primary, #1F7C54) !important;
+            border: none !important;
+            border-radius: 10px !important;
+            color: #ffffff !important;
+            font-size: 1rem !important;
+            font-weight: 600 !important;
+            letter-spacing: 0.02em;
+            height: 50px !important;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 6px rgba(31, 124, 84, 0.2);
+        }
+
+        #btn-socio-solicitar:hover {
+            background-color: var(--color-primary-light, #2BAE76) !important;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(31, 124, 84, 0.3);
+        }
+
+        #btn-socio-solicitar:active {
+            transform: translateY(0px);
+            box-shadow: 0 2px 4px rgba(31, 124, 84, 0.2);
+        }
+
+        #btn-socio-solicitar i {
+            font-size: 1.1rem;
+            margin-right: 8px;
+        }
+
+        /* ---- TARJETA DE RESULTADOS ---- */
+        .sim-results-card {
+            background-color: var(--color-background, #F8FAF9);
+            border: 1px solid #E2E8F0;
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.02);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .sim-results-card h4 {
+            color: var(--color-text-main, #2D3748) !important;
+            font-size: 0.95rem !important;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 1.5rem !important;
+            font-weight: 700 !important;
+            border-bottom: 2px solid #E2E8F0;
+            padding-bottom: 10px;
+        }
+
+        .sim-kpi-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .sim-kpi-item {
+            background: #ffffff;
+            border: 1px solid #E2E8F0;
+            border-radius: 12px;
+            padding: 1.2rem 1rem;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .sim-kpi-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.05);
+            border-color: var(--color-primary-light, #2BAE76);
+        }
+
+        .sim-kpi-item>div:first-child {
+            color: var(--color-text-muted, #718096) !important;
+            font-size: 0.75rem !important;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .sim-kpi-val {
+            font-size: 1.6rem !important;
+            font-weight: 800 !important;
+            color: var(--color-primary, #1F7C54) !important;
+            line-height: 1.2;
+        }
+
+        /* ---- AVISO LEGAL ---- */
+        #tab-simulador [style*="background: #fff"] {
+            background-color: #F1F5F9 !important;
+            border: 1px solid #E2E8F0 !important;
+            border-radius: 8px !important;
+            color: var(--color-text-muted, #718096) !important;
+            font-size: 0.8rem !important;
+            padding: 15px !important;
+        }
+
+        #tab-simulador [style*="background: #fff"] strong {
+            color: var(--color-text-main, #2D3748) !important;
+        }
+    </style>
+</head>
+
+<body class="dashboard-layout">
+
+    <!-- HEADER -->
+    <header class="dash-header">
+        <div class="header-brand">
+            <div class="dash-logo-container">
+                <img src="./assets/images/LogoV1.1.png" alt="COOPMONEY Logo"
+                    onerror="this.src='https://via.placeholder.com/150x40?text=COOPMONEY'">
+            </div>
+            <div class="coop-header-info">
+                <small>Asociado a</small>
+                <span id="header-coop-name">Cargando Cooperativa...</span>
+            </div>
+        </div>
+
+        <nav class="dash-nav">
+            <div class="dash-nav-item active" data-tab-target="tab-resumen">Inicio</div>
+            <div class="dash-nav-item" data-tab-target="tab-ahorros">Mis Ahorros</div>
+            <div class="dash-nav-item" data-tab-target="tab-simulador">Solicitar Crédito</div>
+            <div class="dash-nav-item" data-tab-target="tab-creditos">Mis Créditos</div>
+        </nav>
+
+        <div class="header-action-container">
+            <!-- NOTIFICACIONES CAMPANA -->
+            <div class="notif-bell-container" id="notif-bell-btn">
+                <div class="notif-bell-btn">
+                    <i class="bi bi-bell-fill"></i>
+                </div>
+                <span class="notif-badge" id="badge-notificaciones" style="display: none;">0</span>
+
+                <!-- DROPDOWN NOTIFICACIONES -->
+                <div class="notif-dropdown" id="notif-dropdown">
+                    <div class="notif-header">
+                        <h4>Notificaciones</h4>
+                        <button id="btn-clear-notifs" class="btn btn-secondary"
+                            style="font-size: 0.7rem; padding: 2px 6px;">Marcar leídas</button>
+                    </div>
+                    <div class="notif-list" id="notif-list-container">
+                        <div
+                            style="text-align: center; color: var(--color-text-muted); padding: 15px; font-size: 0.8rem;">
+                            No tienes notificaciones.</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PERFIL USUARIO -->
+            <div class="dash-user-profile" id="profile-menu-btn" onclick="toggleProfileMenu(event)">
+                <div style="text-align: right;">
+                    <div style="font-weight: 600; font-size: 0.9rem; color: var(--color-text-main);"
+                        id="header-user-name">Socio</div>
+                </div>
+                <div class="avatar-label" id="header-user-avatar">SC</div>
+
+                <!-- DROPDOWN PERFIL -->
+                <div class="profile-dropdown-menu" id="profile-dropdown">
+                    <div class="profile-dropdown-item" data-tab-target="tab-historial">
+                        <i class="bi bi-clock-history"></i> Historial
+                    </div>
+                    <div class="profile-dropdown-item" data-tab-target="tab-certificados">
+                        <i class="bi bi-file-earmark-pdf"></i> Certificados
+                    </div>
+                    <div class="profile-dropdown-item" data-tab-target="tab-perfil">
+                        <i class="bi bi-gear"></i> Mi Perfil
+                    </div>
+                    <div class="profile-dropdown-divider"></div>
+                    <a href="#" class="profile-dropdown-item" id="logout-btn" style="color: var(--color-danger);">
+                        <i class="bi bi-box-arrow-right"></i> Cerrar sesión
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- CONTENT WRAPPER -->
+    <main class="dash-main-content">
+
+        <!-- ALERT BANNERS (MORA & AHORRO ADVISORIES) -->
+        <div id="mora-alert-banner" class="alert-banner error" style="display: none;">
+            <i class="bi bi-exclamation-octagon-fill" style="font-size: 1.25rem;"></i>
+            <div>
+                <strong>Alerta de Mora:</strong> Tienes cuotas de crédito vencidas. Saldo en mora: <span
+                    id="mora-val-due">$0</span> + intereses moratorios acumulados: <span
+                    id="mora-val-interest">$0</span>.
+            </div>
+        </div>
+
+        <div id="ahorro-alert-banner" class="alert-banner warning" style="display: none;">
+            <i class="bi bi-exclamation-triangle-fill" style="font-size: 1.25rem;"></i>
+            <div>
+                <strong>Aviso de Ahorro:</strong> Aún no has realizado tu aporte mínimo obligatorio de ahorro
+                correspondiente al mes actual (<span id="ahorro-val-pending">$0</span>).
+            </div>
+        </div>
+
+        <!-- PESTAÑA 1: INICIO (DASHBOARD) -->
+        <section id="tab-resumen" class="tab-pane active">
+            <div class="kpi-row">
+                <div class="kpi-socio-card savings">
+                    <i class="bi bi-piggy-bank kpi-icon"></i>
+                    <div class="kpi-label">Saldo de Ahorros</div>
+                    <div class="kpi-value" id="resumen-ahorros">$0</div>
+                    <div class="kpi-meta">
+                        <i class="bi bi-graph-up-arrow"></i> ¡Rindiendo al 4.5% E.A.!
+                    </div>
+                </div>
+
+                <div class="kpi-socio-card">
+                    <i class="bi bi-calendar-check kpi-icon" style="color: var(--color-primary);"></i>
+                    <div class="kpi-label" style="color: var(--color-text-muted);">Cuota Ahorro Mensual</div>
+                    <div class="kpi-value" id="resumen-cuota-mensual" style="color: var(--color-primary-dark);">$0</div>
+                    <div class="kpi-meta" style="color: var(--color-text-muted);">
+                        <i class="bi bi-clock"></i> Próximo pago: <span id="resumen-fecha-ahorro">15 de este mes</span>
+                    </div>
+                </div>
+
+                <div class="kpi-socio-card loans">
+                    <i class="bi bi-wallet2 kpi-icon"></i>
+                    <div class="kpi-label">Créditos Activos</div>
+                    <div class="kpi-value" id="resumen-creditos-activos">0</div>
+                    <div class="kpi-meta">
+                        Deuda total: <strong id="resumen-total-deuda">$0</strong>
+                    </div>
+                </div>
+
+                <div class="kpi-socio-card">
+                    <i class="bi bi-shield-exclamation kpi-icon" id="icon-estado-mora"
+                        style="color: var(--color-success);"></i>
+                    <div class="kpi-label" style="color: var(--color-text-muted);">Mora Actual</div>
+                    <div class="kpi-value" id="resumen-mora-actual" style="color: var(--color-success);">$0</div>
+                    <div class="kpi-meta" id="resumen-mora-status" style="color: var(--color-text-muted);">
+                        <i class="bi bi-check-circle-fill" style="color: var(--color-success);"></i> Al día
+                    </div>
+                </div>
+            </div>
+
+            <!-- Evolución de ahorros (barras dobles: depósitos vs retiros) -->
+            <div class="dash-card">
+                <div class="card-header" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+                    <h3 class="card-title"><i class="bi bi-bar-chart-line-fill"
+                            style="color: var(--color-primary);"></i> Movimientos Mensuales</h3>
+                    <div style="display: flex; gap: 16px; align-items: center;">
+                        <div style="display: flex; align-items: center; gap: 5px;">
+                            <div style="width: 12px; height: 12px; border-radius: 3px; background: linear-gradient(to top, #34d399, #10B981);"></div>
+                            <span style="font-size: 0.72rem; color: var(--color-text-muted); font-weight: 500;">Depósitos</span>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 5px;">
+                            <div style="width: 12px; height: 12px; border-radius: 3px; background: linear-gradient(to top, #fbbf24, #f59e0b);"></div>
+                            <span style="font-size: 0.72rem; color: var(--color-text-muted); font-weight: 500;">Retiros</span>
+                        </div>
+                    </div>
+                </div>
+                <div id="chart-container"
+                    style="display: flex; justify-content: space-around; align-items: flex-end; height: 200px; margin-top: 20px; padding: 0 10px; border-bottom: 2px solid var(--color-border);">
+                    <!-- Las 6 columnas de meses se generan dinámicamente desde JS -->
+                </div>
+            </div>
+
+            <!-- Tarjetas de Próximos Pagos -->
+            <div class="dash-card" style="margin-top: var(--spacing-xl);">
+                <div class="card-header">
+                    <h3 class="card-title"><i class="bi bi-wallet2" style="color: var(--color-primary);"></i> Próximos
+                        Pagos</h3>
+                    <span class="status-badge pending" id="badge-proximos-pagos" style="font-size: 0.8rem;">0
+                        cuotas</span>
+                </div>
+                <div id="container-proximos-pagos"
+                    style="display: flex; flex-direction: column; gap: var(--spacing-md); margin-top: var(--spacing-lg);">
+                    <div style="text-align: center; color: var(--color-text-muted); padding: var(--spacing-xl);">
+                        <i class="bi bi-inbox"
+                            style="font-size: 2rem; display: block; margin-bottom: 8px; opacity: 0.4;"></i>
+                        No tienes cuotas pendientes.
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PESTAÑA 2: MIS AHORROS -->
+        <section id="tab-ahorros" class="tab-pane">
+            <div class="kpi-row" style="grid-template-columns: repeat(3, 1fr);">
+                <div class="kpi-socio-card savings">
+                    <i class="bi bi-piggy-bank kpi-icon"></i>
+                    <div class="kpi-label">Saldo Total de Ahorros</div>
+                    <div class="kpi-value" id="ahorros-saldo-actual">$0</div>
+                    <div class="kpi-meta"><i class="bi bi-check-circle-fill"></i> Disponibilidad total e inmediata</div>
+                </div>
+                <div class="kpi-socio-card">
+                    <i class="bi bi-gear-wide-connected kpi-icon" style="color: var(--color-primary);"></i>
+                    <div class="kpi-label" style="color: var(--color-text-muted);">Cuota Mensual Configurada</div>
+                    <div class="kpi-value" id="ahorros-cuota-config" style="color: var(--color-primary-dark);">$0</div>
+                    <div class="kpi-meta" style="color: var(--color-text-muted);"><i class="bi bi-arrow-repeat"></i>
+                        Aporte obligatorio mensual</div>
+                </div>
+                <div class="kpi-socio-card">
+                    <i class="bi bi-calendar-event kpi-icon" style="color: var(--color-warning);"></i>
+                    <div class="kpi-label" style="color: var(--color-text-muted);">Próximo Pago</div>
+                    <div class="kpi-value" id="ahorros-fecha-proxima"
+                        style="color: var(--color-warning); font-size: 1.4rem;">15 de cada mes</div>
+                    <div class="kpi-meta" style="color: var(--color-text-muted);"><i class="bi bi-clock"></i> Fecha
+                        límite de aporte</div>
+                </div>
+            </div>
+
+            <!-- Botones de Acción Ahorro -->
+            <div style="display: flex; gap: var(--spacing-md); margin-bottom: var(--spacing-xl);">
+                <button class="btn btn-primary" id="btn-modal-pagar-ahorro" style="height: 46px; font-weight: 600;">
+                    <i class="bi bi-phone-vibrate"></i> Pagar cuota de ahorro (Nequi)
+                </button>
+                <button class="btn btn-secondary" id="btn-modal-retirar" style="height: 46px; font-weight: 600;">
+                    <i class="bi bi-bank"></i> Retirar ahorros
+                </button>
+            </div>
+
+            <div class="dash-card">
+                <div class="card-header">
+                    <h3 class="card-title"><i class="bi bi-clock-history" style="color: var(--color-primary);"></i>
+                        Movimientos de Ahorros</h3>
+                </div>
+                <div class="data-table-wrapper" style="margin-top: var(--spacing-lg);">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Fecha</th>
+                                <th>Tipo</th>
+                                <th>Monto</th>
+                                <th>Saldo después</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tabla-movimientos-ahorro">
+                            <tr>
+                                <td colspan="4" style="text-align: center; color: var(--color-text-muted);">No tienes
+                                    movimientos registrados.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- PESTAÑA 3: SOLICITAR CRÉDITO -->
+        <section id="tab-simulador" class="tab-pane">
+            <div class="dash-card">
+                <h3 class="card-title" style="margin-bottom: var(--spacing-xl);"><i class="bi bi-file-earmark-text"
+                        style="color: var(--color-primary);"></i> Radicar Solicitud de Crédito</h3>
+
+                <!-- Mensaje de aviso de la regla del 15% -->
+                <div
+                    style="background-color: #eff6ff; border: 1px solid #bfdbfe; color: #1e3a8a; padding: var(--spacing-md); border-radius: 8px; font-size: 0.85rem; margin-bottom: var(--spacing-xl); display: flex; align-items: center; gap: 8px;">
+                    <i class="bi bi-info-circle-fill" style="color: #3b82f6; font-size: 1.1rem;"></i>
+                    <span><strong>Regla de Crédito:</strong> Para radicar tu solicitud, debes tener ahorrado mínimo el
+                        <strong>15%</strong> del monto solicitado. Tu cupo máximo actual por ahorros es: <strong
+                            id="sim-cupo-maximo">$0</strong>.</span>
+                </div>
+
+                <div class="simulator-grid">
+                    <!-- Controles -->
+                    <div>
+                        <div class="range-slider-group">
+                            <div class="range-slider-label">
+                                <span>Monto a Solicitar</span>
+                                <span id="sim-monto-txt"
+                                    style="color: var(--color-primary); font-weight: 700;">$5.000.000</span>
+                            </div>
+                            <input type="range" id="sim-monto" class="range-slider" min="1000000" max="30000000"
+                                step="500000" value="5000000">
+                        </div>
+
+                        <div class="range-slider-group">
+                            <div class="range-slider-label">
+                                <span>Plazo (Meses)</span>
+                                <span id="sim-plazo-txt" style="color: var(--color-primary); font-weight: 700;">12
+                                    meses</span>
+                            </div>
+                            <input type="range" id="sim-plazo" class="range-slider" min="6" max="36" step="6"
+                                value="12">
+                        </div>
+
+                        <div class="range-slider-group" style="margin-bottom: var(--spacing-lg);">
+                            <label class="form-label">Propósito del Crédito</label>
+                            <input type="text" id="sim-proposito" class="form-input"
+                                placeholder="Ej. Inversión negocio, educación, libre inversión"
+                                value="Libre inversión y gastos personales">
+                        </div>
+
+                        <div class="range-slider-group" style="margin-bottom: var(--spacing-lg);">
+                            <label class="form-label">Línea de Crédito</label>
+                            <select id="sim-linea" class="form-input"></select>
+                        </div>
+
+                        <div class="range-slider-group">
+                            <div class="range-slider-label">
+                                <span>Tasa de Interés Nominal (Mes Vencido)</span>
+                                <span id="sim-tasa-label"
+                                    style="color: var(--color-primary); font-weight: 700;">-</span>
+                            </div>
+                        </div>
+
+                        <!-- Indicador visual del 15% -->
+                        <div id="sim-val-warning"
+                            style="display: none; padding: 10px; border-radius: 6px; font-size: 0.8rem; margin-bottom: 12px; font-weight: 600;">
+                        </div>
+
+                        <button class="btn btn-primary" style="width:100%; height:46px; margin-top:var(--spacing-md);"
+                            id="btn-socio-solicitar">
+                            <i class="bi bi-send"></i> Enviar Solicitud de Estudio
+                        </button>
+                    </div>
+
+                    <!-- Resultados de simulación -->
+                    <div class="sim-results-card">
+                        <h4 style="margin: 0 0 var(--spacing-md) 0; font-size: 1.1rem; color: var(--color-text-main);">
+                            Proyección Estimada (Método Francés)</h4>
+
+                        <div class="sim-kpi-grid">
+                            <div class="sim-kpi-item">
+                                <div style="font-size: 0.8rem; color: var(--color-text-muted);">Cuota Mensual Aprox.
+                                </div>
+                                <div class="sim-kpi-val" id="sim-cuota">$0</div>
+                            </div>
+                            <div class="sim-kpi-item">
+                                <div style="font-size: 0.8rem; color: var(--color-text-muted);">Total Intereses</div>
+                                <div class="sim-kpi-val" id="sim-interes">$0</div>
+                            </div>
+                        </div>
+
+                        <div
+                            style="font-size: 0.85rem; color: var(--color-text-muted); line-height: 1.5; background: #fff; padding: var(--spacing-md); border-radius: 8px; border: 1px solid #e2e8f0;">
+                            <strong>Aviso Legal:</strong> La aprobación de esta solicitud requiere de la evaluación del
+                            Analista de Crédito, el cual validará tu capacidad laboral, antigüedad y nivel de
+                            endeudamiento general.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PESTAÑA 4: MIS CRÉDITOS -->
+        <section id="tab-creditos" class="tab-pane">
+            <div
+                style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--spacing-xl);">
+                <h3 class="card-title" style="margin: 0;"><i class="bi bi-wallet2"
+                        style="color: var(--color-primary);"></i> Mis Obligaciones Crediticias</h3>
+                <span class="status-badge active" id="badge-creditos-activos" style="font-size: 0.85rem;">0
+                    créditos</span>
+            </div>
+
+            <!-- Contenedor dinámico de tarjetas de crédito -->
+            <div id="container-creditos-cards" style="display: flex; flex-direction: column; gap: var(--spacing-xl);">
+                <div class="dash-card"
+                    style="text-align: center; color: var(--color-text-muted); padding: var(--spacing-3xl);">
+                    <i class="bi bi-wallet2"
+                        style="font-size: 2.5rem; display: block; margin-bottom: var(--spacing-md); opacity: 0.3;"></i>
+                    No tienes créditos activos en este momento.
+                </div>
+            </div>
+
+            <!-- Detalle Amortización del Crédito Seleccionado -->
+            <div class="dash-card" id="card-amortizacion-detalle" style="margin-top: var(--spacing-xl); display: none;">
+                <div class="card-header">
+                    <h3 class="card-title" id="title-amortizacion">Amortización Completa del Crédito</h3>
+                </div>
+                <div class="data-table-wrapper" style="margin-top: var(--spacing-md);">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>N° Cuota</th>
+                                <th>Vencimiento</th>
+                                <th>Valor Cuota</th>
+                                <th>Capital</th>
+                                <th>Interés</th>
+                                <th>Saldo Restante</th>
+                                <th>Estado</th>
+                                <th>Acción</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tabla-amortizacion-socio">
+                            <!-- Inyectado dinámicamente -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- PESTAÑA 5: HISTORIAL COMPLETO -->
+        <section id="tab-historial" class="tab-pane">
+            <div class="dash-card">
+                <div class="card-header" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+                    <h3 class="card-title"><i class="bi bi-clock-history" style="color: var(--color-primary);"></i>
+                        Historial de Movimientos de mi Cuenta</h3>
+                    <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+                        <button class="btn btn-secondary" id="filter-historial-hoy" style="padding: 6px 12px; font-size: 0.8rem; height: auto;">Hoy</button>
+                        <button class="btn btn-secondary" id="filter-historial-ayer" style="padding: 6px 12px; font-size: 0.8rem; height: auto;">Ayer</button>
+                        <input type="month" id="filter-historial-mes" class="form-input" style="padding: 4px 10px; font-size: 0.8rem; height: auto; width: auto;" title="Filtrar por mes">
+                        <input type="date" id="filter-historial-dia" class="form-input" style="padding: 4px 10px; font-size: 0.8rem; height: auto; width: auto;" title="Filtrar por día exacto">
+                        <button class="btn btn-icon" id="filter-historial-clear" style="padding: 4px; color: var(--color-danger); display: none;" title="Limpiar filtros"><i class="bi bi-x-circle-fill"></i></button>
+                    </div>
+                </div>
+                <div class="data-table-wrapper" style="margin-top: var(--spacing-lg);">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Fecha y Hora</th>
+                                <th>Operación</th>
+                                <th>Monto</th>
+                                <th>Descripción detallada</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tabla-historial-completo">
+                            <tr>
+                                <td colspan="4" style="text-align: center; color: var(--color-text-muted);">El historial
+                                    está vacío.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- PESTAÑA 6: CERTIFICADOS -->
+        <section id="tab-certificados" class="tab-pane">
+            <div class="dash-card">
+                <div class="card-header">
+                    <h3 class="card-title"><i class="bi bi-file-earmark-pdf-fill"
+                            style="color: var(--color-primary);"></i> Certificados</h3>
+                </div>
+                <div style="margin-top: var(--spacing-lg); display: flex; flex-wrap: wrap; gap: var(--spacing-md);">
+                    <button class="btn btn-primary" id="btn-cert-pazysalvo" style="height: 46px; font-weight: 600;">
+                        <i class="bi bi-shield-check"></i> Paz y salvo
+                    </button>
+                    <button class="btn btn-secondary" id="btn-cert-afiliacion" style="height: 46px; font-weight: 600;">
+                        <i class="bi bi-person-check"></i> Afiliación
+                    </button>
+                    <button class="btn btn-secondary" id="btn-cert-ahorros" style="height: 46px; font-weight: 600;">
+                        <i class="bi bi-piggy-bank"></i> Ahorros
+                    </button>
+                    <button class="btn btn-secondary" id="btn-cert-estado-cuenta"
+                        style="height: 46px; font-weight: 600;">
+                        <i class="bi bi-card-checklist"></i> Estado de cuenta
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- PESTAÑA 7: MI PERFIL -->
+        <section id="tab-perfil" class="tab-pane">
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--spacing-2xl);">
+                <!-- Información Personal -->
+                <div style="display: flex; flex-direction: column; gap: var(--spacing-xl);">
+                    <div class="dash-card"
+                        style="background: linear-gradient(145deg, #ffffff, #f8fafc); position: relative; overflow: hidden; padding: 0;">
+                        <!-- Banner Superior de la Tarjeta -->
+                        <div
+                            style="position: absolute; top: 0; left: 0; right: 0; height: 100px; background: linear-gradient(135deg, var(--color-primary), #059669); opacity: 0.1;">
+                        </div>
+
+                        <div
+                            style="padding: var(--spacing-xl); display: flex; flex-direction: column; align-items: center; position: relative; z-index: 1;">
+                            <!-- Avatar Circular -->
+                            <div style="width: 80px; height: 80px; border-radius: 50%; background: linear-gradient(135deg, var(--color-primary), var(--color-primary-dark)); color: white; display: flex; align-items: center; justify-content: center; font-size: 2rem; font-weight: 700; box-shadow: 0 8px 20px rgba(16, 185, 129, 0.25); margin-bottom: 16px;"
+                                id="p-avatar-large"><i class="bi bi-person-fill"></i></div>
+                            <h3 id="p-nombre"
+                                style="margin: 0; font-size: 1.3rem; color: var(--color-text-main); text-align: center;">
+                                -</h3>
+                            <span
+                                style="color: var(--color-primary); font-size: 0.85rem; font-weight: 600; margin-top: 4px;"
+                                id="p-empresa">Asociado Activo</span>
+                        </div>
+
+                        <div
+                            style="padding: 0 var(--spacing-xl) var(--spacing-xl) var(--spacing-xl); display: grid; grid-template-columns: 1fr; gap: 16px; position: relative; z-index: 1;">
+                            <div
+                                style="background: #fff; padding: 12px 16px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.02); display: flex; align-items: center; gap: 16px;">
+                                <div
+                                    style="width: 42px; height: 42px; border-radius: 10px; background: #e0f2fe; color: #0284c7; display: flex; align-items: center; justify-content: center; font-size: 1.2rem;">
+                                    <i class="bi bi-person-vcard"></i>
+                                </div>
+                                <div>
+                                    <div
+                                        style="font-size: 0.75rem; color: var(--color-text-muted); font-weight: 600; text-transform: uppercase;">
+                                        Documento</div>
+                                    <div style="font-size: 1rem; font-weight: 600; color: var(--color-text-main);"
+                                        id="p-documento">-</div>
+                                </div>
+                            </div>
+
+                            <div
+                                style="background: #fff; padding: 12px 16px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.02); display: flex; align-items: center; gap: 16px;">
+                                <div
+                                    style="width: 42px; height: 42px; border-radius: 10px; background: #fce7f3; color: #be185d; display: flex; align-items: center; justify-content: center; font-size: 1.2rem;">
+                                    <i class="bi bi-envelope"></i>
+                                </div>
+                                <div>
+                                    <div
+                                        style="font-size: 0.75rem; color: var(--color-text-muted); font-weight: 600; text-transform: uppercase;">
+                                        Correo Electrónico</div>
+                                    <div style="font-size: 1rem; font-weight: 600; color: var(--color-text-main);"
+                                        id="p-correo">-</div>
+                                </div>
+                            </div>
+
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                                <div
+                                    style="background: #fff; padding: 12px 16px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.02);">
+                                    <div
+                                        style="font-size: 0.75rem; color: var(--color-text-muted); font-weight: 600; text-transform: uppercase; margin-bottom: 4px;">
+                                        <i class="bi bi-graph-up-arrow"
+                                            style="color: var(--color-success); margin-right: 4px;"></i> Ingresos
+                                    </div>
+                                    <div style="font-size: 1.1rem; font-weight: 700; color: var(--color-text-main);"
+                                        id="p-ingresos">$0</div>
+                                </div>
+                                <div
+                                    style="background: #fff; padding: 12px 16px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.02);">
+                                    <div
+                                        style="font-size: 0.75rem; color: var(--color-text-muted); font-weight: 600; text-transform: uppercase; margin-bottom: 4px;">
+                                        <i class="bi bi-graph-down-arrow"
+                                            style="color: var(--color-error); margin-right: 4px;"></i> Egresos
+                                    </div>
+                                    <div style="font-size: 1.1rem; font-weight: 700; color: var(--color-text-main);"
+                                        id="p-egresos">$0</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Configuración Ahorro Mensual (Regla de Ahorro 1) -->
+                    <div class="dash-card">
+                        <div class="card-header">
+                            <h3 class="card-title"><i class="bi bi-sliders" style="color: var(--color-primary);"></i>
+                                Ajuste de Ahorro Programado</h3>
+                        </div>
+                        <form id="config-ahorro-form"
+                            style="display: flex; flex-direction: column; gap: var(--spacing-md); margin-top: var(--spacing-lg);">
+                            <div id="ahorro-config-alert" class="alert alert-success"
+                                style="display: none; padding: 10px; font-size: 0.8rem; font-weight: 600;"></div>
+
+                            <div class="form-group">
+                                <label class="form-label">Aporte Mensual Mínimo de Ahorro</label>
+                                <input type="number" id="ahorro-monto-config-input" class="form-control" min="10000"
+                                    step="10000" required placeholder="Ej. 100000">
+                                <span style="font-size: 0.75rem; color: var(--color-text-muted);">Este monto es el que
+                                    deberás transferir mensualmente para estar al día con la cooperativa.</span>
+                            </div>
+                            <button type="submit" class="btn btn-primary" style="margin-top: var(--spacing-xs);">Guardar
+                                Configuración</button>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Seguridad y Cambio de Contraseña -->
+                <div class="dash-card">
+                    <div class="card-header">
+                        <h3 class="card-title"><i class="bi bi-shield-lock" style="color: var(--color-primary);"></i>
+                            Seguridad</h3>
+                    </div>
+                    <form id="change-password-form"
+                        style="display: flex; flex-direction: column; gap: var(--spacing-lg); margin-top: var(--spacing-lg);">
+                        <div id="password-alert" class="alert" style="display: none;"></div>
+
+                        <div class="form-group">
+                            <label class="form-label">Contraseña Actual</label>
+                            <input type="password" id="pass-current" class="form-control" required
+                                placeholder="Ingresa tu contraseña actual">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Contraseña Nueva</label>
+                            <input type="password" id="pass-new" class="form-control" required
+                                placeholder="Contraseña nueva (mínimo 6 caracteres)">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Confirmar Contraseña Nueva</label>
+                            <input type="password" id="pass-confirm" class="form-control" required
+                                placeholder="Re-ingresa la contraseña nueva">
+                        </div>
+
+                        <button type="submit" class="btn btn-primary" style="margin-top: var(--spacing-sm);">Actualizar
+                            contraseña</button>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- MODAL 1: MOCK PASARELA DE PAGO NEQUI (AHORRO) -->
+    <div class="coop-modal" id="modal-nequi-ahorro">
+        <div class="coop-modal-content">
+            <div class="coop-modal-header">
+                <h3>Pasarela de Ahorro Mensual</h3>
+                <button class="coop-modal-close" onclick="closeModal('modal-nequi-ahorro')">&times;</button>
+            </div>
+            <div class="coop-modal-body">
+                <div class="nequi-banner">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/e/e3/Logo-nequi.png" alt="Nequi"
+                        height="24" onerror="this.style.display='none'">
+                    <span>Nequi Negocios</span>
+                </div>
+                <form id="nequi-pay-form" style="display: flex; flex-direction: column; gap: var(--spacing-md);">
+                    <div class="form-group">
+                        <label class="form-label">Número de Celular Nequi</label>
+                        <input type="text" id="nequi-celular" class="form-input" required placeholder="Ej. 3001234567"
+                            pattern="[0-9]{10}" title="Debe contener 10 dígitos numéricos">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Correo Registrado en Nequi</label>
+                        <input type="email" id="nequi-correo" class="form-input" required
+                            placeholder="Ej. socio@correo.com">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Monto a Depositar (COP)</label>
+                        <input type="number" id="nequi-monto" class="form-input" required min="5000"
+                            placeholder="Ej. 100000">
+                    </div>
+                    <div
+                        style="font-size: 0.75rem; color: var(--color-text-muted); line-height: 1.4; background: #f8fafc; padding: 10px; border-radius: 8px;">
+                        ⚠️ <strong>Simulación Segura:</strong> Este pago es simulado. Tu saldo de ahorros se
+                        incrementará de inmediato en el sistema al dar clic en Pagar.
+                    </div>
+                    <button type="submit" class="btn btn-primary" style="height: 44px; margin-top: 5px;">Pagar con
+                        Nequi</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL 2: RETIRAR AHORROS -->
+    <div class="coop-modal" id="modal-retirar-ahorros">
+        <div class="coop-modal-content">
+            <div class="coop-modal-header">
+                <h3>Retirar Ahorros de mi Cuenta</h3>
+                <button class="coop-modal-close" onclick="closeModal('modal-retirar-ahorros')">&times;</button>
+            </div>
+            <div class="coop-modal-body">
+                <form id="retirar-ahorros-form" style="display: flex; flex-direction: column; gap: var(--spacing-md);">
+                    <div
+                        style="background-color: #fef3c7; border: 1px solid #fcd34d; color: #92400e; padding: 10px; border-radius: 8px; font-size: 0.8rem; font-weight: 500;">
+                        Saldo disponible para retiro: <strong id="retirar-saldo-disponible">$0</strong>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Monto a Retirar (COP)</label>
+                        <input type="number" id="retirar-monto-input" class="form-input" required min="5000"
+                            placeholder="Ej. 50000">
+                    </div>
+                    <div style="font-size: 0.75rem; color: var(--color-text-muted); line-height: 1.4;">
+                        💸 El dinero retirado será transferido a tu cuenta bancaria registrada en un lapso de 2-3 días
+                        hábiles.
+                    </div>
+                    <button type="submit" class="btn btn-primary" style="height: 44px; margin-top: 5px;">Confirmar
+                        Retiro</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL 3: PAGO VIRTUAL DE CUOTAS DE CRÉDITO -->
+    <div class="coop-modal" id="modal-pago-cuota">
+        <div class="coop-modal-content" style="max-width: 550px;">
+            <div class="coop-modal-header">
+                <h3><i class="bi bi-credit-card-fill" style="color: var(--color-primary); margin-right: 6px;"></i> Pagar
+                    Cuota</h3>
+                <button class="coop-modal-close" onclick="closeModal('modal-pago-cuota')">&times;</button>
+            </div>
+            <div class="coop-modal-body">
+                <!-- Info del crédito -->
+                <div
+                    style="background-color: #f8fafc; border: 1px solid var(--color-border); padding: 16px; border-radius: 12px; margin-bottom: var(--spacing-lg); font-size: 0.9rem;">
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                        <span style="color: var(--color-text-muted);"><i class="bi bi-clipboard2-data"
+                                style="margin-right: 6px;"></i>Crédito:</span>
+                        <strong id="pago-cuota-linea">-</strong>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                        <span style="color: var(--color-text-muted);"><i class="bi bi-hash"
+                                style="margin-right: 6px;"></i>Cuota:</span>
+                        <strong id="pago-cuota-numero">-</strong>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                        <span style="color: var(--color-text-muted);"><i class="bi bi-cash-coin"
+                                style="margin-right: 6px;"></i>Monto a pagar:</span>
+                        <strong id="pago-cuota-monto"
+                            style="color: var(--color-primary-dark); font-size: 1.1rem;">$0</strong>
+                    </div>
+                    <div style="display: flex; justify-content: space-between;">
+                        <span style="color: var(--color-text-muted);"><i class="bi bi-calendar-event"
+                                style="margin-right: 6px;"></i>Fecha de vencimiento:</span>
+                        <strong id="pago-cuota-vence">-</strong>
+                    </div>
+                </div>
+
+                <hr style="border: none; border-top: 1px solid var(--color-border); margin: var(--spacing-lg) 0;">
+
+                <!-- Opciones de Pago -->
+                <h4 style="font-size: 0.95rem; margin-bottom: var(--spacing-md); color: var(--color-text-main);"><i
+                        class="bi bi-cash-stack" style="margin-right: 6px; color: var(--color-primary);"></i>Tipo de
+                    pago</h4>
+                <div style="display: flex; flex-direction: column; gap: 12px; margin-bottom: var(--spacing-lg);">
+                    <label
+                        style="display: flex; align-items: center; gap: 8px; cursor: pointer; padding: 10px; border: 1px solid var(--color-border); border-radius: 8px; background: #fff; transition: all 0.2s;">
+                        <input type="radio" name="pago_tipo" value="normal" checked>
+                        <span><strong>Pago Normal:</strong> Solo cuota actual</span>
+                    </label>
+                    <label
+                        style="display: flex; align-items: center; gap: 8px; cursor: pointer; padding: 10px; border: 1px solid var(--color-border); border-radius: 8px; background: #fff; transition: all 0.2s;">
+                        <input type="radio" name="pago_tipo" value="total">
+                        <span><strong>Pago Total:</strong> Liquidar todo el crédito</span>
+                    </label>
+                    <label
+                        style="display: flex; align-items: center; gap: 8px; cursor: pointer; padding: 10px; border: 1px solid var(--color-border); border-radius: 8px; background: #fff; transition: all 0.2s;">
+                        <input type="radio" name="pago_tipo" value="extra">
+                        <span><strong>Otro Valor:</strong> Abono extraordinario a capital</span>
+                    </label>
+                </div>
+
+                <!-- Input de Otro Valor -->
+                <div id="pago-extra-container"
+                    style="display: none; flex-direction: column; gap: 12px; margin-bottom: var(--spacing-lg); padding: 16px; background: #ecfdf5; border-radius: 8px; border: 1px dashed var(--color-primary);">
+                    <div>
+                        <label class="form-label" style="font-size: 0.85rem;">Monto a aportar (Debe ser mayor a la
+                            cuota)</label>
+                        <input type="number" id="pago-monto-personalizado" class="form-control"
+                            placeholder="Ej. 500000">
+                    </div>
+                    <div>
+                        <label class="form-label" style="font-size: 0.85rem;">¿Qué hacer con el dinero sobrante?</label>
+                        <select id="pago-accion-extra" class="form-control">
+                            <option value="plazo">Reducir Plazo (terminar de pagar en menos meses)</option>
+                            <option value="cuota">Reducir Cuota (pagar menos dinero cada mes)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <hr style="border: none; border-top: 1px solid var(--color-border); margin: var(--spacing-lg) 0;">
+
+                <!-- Método de Pago -->
+                <h4 style="font-size: 0.95rem; margin-bottom: var(--spacing-md); color: var(--color-text-main);"><i
+                        class="bi bi-wallet" style="margin-right: 6px; color: var(--color-primary);"></i>Método de pago
+                </h4>
+                <div
+                    style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: var(--spacing-lg);">
+                    <!-- Ahorros -->
+                    <label class="payment-method-card" style="cursor: pointer;">
+                        <input type="radio" name="pago_metodo" value="ahorros" checked style="display: none;">
+                        <div class="method-card-content"
+                            style="border: 2px solid var(--color-border); border-radius: 12px; padding: 12px; text-align: center; transition: all 0.2s;">
+                            <i class="bi bi-piggy-bank-fill"
+                                style="font-size: 1.8rem; color: #10B981; display: block; margin-bottom: 8px;"></i>
+                            <div style="font-weight: 700; font-size: 0.85rem; margin-bottom: 4px;">AHORROS</div>
+                            <div style="font-size: 0.7rem; color: var(--color-text-muted); line-height: 1.3;">Pagar con
+                                tus ahorros</div>
+                        </div>
+                    </label>
+                    <!-- PSE -->
+                    <label class="payment-method-card" style="cursor: pointer;">
+                        <input type="radio" name="pago_metodo" value="pse" style="display: none;">
+                        <div class="method-card-content"
+                            style="border: 2px solid var(--color-border); border-radius: 12px; padding: 12px; text-align: center; transition: all 0.2s;">
+                            <i class="bi bi-bank"
+                                style="font-size: 1.8rem; color: #3B82F6; display: block; margin-bottom: 8px;"></i>
+                            <div style="font-weight: 700; font-size: 0.85rem; margin-bottom: 4px;">PSE</div>
+                            <div style="font-size: 0.7rem; color: var(--color-text-muted); line-height: 1.3;">
+                                Transferencia bancaria</div>
+                        </div>
+                    </label>
+                    <!-- Nequi -->
+                    <label class="payment-method-card" style="cursor: pointer;">
+                        <input type="radio" name="pago_metodo" value="nequi" style="display: none;">
+                        <div class="method-card-content"
+                            style="border: 2px solid var(--color-border); border-radius: 12px; padding: 12px; text-align: center; transition: all 0.2s;">
+                            <i class="bi bi-phone"
+                                style="font-size: 1.8rem; color: #8B5CF6; display: block; margin-bottom: 8px;"></i>
+                            <div style="font-weight: 700; font-size: 0.85rem; margin-bottom: 4px;">NEQUI</div>
+                            <div style="font-size: 0.7rem; color: var(--color-text-muted); line-height: 1.3;">Pago móvil
+                            </div>
+                        </div>
+                    </label>
+                </div>
+
+                <hr style="border: none; border-top: 1px solid var(--color-border); margin: var(--spacing-lg) 0;">
+
+                <!-- Simulación de Pago -->
+                <h4 style="font-size: 0.95rem; margin-bottom: var(--spacing-md); color: var(--color-text-main);"><i
+                        class="bi bi-bar-chart-line"
+                        style="margin-right: 6px; color: var(--color-primary);"></i>Simulación de pago</h4>
+                <div
+                    style="background-color: #f1f5f9; border: 1px solid var(--color-border); padding: 16px; border-radius: 12px; margin-bottom: var(--spacing-lg); font-size: 0.85rem;">
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                        <span style="color: var(--color-text-muted);">Método seleccionado:</span>
+                        <strong id="simulacion-metodo">Ahorros</strong>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                        <span style="color: var(--color-text-muted);">Saldo actual de ahorros:</span>
+                        <strong id="simulacion-ahorros-actual">$0</strong>
+                    </div>
+                    <div id="simulacion-ahorros-despues-container"
+                        style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                        <span style="color: var(--color-text-muted);">Saldo después del pago:</span>
+                        <strong id="simulacion-ahorros-despues">$0</strong>
+                    </div>
+                    <div style="display: flex; justify-content: space-between;">
+                        <span style="color: var(--color-text-muted);">Deuda restante del crédito:</span>
+                        <strong id="simulacion-deuda-restante">$0</strong>
+                    </div>
+                </div>
+
+                <!-- Alerta de validación (saldo insuficiente, etc.) -->
+                <div id="pago-cuota-alerta" class="alert-banner error"
+                    style="display: none; margin-bottom: var(--spacing-lg);">
+                    <i class="bi bi-x-circle-fill" style="font-size: 1.25rem;"></i>
+                    <div id="pago-cuota-alerta-texto"></div>
+                </div>
+
+                <hr style="border: none; border-top: 1px solid var(--color-border); margin: var(--spacing-lg) 0;">
+
+                <div style="display: flex; justify-content: space-between; gap: 16px;">
+                    <button class="btn btn-secondary" style="flex: 1; height: 46px;"
+                        onclick="closeModal('modal-pago-cuota')">
+                        Cancelar
+                    </button>
+                    <button id="btn-confirmar-pago" class="btn btn-primary"
+                        style="flex: 1; height: 46px; font-weight: bold;">
+                        <i class="bi bi-check-circle"></i> Confirmar pago
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL 4: HISTORIAL DE PAGOS POR CRÉDITO -->
+    <div class="coop-modal" id="modal-historial-credito">
+        <div class="coop-modal-content" style="max-width: 650px;">
+            <div class="coop-modal-header">
+                <h3><i class="bi bi-receipt-cutoff" style="color: var(--color-primary); margin-right: 6px;"></i>
+                    Historial de Pagos</h3>
+                <button class="coop-modal-close" onclick="closeModal('modal-historial-credito')">&times;</button>
+            </div>
+            <div class="coop-modal-body">
+                <!-- Info resumida del crédito -->
+                <div
+                    style="background-color: #f8fafc; padding: 14px 16px; border-radius: 12px; margin-bottom: var(--spacing-lg); display: flex; justify-content: space-between; align-items: center; font-size: 0.9rem;">
+                    <div>
+                        <span style="color: var(--color-text-muted);">Crédito:</span>
+                        <strong id="historial-credito-linea">-</strong>
+                    </div>
+                    <div>
+                        <span style="color: var(--color-text-muted);">Total pagado:</span>
+                        <strong id="historial-credito-total" style="color: var(--color-success);">$0</strong>
+                    </div>
+                </div>
+
+                <!-- Tabla de pagos -->
+                <div style="max-height: 380px; overflow-y: auto;">
+                    <table class="dash-table" style="width: 100%; font-size: 0.85rem;">
+                        <thead>
+                            <tr>
+                                <th>Fecha</th>
+                                <th>Recibo</th>
+                                <th>Cuota #</th>
+                                <th>Monto</th>
+                                <th>Canal</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tabla-historial-credito">
+                            <tr>
+                                <td colspan="5" style="text-align: center; color: var(--color-text-muted);">Selecciona
+                                    un crédito.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- UTILS & MODAL CONTROLS -->
+    <script>
+        function showModal(id) {
+            document.getElementById(id).classList.add('show');
+        }
+        function closeModal(id) {
+            document.getElementById(id).classList.remove('show');
+        }
+
+        function toggleProfileMenu(event) {
+            const dropdown = document.getElementById('profile-dropdown');
+            dropdown.classList.toggle('show');
+            event.stopPropagation();
+        }
+
+        document.addEventListener('click', function (event) {
+            const profileBtn = document.getElementById('profile-menu-btn');
+            const dropdown = document.getElementById('profile-dropdown');
+            const notifBtn = document.getElementById('notif-bell-btn');
+            const notifDropdown = document.getElementById('notif-dropdown');
+
+            if (profileBtn && !profileBtn.contains(event.target)) {
+                if (dropdown && dropdown.classList.contains('show')) {
+                    dropdown.classList.remove('show');
+                }
+            }
+
+            if (notifBtn && !notifBtn.contains(event.target)) {
+                if (notifDropdown && notifDropdown.classList.contains('show')) {
+                    notifDropdown.classList.remove('show');
+                }
+            }
+        });
+    </script>
+    <script src="./js/controllers/socio.controller.js"></script>
+</body>
+
+</html>

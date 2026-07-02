@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="es" class="session-pending">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analista de Crédito | COOPMONEY</title>
+    <style>.session-pending body{display:none !important;}</style>
+    <script>
+        (function() {
+            function checkSession() {
+                var raw = sessionStorage.getItem('currentUser') || localStorage.getItem('currentUser');
+                var currentUser = null;
+                try { currentUser = JSON.parse(raw); } catch(e) {}
+                if (!currentUser || !currentUser.token || currentUser.rol !== 'analista') {
+                    sessionStorage.removeItem('currentUser');
+                    localStorage.removeItem('currentUser');
+                    window.location.replace('index.html');
+                    return;
+                }
+                document.documentElement.classList.remove('session-pending');
+            }
+            checkSession();
+            window.addEventListener('pageshow', function(event) {
+                if (event.persisted || (window.performance && window.performance.navigation.type === 2)) {
+                    checkSession();
+                }
+            });
+        })();
+    </script>
+    <!-- Google Fonts - Carga Asíncrona Optimizada -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" media="print" onload="this.media='all'">
+    <noscript>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+    </noscript>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="./css/main.css">
+    <style>
+        .header-brand {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .dash-logo-container {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0;
+            width: auto;
+        }
+
+        .dash-logo-container img {
+            height: 40px;
+        }
+
+        .dash-nav {
+            display: flex;
+            flex-direction: row;
+            gap: 8px;
+            width: auto;
+            height: 100%;
+            align-items: center;
+        }
+
+        .coop-header-info {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 0;
+            padding: 0;
+            background-color: transparent;
+            border: none;
+            box-sizing: border-box;
+            width: auto;
+            border-left: 1px solid var(--color-border);
+            padding-left: 15px;
+        }
+
+        .coop-header-info span {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--color-primary-dark);
+            line-height: 1.2;
+        }
+
+        .coop-header-info small {
+            font-size: 0.65rem;
+            color: var(--color-text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .dash-nav-item {
+            width: auto;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            padding: 0 var(--spacing-md) !important;
+            border-radius: 8px;
+            color: var(--color-text-muted) !important;
+            border: none !important;
+            transition: all 0.2s ease;
+            font-size: 0.9rem;
+            font-weight: 500;
+            box-sizing: border-box;
+            gap: 8px;
+            cursor: pointer;
+        }
+
+        .dash-nav-item:hover {
+            background-color: #f1f5f9;
+            color: var(--color-primary) !important;
+        }
+
+        .dash-nav-item.active {
+            background-color: #ecfdf5 !important;
+            color: var(--color-primary-dark) !important;
+            border: none !important;
+            font-weight: 600 !important;
+        }
+
+        .header-action-container {
+            margin-top: 0;
+            width: auto;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            gap: var(--spacing-lg);
+            border: none;
+            padding-top: 0;
+            margin-right: 0 !important;
+            box-sizing: border-box;
+        }
+
+        .dash-user-profile {
+            width: auto;
+            display: flex;
+            flex-direction: row;
+            justify-content: flex-end;
+            align-items: center;
+            gap: var(--spacing-sm);
+            padding: 4px;
+            box-sizing: border-box;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .dash-user-profile>div {
+            text-align: right !important;
+        }
+
+        .avatar-label {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.95rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+
+        .profile-dropdown-menu {
+            position: absolute;
+            top: 60px;
+            right: 0;
+            width: 220px;
+            background: #ffffff;
+            border: 1px solid var(--color-border);
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            z-index: 10000;
+            display: none;
+            flex-direction: column;
+            overflow: hidden;
+            padding: 8px 0;
+        }
+
+        .profile-dropdown-menu.show {
+            display: flex;
+            animation: slideDown 0.2s ease-out;
+        }
+
+        .profile-dropdown-item {
+            padding: 10px 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--color-text-main);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.2s;
+            border: none;
+            background: transparent;
+            width: 100%;
+            text-align: left;
+        }
+
+        .profile-dropdown-item:hover {
+            background-color: #f8fafc;
+            color: var(--color-primary);
+        }
+
+        .profile-dropdown-divider {
+            height: 1px;
+            background-color: var(--color-border);
+            margin: 4px 0;
+        }
+
+        @keyframes slideDown {
+            from {
+                transform: translateY(-10px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+
+<body class="dashboard-layout">
+
+    <!-- HEADER -->
+    <header class="dash-header">
+        <div class="header-brand">
+            <div class="dash-logo-container">
+                <img src="./assets/images/LogoV1.1.png" alt="COOPMONEY Logo"
+                    onerror="this.src='https://via.placeholder.com/150x40?text=COOPMONEY'">
+            </div>
+            <div class="coop-header-info">
+                <small>Analista de</small>
+                <span id="header-coop-name">Cargando Cooperativa...</span>
+            </div>
+        </div>
+
+        <nav class="dash-nav">
+            <div class="dash-nav-item active" data-tab-target="tab-solicitudes">Solicitudes en Estudio</div>
+            <div class="dash-nav-item" data-tab-target="tab-registrar">Registrar Crédito</div>
+            <div class="dash-nav-item" data-tab-target="tab-aspirantes">Afiliaciones Pendientes</div>
+        </nav>
+
+        <div class="header-action-container">
+            <!-- PERFIL USUARIO -->
+            <div class="dash-user-profile" id="profile-menu-btn" onclick="toggleProfileMenu(event)">
+                <div style="text-align: right;">
+                    <div style="font-weight: 600; font-size: 0.9rem; color: var(--color-text-main);"
+                        id="header-user-name">Analista</div>
+                </div>
+                <div class="avatar-label" id="header-user-avatar">AN</div>
+
+                <!-- DROPDOWN PERFIL -->
+                <div class="profile-dropdown-menu" id="profile-dropdown">
+                    <div class="profile-dropdown-item" data-tab-target="tab-perfil">
+                        <i class="bi bi-gear"></i> Mi Perfil
+                    </div>
+                    <div class="profile-dropdown-divider"></div>
+                    <a href="#" class="profile-dropdown-item" id="logout-btn" style="color: var(--color-danger);">
+                        <i class="bi bi-box-arrow-right"></i> Cerrar sesión
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- CONTENT -->
+    <main class="dash-main-content">
+
+        <section id="tab-solicitudes" class="tab-pane active">
+            <div class="analista-section-header">
+                <h3 class="card-title analista-section-title"><i class="bi bi-folder2-open"></i> Solicitudes de Crédito Pendientes</h3>
+                <span class="status-badge pending" id="count-solicitudes" style="font-size: 0.85rem;">0 pendientes</span>
+            </div>
+            <div id="cards-solicitudes-container" class="analista-solicitudes-list">
+                <div class="dash-card analista-empty-state">
+                    <i class="bi bi-inbox"></i>
+                    No hay solicitudes de crédito pendientes en este momento.
+                </div>
+            </div>
+        </section>
+
+    <!-- MODAL: MOTIVO DE RECHAZO -->
+    <div class="modal-overlay" id="modal-rechazo">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="bi bi-x-octagon" style="color: var(--color-danger);"></i> Rechazar Solicitud</h3>
+                <button class="coop-modal-close" onclick="document.getElementById('modal-rechazo').classList.remove('open')">&times;</button>
+            </div>
+            <div style="padding: var(--spacing-lg);">
+                <p style="margin-bottom: var(--spacing-md); color: var(--color-text-muted); font-size: 0.9rem;">
+                    Escribe el motivo del rechazo para la solicitud de <strong id="rechazo-socio-name">-</strong>. Este motivo será enviado como notificación al socio.
+                </p>
+                <input type="hidden" id="rechazo-solicitud-id">
+                <div class="form-group">
+                    <label class="form-label">Motivo de Rechazo (obligatorio)</label>
+                    <textarea id="rechazo-motivo-input" class="form-input" style="height: 100px;" required placeholder="Ej: Capacidad de pago insuficiente, relación I/E por debajo del mínimo..."></textarea>
+                </div>
+                <button class="btn btn-primary" id="btn-confirmar-rechazo" style="width: 100%; height: 44px; margin-top: var(--spacing-md); background-color: var(--color-danger);">
+                    <i class="bi bi-x-circle"></i> Confirmar Rechazo
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL: HISTORIAL FINANCIERO DEL SOCIO -->
+    <div class="modal-overlay" id="modal-historial-socio">
+        <div class="modal-content" style="max-width: 650px;">
+            <div class="modal-header">
+                <h3><i class="bi bi-clock-history" style="color: var(--color-primary);"></i> Historial Financiero</h3>
+                <button class="coop-modal-close" onclick="document.getElementById('modal-historial-socio').classList.remove('open')">&times;</button>
+            </div>
+            <div style="padding: var(--spacing-lg);">
+                <h4 id="historial-socio-title" style="margin-bottom: var(--spacing-lg); font-size: 1rem;">-</h4>
+                <div id="historial-socio-content" style="font-size: 0.9rem; color: var(--color-text-muted);">
+                    Cargando historial...
+                </div>
+            </div>
+        </div>
+    </div>
+
+        <!-- PESTAÑA 2: REGISTRAR CRÉDITO -->
+        <section id="tab-registrar" class="tab-pane">
+            <div class="dash-card" style="max-width: 700px; margin: 0 auto; overflow: hidden; padding: 0; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08); border: none;">
+                
+                <!-- CABECERA DEL FORMULARIO -->
+                <div style="background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%); padding: var(--spacing-2xl); color: white; text-align: center;">
+                    <div style="background: rgba(255, 255, 255, 0.2); width: 70px; height: 70px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto var(--spacing-md) auto; backdrop-filter: blur(5px);">
+                        <i class="bi bi-file-earmark-text" style="font-size: 2rem;"></i>
+                    </div>
+                    <h3 style="margin: 0; font-weight: 700; font-size: 1.6rem; color: white; letter-spacing: -0.5px;">Radicar Solicitud Manual</h3>
+                    <p style="margin: 8px 0 0 0; opacity: 0.9; font-size: 0.95rem;">Registra un nuevo crédito para un asociado existente de la cooperativa.</p>
+                </div>
+
+                <div style="padding: var(--spacing-2xl);">
+                    <div id="analista-form-alert" class="alert" style="display: none; border-radius: 12px; font-weight: 500;"></div>
+
+                    <form id="registrar-solicitud-form" style="display: flex; flex-direction: column; gap: var(--spacing-xl);">
+                        
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: var(--spacing-xl);">
+                            <div class="form-group" style="margin-bottom: 0;">
+                                <label class="form-label" style="font-weight: 600; display: flex; align-items: center; gap: 8px; color: var(--color-text-main);">
+                                    <i class="bi bi-person-vcard" style="color: var(--color-primary); font-size: 1.1rem;"></i> Documento del Asociado (*)
+                                </label>
+                                <input type="text" id="sol-documento" class="form-input" required placeholder="Ej: 1098765432" style="background-color: #f8fafc; border: 2px solid transparent; border-radius: 10px; transition: all 0.3s; box-shadow: 0 2px 5px rgba(0,0,0,0.02);" onfocus="this.style.borderColor='var(--color-primary)'; this.style.backgroundColor='#fff';" onblur="this.style.borderColor='transparent'; this.style.backgroundColor='#f8fafc';">
+                            </div>
+
+                            <div class="form-group" style="margin-bottom: 0;">
+                                <label class="form-label" style="font-weight: 600; display: flex; align-items: center; gap: 8px; color: var(--color-text-main);">
+                                    <i class="bi bi-tags" style="color: var(--color-primary); font-size: 1.1rem;"></i> Línea de Crédito (*)
+                                </label>
+                                <select class="form-input" id="sol-linea" required style="background-color: #f8fafc; border: 2px solid transparent; border-radius: 10px; transition: all 0.3s; box-shadow: 0 2px 5px rgba(0,0,0,0.02);" onfocus="this.style.borderColor='var(--color-primary)'; this.style.backgroundColor='#fff';" onblur="this.style.borderColor='transparent'; this.style.backgroundColor='#f8fafc';">
+                                    <option value="1">Libre Inversión</option>
+                                    <option value="2">Vivienda</option>
+                                    <option value="3">Educativo</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: var(--spacing-xl);">
+                            <div class="form-group" style="margin-bottom: 0;">
+                                <label class="form-label" style="font-weight: 600; display: flex; align-items: center; gap: 8px; color: var(--color-text-main);">
+                                    <i class="bi bi-cash-stack" style="color: var(--color-primary); font-size: 1.1rem;"></i> Monto Aprobado ($) (*)
+                                </label>
+                                <input type="number" id="sol-monto" class="form-input" required placeholder="Ej: 8000000" min="500000" style="background-color: #f8fafc; border: 2px solid transparent; border-radius: 10px; transition: all 0.3s; box-shadow: 0 2px 5px rgba(0,0,0,0.02); font-weight: 700; color: var(--color-primary-dark); font-size: 1.1rem;" onfocus="this.style.borderColor='var(--color-primary)'; this.style.backgroundColor='#fff';" onblur="this.style.borderColor='transparent'; this.style.backgroundColor='#f8fafc';">
+                            </div>
+
+                            <div class="form-group" style="margin-bottom: 0;">
+                                <label class="form-label" style="font-weight: 600; display: flex; align-items: center; gap: 8px; color: var(--color-text-main);">
+                                    <i class="bi bi-calendar-range" style="color: var(--color-primary); font-size: 1.1rem;"></i> Plazo en Meses (*)
+                                </label>
+                                <input type="number" id="sol-plazo" class="form-input" required placeholder="Ej: 12" min="6" max="60" style="background-color: #f8fafc; border: 2px solid transparent; border-radius: 10px; transition: all 0.3s; box-shadow: 0 2px 5px rgba(0,0,0,0.02);" onfocus="this.style.borderColor='var(--color-primary)'; this.style.backgroundColor='#fff';" onblur="this.style.borderColor='transparent'; this.style.backgroundColor='#f8fafc';">
+                            </div>
+                        </div>
+
+                        <div class="form-group" style="margin-bottom: 0;">
+                            <label class="form-label" style="font-weight: 600; display: flex; align-items: center; gap: 8px; color: var(--color-text-main);">
+                                <i class="bi bi-chat-left-text" style="color: var(--color-primary); font-size: 1.1rem;"></i> Propósito / Destino del Crédito (*)
+                            </label>
+                            <textarea id="sol-proposito" class="form-input" style="height: 100px; background-color: #f8fafc; border: 2px solid transparent; border-radius: 10px; resize: vertical; transition: all 0.3s; box-shadow: 0 2px 5px rgba(0,0,0,0.02);" required placeholder="Especificar el uso detallado de los fondos para el comité de crédito..." onfocus="this.style.borderColor='var(--color-primary)'; this.style.backgroundColor='#fff';" onblur="this.style.borderColor='transparent'; this.style.backgroundColor='#f8fafc';"></textarea>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary" style="width: 100%; height: 55px; font-size: 1.1rem; font-weight: 700; letter-spacing: 0.5px; border-radius: 12px; margin-top: var(--spacing-md); display: flex; align-items: center; justify-content: center; gap: 10px; box-shadow: 0 8px 20px rgba(16, 185, 129, 0.3); transition: all 0.3s;" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 12px 25px rgba(16, 185, 129, 0.4)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 8px 20px rgba(16, 185, 129, 0.3)';">
+                            <i class="bi bi-cloud-arrow-up-fill" style="font-size: 1.3rem;"></i> RADICAR SOLICITUD DE CRÉDITO
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <!-- PESTAÑA: AFILIACIONES PENDIENTES (ASPIRANTES) -->
+        <section id="tab-aspirantes" class="tab-pane">
+            <div class="dash-card">
+                <div class="card-header">
+                    <h3 class="card-title">Solicitudes de Afiliación en tu Bandeja</h3>
+                </div>
+
+                <div class="data-table-wrapper" style="margin-top: var(--spacing-lg);">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Aspirante</th>
+                                <th>Documento</th>
+                                <th>Contacto</th>
+                                <th>Dirección</th>
+                                <th>Ocupación</th>
+                                <th>Ingresos Mensuales</th>
+                                <th>Acción</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tabla-analista-aspirantes">
+                            <tr>
+                                <td colspan="7" style="text-align: center; color: var(--color-text-muted);">No tienes solicitudes de afiliación pendientes de revisión.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- PESTAÑA 3: MI PERFIL -->
+        <section id="tab-perfil" class="tab-pane">
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--spacing-2xl);">
+                <!-- Ficha -->
+                <div class="dash-card">
+                    <div class="card-header">
+                        <h3 class="card-title">Perfil Analista</h3>
+                    </div>
+                    <div style="display: flex; flex-direction: column; gap: var(--spacing-md); margin-top: var(--spacing-lg);">
+                        <div>
+                            <label style="font-size: 0.75rem; text-transform: uppercase; color: var(--color-text-muted); font-weight: 600;">Nombre Completo</label>
+                            <div style="font-size: 1.1rem; font-weight: 500; color: var(--color-text-main); margin-top: 4px;" id="p-nombre">-</div>
+                        </div>
+                        <div>
+                            <label style="font-size: 0.75rem; text-transform: uppercase; color: var(--color-text-muted); font-weight: 600;">Documento</label>
+                            <div style="font-size: 1.1rem; font-weight: 500; color: var(--color-text-main); margin-top: 4px;" id="p-documento">-</div>
+                        </div>
+                        <div>
+                            <label style="font-size: 0.75rem; text-transform: uppercase; color: var(--color-text-muted); font-weight: 600;">Correo Electrónico</label>
+                            <div style="font-size: 1.1rem; font-weight: 500; color: var(--color-text-main); margin-top: 4px;" id="p-correo">-</div>
+                        </div>
+                        <div>
+                            <label style="font-size: 0.75rem; text-transform: uppercase; color: var(--color-text-muted); font-weight: 600;">Cargo</label>
+                            <div style="font-size: 1.1rem; font-weight: 500; color: var(--color-text-main); margin-top: 4px;">Analista de Crédito Senior</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Seguridad -->
+                <div class="dash-card">
+                    <div class="card-header">
+                        <h3 class="card-title">Seguridad</h3>
+                    </div>
+                    <form id="change-password-form" style="display: flex; flex-direction: column; gap: var(--spacing-lg); margin-top: var(--spacing-lg);">
+                        <div id="password-alert" class="alert" style="display: none;"></div>
+
+                        <div class="form-group">
+                            <label class="form-label">Contraseña Actual</label>
+                            <input type="password" id="pass-current" class="form-input" required placeholder="Ingresa tu contraseña actual">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Contraseña Nueva</label>
+                            <input type="password" id="pass-new" class="form-input" required placeholder="Contraseña nueva (mínimo 6 caracteres)">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Confirmar Contraseña Nueva</label>
+                            <input type="password" id="pass-confirm" class="form-input" required placeholder="Re-ingresa la contraseña nueva">
+                        </div>
+
+                        <button type="submit" class="btn btn-primary" style="margin-top: var(--spacing-sm);">Actualizar contraseña</button>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <script>
+        function toggleProfileMenu(event) {
+            const dropdown = document.getElementById('profile-dropdown');
+            dropdown.classList.toggle('show');
+            event.stopPropagation();
+        }
+
+        document.addEventListener('click', function (event) {
+            const profileBtn = document.getElementById('profile-menu-btn');
+            const dropdown = document.getElementById('profile-dropdown');
+
+            if (profileBtn && !profileBtn.contains(event.target)) {
+                if (dropdown && dropdown.classList.contains('show')) {
+                    dropdown.classList.remove('show');
+                }
+            }
+        });
+    </script>
+    <script src="./js/controllers/analista.controller.js"></script>
+</body>
+
+</html>

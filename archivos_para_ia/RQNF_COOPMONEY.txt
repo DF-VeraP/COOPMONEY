@@ -1,0 +1,15 @@
+ REQUISITOS NO FUNCIONALES – VERSIÓN FINAL
+🔧 RNF de Negocio y Configuración
+ID	Requisito No Funcional	Tipo
+RNF01	La tasa de interés debe ser parametrizable según la línea de crédito (ej: consumo, vivienda, educativo). La configuración la realiza el Gestor Financiero.	Configuración / Negocio
+RNF02	El sistema debe permitir la generación de paz y salvo y certificados de deuda en formato PDF, tanto para el Socio (descarga virtual) como para el Cajero (impresión en punto físico).	Documentación
+RNF03	El acceso a la información financiera (créditos, pagos, ahorros, reportes de cartera) debe estar restringido según el rol del usuario autenticado. Cada rol solo ve lo que le corresponde.	Seguridad / Acceso
+🔐 RNF de Control de Acceso y Reglas
+ID	Requisito No Funcional	Tipo
+RNF04	El Aspirante no tiene acceso al sistema hasta que su solicitud sea aprobada por el Analista y pase formalmente a ser Socio. Mientras está en estado "Pendiente" o "Rechazado", no puede iniciar sesión.	Control de acceso
+RNF05	El historial de pagos (visible para Socio y Cajero) debe mostrarse ordenado del más reciente al más antiguo por defecto, sin requerir acción adicional del usuario.	Usabilidad / UX
+RNF06	El sistema debe evitar pagos duplicados mediante un bloqueo de 5 minutos. Cada pago pendiente tiene un ID único; si se intenta pagar el mismo ID antes de 5 minutos, el sistema lo rechaza con un mensaje de advertencia.	Integridad de datos
+🛡️ RNF de Seguridad y Reglas Fijas
+ID	Requisito No Funcional	Tipo
+RNF07	El acceso a información financiera (saldos, créditos, pagos, reportes) debe estar estrictamente restringido según el rol del usuario autenticado. El sistema debe validar el rol en cada petición al servidor, no solo en la interfaz.	Seguridad / Backend
+RNF08	El porcentaje de ahorro mínimo requerido para que un Socio pueda solicitar un crédito es fijo: 15% del monto solicitado. Este valor no es configurable desde la interfaz y está definido directamente en el código del sistema.	Regla fija de negocio

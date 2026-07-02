@@ -1,0 +1,673 @@
+🏃 Sprint 1: Registro de asociados y líneas de crédito
+Duración: 1 semana
+Objetivo: Base del sistema: cooperativas, usuarios, aspirantes, analistas y líneas de crédito
+
+🧑💼 Super Administrador
+HU01
+
+Yo como Super Administrador
+quiero registrar una nueva cooperativa con sus datos básicos
+para que la cooperativa pueda comenzar a usar el sistema
+
+Criterios de aceptación:
+
+El formulario incluye: nombre, NIT, dirección, teléfono, correo electrónico
+
+Todos los campos son obligatorios
+
+El NIT debe ser único en el sistema (no puede repetirse)
+
+Al guardar, la cooperativa queda con estado "Activa" por defecto
+
+Se muestra un mensaje de confirmación: "Cooperativa registrada exitosamente"
+
+HU02
+
+Yo como Super Administrador
+quiero listar todas las cooperativas registradas
+para tener visibilidad general del sistema multi-cooperativa
+
+Criterios de aceptación:
+
+La tabla muestra: nombre, NIT, estado (Activo/Inactivo), fecha de registro
+
+Se puede buscar por nombre o NIT
+
+Se puede ordenar por cualquier columna
+
+Cada fila tiene botones: "Ver detalles", "Activar/Desactivar"
+
+HU03
+
+Yo como Super Administrador
+quiero activar o desactivar una cooperativa
+para suspender el acceso de cooperativas que no han pagado su mensualidad
+
+Criterios de aceptación:
+
+Al desactivar, todos los usuarios de esa cooperativa pierden acceso al sistema
+
+Al intentar iniciar sesión en una cooperativa desactivada, muestra: "Su cooperativa está inactiva. Contacte al administrador"
+
+Al activar, los usuarios recuperan el acceso inmediatamente
+
+Se solicita confirmación antes de cambiar el estado
+
+👤 Aspirante
+HU04
+
+Yo como Aspirante
+quiero llenar un formulario de solicitud de ingreso con mis datos personales, laborales y financieros
+para convertirme en socio de la cooperativa
+
+Criterios de aceptación:
+
+El formulario incluye: nombre completo, documento, correo, teléfono, dirección, ocupación, ingresos mensuales
+
+El campo correo debe tener formato válido
+
+El documento debe ser único (no puede haber dos solicitudes con el mismo documento pendientes)
+
+Al enviar, la solicitud queda en estado "Pendiente"
+
+Se muestra mensaje: "Solicitud enviada. Recibirás respuesta por correo"
+
+HU05
+
+Yo como Aspirante
+quiero recibir un correo electrónico con el resultado de mi solicitud
+para saber si fui aprobado o rechazado como socio
+
+Criterios de aceptación:
+
+Si es aprobado, el correo dice: "¡Felicidades! Tu solicitud ha sido aprobada. Ya puedes iniciar sesión como Socio"
+
+Si es rechazado, el correo dice: "Tu solicitud ha sido rechazada. Motivo: [motivo]"
+
+El correo se envía automáticamente cuando el Analista cambia el estado
+
+Si el correo no se puede enviar, el sistema lo registra en un log de errores
+
+📋 Analista
+HU06
+
+Yo como Analista
+quiero ver el listado de solicitudes de aspirantes en estado "Pendiente"
+para revisar quiénes quieren unirse a la cooperativa
+
+Criterios de aceptación:
+
+La tabla muestra: nombre, documento, fecha de solicitud, ocupación
+
+Se puede filtrar por estado: Pendiente, Aprobada, Rechazada
+
+Cada fila tiene un botón "Ver detalles" para revisar la solicitud completa
+
+Solo aparecen solicitudes de la cooperativa del Analista logueado
+
+HU07
+
+Yo como Analista
+quiero aprobar una solicitud de aspirante
+para convertirlo automáticamente en Socio de la cooperativa
+
+Criterios de aceptación:
+
+Al aprobar, el aspirante pasa a ser Socio con estado "Activo"
+
+El nuevo Socio recibe un correo de aprobación
+
+El Socio puede iniciar sesión inmediatamente
+
+Se genera un registro en el historial del Analista
+
+HU08
+
+Yo como Analista
+quiero rechazar una solicitud de aspirante con un motivo obligatorio
+para que el aspirante sepa por qué no fue aceptado
+
+Criterios de aceptación:
+
+El campo "motivo de rechazo" es obligatorio (texto libre)
+
+No se puede rechazar sin escribir un motivo
+
+El aspirante recibe un correo con el motivo de rechazo
+
+La solicitud queda en estado "Rechazada" y no se puede volver a aprobar
+
+🛠️ Administrador Local
+HU09
+
+Yo como Administrador Local
+quiero crear nuevos usuarios para mi cooperativa con roles específicos
+para que cajeros, analistas, gerentes y gestores financieros puedan acceder al sistema
+
+Criterios de aceptación:
+
+El formulario incluye: nombre, correo, documento, contraseña, rol
+
+Roles disponibles: Analista, Cajero, Gerente, Gestor Financiero
+
+El correo debe ser único dentro de la cooperativa
+
+Al crear, el usuario queda con estado "Activo"
+
+HU10
+
+Yo como Administrador Local
+quiero desactivar un usuario que ya no trabaja en la cooperativa
+para que no pueda seguir accediendo al sistema
+
+Criterios de aceptación:
+
+Al desactivar, el usuario no puede iniciar sesión
+
+Si el usuario estaba logueado, su sesión se cierra automáticamente
+
+Se puede activar nuevamente si es necesario
+
+Se solicita confirmación antes de desactivar
+
+💼 Gestor Financiero
+HU11
+
+Yo como Gestor Financiero
+quiero configurar las tasas de interés por línea de crédito
+para que el sistema calcule correctamente los intereses de cada crédito
+
+Criterios de aceptación:
+
+Las líneas de crédito base son: Consumo, Vivienda, Educativo
+
+Para cada línea se puede configurar: tasa de interés anual (%)
+
+También se puede configurar: plazo máximo (meses), plazo mínimo (meses), monto máximo, monto mínimo
+
+Los cambios aplican solo a créditos nuevos, no a los ya aprobados
+
+------------------------------------------------------------------------------------------------
+🏃 Sprint 2: Solicitud, simulación y amortización
+Duración: 1 semana
+Objetivo: Socios solicitan créditos, sistema preaprueba automáticamente y genera tabla de amortización
+
+💰 Socio
+HU12
+
+Yo como Socio
+quiero ver mi saldo actual de ahorros
+para saber cuánto dinero tengo disponible en la cooperativa
+
+Criterios de aceptación:
+
+El saldo se muestra en el panel principal del Socio
+
+Se actualiza inmediatamente después de cada pago o abono
+
+Muestra el valor formateado con moneda (ej: $1,500,000 COP)
+
+HU13
+
+Yo como Socio
+quiero solicitar un crédito ingresando monto, plazo y propósito
+para obtener financiamiento de la cooperativa
+
+Criterios de aceptación:
+
+El formulario tiene campos: monto solicitado, plazo (meses), propósito (lista desplegable)
+
+El sistema valida que el monto esté dentro de los rangos configurados por el Gestor Financiero
+
+Al enviar, el sistema evalúa automáticamente si cumple las reglas
+
+Si cumple, muestra mensaje: "Crédito preaprobado. Acepta los términos para continuar"
+
+HU14
+
+Yo como Socio
+quiero saber si cumplo con las reglas para solicitar un crédito
+para entender por qué mi solicitud puede ser rechazada
+
+Criterios de aceptación:
+
+El sistema verifica automáticamente: tiempo como socio ≥ 2 meses, ahorro ≥ 15% del monto, mora = 0 días, créditos activos ≤ 2, monto ≤ (ahorros × 3)
+
+Si no cumple una regla, muestra mensaje específico: "No cumples con el ahorro mínimo requerido del 15%"
+
+Si cumple todas, el crédito se preaprueba automáticamente
+
+HU15
+
+Yo como Socio
+quiero ver la tabla de amortización de mi crédito antes de aceptarlo
+para saber cuánto pagaré cada mes y cuánto en total
+
+Criterios de aceptación:
+
+La tabla muestra: número de cuota, fecha de vencimiento, valor cuota, abono a capital, intereses, saldo restante
+
+Se genera con el método de amortización francés (cuota fija)
+
+La tabla se puede descargar en PDF
+
+Solo se muestra después de la preaprobación y antes de la aceptación final
+
+HU16
+
+Yo como Socio
+quiero recibir notificaciones de créditos preaprobados según mi capacidad de ahorro
+para saber qué créditos puedo solicitar sin tener que calcular manualmente
+
+Criterios de aceptación:
+
+El sistema calcula automáticamente: monto máximo = ahorros × 3
+
+Aparece una notificación en el panel: "Tienes preaprobado hasta $X en crédito de consumo"
+
+Las notificaciones se actualizan cuando cambia el saldo de ahorros del Socio
+
+Al hacer clic en la notificación, abre el formulario de solicitud con el monto sugerido
+
+🤖 Sistema (Reglas Automáticas)
+HU17
+
+Yo como Sistema
+quiero calcular automáticamente la tabla de amortización usando el método francés cuando un crédito es aprobado
+para que el socio tenga claras sus cuotas mensuales
+
+Criterios de aceptación:
+
+El cálculo usa: monto solicitado, tasa de interés (según línea de crédito), plazo en meses
+
+Fórmula: cuota fija = monto × (tasa × (1+tasa)^n) / ((1+tasa)^n - 1)
+
+La tabla se genera y guarda en la base de datos
+
+El Socio puede consultarla en cualquier momento
+
+HU18
+
+Yo como Sistema
+quiero registrar el desembolso simulado de un crédito aprobado con fecha y monto
+para tener un registro contable de que el socio recibió el dinero
+
+Criterios de aceptación:
+
+Después de que el Socio acepta los términos, el crédito cambia a estado "Desembolsado"
+
+Se guarda automáticamente la fecha de desembolso (fecha actual del sistema)
+
+No hay integración bancaria real (es una simulación)
+
+El Socio ve en su panel: "Crédito desembolsado el [fecha]"
+
+🏃 Sprint 3: Registro de pagos y cálculo de mora
+Duración: 1 semana
+Objetivo: Pagos virtuales y presenciales, pago con ahorros voluntario, cálculo de mora
+
+💰 Socio
+HU19
+
+Yo como Socio
+quiero pagar una cuota de mi crédito desde mi interfaz virtual
+para no tener que ir a la cooperativa físicamente
+
+Criterios de aceptación:
+
+Selecciono el crédito y veo la cuota actual a pagar
+
+El sistema me pregunta: "¿Deseas pagar con tus ahorros? (Saldo disponible: $X)"
+
+Si acepto, se resta el valor de mis ahorros y se registra el pago
+
+Se genera un recibo digital en PDF
+
+HU20
+
+Yo como Socio
+quiero pagar una cuota anticipada (mayor valor al de la cuota)
+para reducir los intereses totales de mi crédito
+
+Criterios de aceptación:
+
+Puedo ingresar un monto mayor al de la cuota
+
+El sistema recalcula el saldo restante y reduce los intereses futuros
+
+Se genera una nueva tabla de amortización con el saldo actualizado
+
+Si pago todo el saldo restante, el crédito se marca como "Pagado"
+
+HU21
+
+Yo como Socio
+quiero descargar mi paz y salvo cuando termino de pagar un crédito
+para tener un documento que certifique que no debo nada
+
+Criterios de aceptación:
+
+El botón "Descargar paz y salvo" aparece solo cuando el crédito está en estado "Pagado"
+
+El PDF incluye: nombre del socio, documento, monto total pagado, fecha de pago total
+
+El documento tiene un código QR único de verificación
+
+Se puede descargar las veces que quiera
+
+💵 Cajero
+HU22
+
+Yo como Cajero
+quiero buscar a un socio por su documento o nombre
+para acceder rápidamente a su perfil y registrar pagos presenciales
+
+Criterios de aceptación:
+
+Buscador tipo autocompletar mientras se escribe
+
+Muestra resultados coincidentes por nombre o documento
+
+Al seleccionar un socio, se abre su perfil completo
+
+Si no se encuentra, muestra mensaje: "No se encontró ningún socio"
+
+HU23
+
+Yo como Cajero
+quiero registrar un pago de cuota presencial
+para que el socio pueda pagar en ventanilla física
+
+Criterios de aceptación:
+
+Selecciono el crédito y la cuota a pagar
+
+El sistema muestra: "El socio tiene $X en ahorros. ¿Usar ahorros para este pago?"
+
+El Cajero selecciona Sí o No según lo que decida el socio
+
+Se genera un recibo impreso o PDF para entregar al socio
+
+HU24
+
+Yo como Cajero
+quiero ver el historial completo de pagos de un socio con filtro por fechas
+para responder consultas del socio sobre sus pagos anteriores
+
+Criterios de aceptación:
+
+Se puede filtrar por rango de fechas (desde - hasta)
+
+Muestra: fecha, valor pagado, crédito asociado, método de pago (efectivo/ahorros)
+
+Los pagos se muestran por defecto del más reciente al más antiguo (RNF05)
+
+Se puede exportar a Excel
+
+HU25
+
+Yo como Cajero
+quiero entregar un certificado de deuda impreso al socio que lo solicite
+para que el socio sepa exactamente cuánto debe actualmente
+
+Criterios de aceptación:
+
+El certificado muestra: nombre del socio, documento, lista de créditos activos con saldos pendientes
+
+También muestra la deuda total sumada
+
+Se puede imprimir en formato PDF
+
+Incluye fecha de emisión del certificado
+
+🤖 Sistema (Reglas Automáticas)
+HU26
+
+Yo como Sistema
+quiero evitar pagos duplicados mediante un bloqueo de 5 minutos por ID único de pago
+para que un socio no pague la misma cuota dos veces por error
+
+Criterios de aceptación:
+
+Cada pago pendiente tiene un ID único generado al iniciar la transacción
+
+Si se intenta pagar el mismo ID antes de 5 minutos, se rechaza con mensaje: "Este pago ya está siendo procesado"
+
+Después de 5 minutos, se puede reintentar
+
+El bloqueo aplica tanto para pagos virtuales como presenciales
+
+HU27
+
+Yo como Sistema
+quiero calcular intereses corrientes y de mora según los días de retraso
+para que el socio pague exactamente lo que debe según la normativa
+
+Criterios de aceptación:
+
+Si el socio paga antes del vencimiento: solo intereses corrientes
+
+Si paga después: intereses corrientes + intereses de mora (tasa moratoria configurada)
+
+El cálculo es día por día desde la fecha de vencimiento
+
+El desglose aparece en el recibo de pago
+
+💼 Gestor Financiero
+HU28
+
+Yo como Gestor Financiero
+quiero ver el listado de créditos en mora organizados por rangos de días
+para priorizar la gestión de cobro según la gravedad
+
+Criterios de aceptación:
+
+Rangos: 1-10 días (leve), 11-30 días (preocupante), 31-60 días (crítica), 61+ días (castigada)
+
+Cada rango es un acordeón o pestaña independiente
+
+Muestra: socio, monto de la cuota vencida, días en mora
+
+Al hacer clic en un crédito, se abren las opciones de gestión
+
+HU29
+
+Yo como Gestor Financiero
+quiero enviar recordatorios manuales a socios en mora leve (1-10 días)
+para complementar los recordatorios automáticos del sistema
+
+Criterios de aceptación:
+
+El sistema ya envía recordatorios automáticos al socio
+
+El Gestor tiene un botón "Enviar recordatorio manual"
+
+Se puede agregar un mensaje personalizado
+
+Queda registro de que el Gestor envió un recordatorio manual
+
+HU30
+
+Yo como Gestor Financiero
+quiero registrar una gestión de cobro para mora preocupante (11-30 días)
+para dejar evidencia de que contacté al socio y qué acordamos
+
+Criterios de aceptación:
+
+Formulario con campos: fecha de contacto, medio (teléfono/correo/presencial), acuerdo (texto libre)
+
+La gestión queda asociada al crédito en mora
+
+Se puede ver el historial de gestiones anteriores
+
+Si se llega a un acuerdo de pago, se puede registrar la nueva fecha prometida
+
+📊 Gerente
+HU31
+
+Yo como Gerente
+quiero ver reportes de cartera vigente, vencida y castigada con indicadores
+para tomar decisiones sobre la salud financiera de la cooperativa
+
+Criterios de aceptación:
+
+Cartera vigente: créditos al día
+
+Cartera vencida: créditos en mora, desglosado por rangos
+
+Cartera castigada: créditos dados por perdidos
+
+Indicadores: índice de morosidad, cobertura de cartera
+
+HU32
+
+Yo como Gerente
+quiero exportar cualquier reporte a Excel o PDF
+para presentar los resultados en juntas o enviarlos por correo
+
+Criterios de aceptación:
+
+Botón "Exportar a Excel" genera archivo .xlsx
+
+Botón "Exportar a PDF" genera archivo .pdf
+
+El formato de exportación respeta los filtros aplicados
+
+El nombre del archivo incluye la fecha de generación
+
+🏃 Sprint 4: Reportes de cartera y certificaciones
+Duración: 1 semana
+Objetivo: Reportes avanzados, reestructuración de créditos, castigo de cartera
+
+💼 Gestor Financiero
+HU33
+
+Yo como Gestor Financiero
+quiero reestructurar un crédito vencido cambiando plazo, número de cuotas o tasa de interés renegociada
+para ayudar al socio a ponerse al día y evitar el castigo de la cartera
+
+Criterios de aceptación:
+
+Solo se puede reestructurar créditos en mora (cualquier rango)
+
+Se puede modificar: plazo (meses), número de cuotas, tasa de interés renegociada
+
+El sistema genera una nueva tabla de amortización con los nuevos parámetros
+
+Queda registro histórico de la reestructuración (fecha, quién la hizo, cambios aplicados)
+
+HU34
+
+Yo como Gestor Financiero
+quiero proponer el castigo de cartera para créditos con más de 61 días de mora
+para limpiar contablemente los créditos incobrables
+
+Criterios de aceptación:
+
+Solo disponible para créditos con 61+ días de mora
+
+Al proponer castigo, el crédito pasa a estado "Castigo propuesto"
+
+El Gerente debe aprobar el castigo (se puede añadir como validación adicional)
+
+Una vez aprobado, el crédito se marca como "Castigado" y no genera más intereses
+
+HU35
+
+Yo como Gestor Financiero
+quiero ver los datos de contacto del socio (teléfono, dirección, correo)
+para contactarlo en el proceso de gestión de cobro
+
+Criterios de aceptación:
+
+Los datos se muestran dentro de la vista del crédito en mora
+
+No se pueden editar desde esta pantalla (solo consulta)
+
+El correo tiene un enlace para abrir el cliente de correo
+
+El teléfono se puede copiar al portapapeles con un botón
+
+📊 Gerente
+HU36
+
+Yo como Gerente
+quiero consultar los créditos de un socio específico
+para analizar su comportamiento financiero antes de tomar decisiones
+
+Criterios de aceptación:
+
+Buscador de socios por documento o nombre
+
+Al seleccionar un socio, se muestran todos sus créditos (activos, pagados, castigados)
+
+Para cada crédito: monto, estado, cuotas pagadas, cuotas pendientes, días en mora (si aplica)
+
+Se puede ver la tabla de amortización original y la actual (si fue reestructurada)
+
+HU37
+
+Yo como Gerente
+quiero filtrar los reportes de cartera por rango de fechas y por línea de crédito
+para hacer análisis más específicos y detallados
+
+Criterios de aceptación:
+
+Filtro por fecha: desde - hasta (aplica a fecha de desembolso o fecha de vencimiento)
+
+Filtro por línea de crédito: Consumo, Vivienda, Educativo, o "Todas"
+
+Los filtros se pueden combinar
+
+Al aplicar filtros, los reportes se actualizan automáticamente
+
+🤖 Sistema (Reglas Automáticas)
+HU38
+
+Yo como Sistema
+quiero restringir el acceso a información financiera según el rol del usuario autenticado
+para que solo las personas autorizadas vean datos sensibles
+
+Criterios de aceptación:
+
+El rol Cajero no puede ver reportes de cartera (solo pagos e historial)
+
+El rol Socio solo ve su propia información financiera
+
+El rol Gerente ve todos los reportes pero no puede modificar tasas ni reestructurar
+
+El rol Gestor Financiero ve datos de contacto de socios en mora, pero no reportes agregados de gerencia (RF071 migrado a RNF07)
+
+💰 Socio
+HU39
+
+Yo como Socio
+quiero descargar mi certificado de deuda actualizado en cualquier momento
+para saber exactamente cuánto debo si necesito un documento oficial
+
+Criterios de aceptación:
+
+El certificado muestra: nombre del socio, documento, lista de créditos activos con saldos pendientes
+
+También muestra la deuda total sumada
+
+Se puede descargar en PDF
+
+Incluye fecha de emisión y un código QR único de verificación
+
+💵 Cajero
+HU40
+
+Yo como Cajero
+quiero generar un certificado de deuda impreso para un socio que lo solicite en ventanilla
+para que el socio tenga un documento oficial sin necesidad de acceso virtual
+
+Criterios de aceptación:
+
+Busco al socio, voy a la sección "Certificados"
+
+Genero el certificado de deuda con un clic
+
+El sistema permite imprimirlo directamente
+
+Incluye fecha de emisión y firma digital de la cooperativa

@@ -1,0 +1,142 @@
+@import './base/variables.css';
+@import './base/reset.css';
+
+@import './components/buttons.css';
+@import './components/cards.css';
+@import './components/forms.css';
+
+@import './pages/home.css';
+@import './pages/login.css';
+@import './pages/dashboard.css';
+@import './pages/registro.css';
+
+/* Tipografía general */
+h1, h2, h3, h4 {
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--color-secondary);
+}
+
+.container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 var(--spacing-lg);
+}
+
+/* Header & Nav */
+.main-header {
+  background-color: var(--color-surface);
+  box-shadow: var(--shadow-sm);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.nav-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 100px;
+}
+
+.main-header .logo-container {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+}
+
+.logo-container img {
+  height: 70px;
+  width: auto;
+  object-fit: contain;
+}
+
+.header-brand-text {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.header-brand-subtitle {
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+  line-height: 1;
+  font-weight: 500;
+  text-align: left;
+}
+
+.header-brand-title {
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: var(--color-primary);
+  line-height: 1;
+  margin-top: 4px;
+  text-align: left;
+}
+
+.nav-links {
+  display: flex;
+  gap: var(--spacing-xl);
+}
+
+.nav-links a {
+  font-weight: 500;
+  color: var(--color-text-main);
+  transition: color 0.2s ease;
+}
+
+.nav-links a:hover {
+  color: var(--color-primary);
+}
+
+.nav-actions {
+  display: flex;
+  gap: var(--spacing-md);
+}
+
+/* Footer */
+.main-footer {
+  background-color: var(--color-secondary);
+  color: var(--color-text-light);
+  padding: var(--spacing-3xl) 0 var(--spacing-xl);
+  margin-top: var(--spacing-3xl);
+}
+
+.footer-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: var(--spacing-lg);
+}
+
+.footer-links {
+  display: flex;
+  gap: var(--spacing-lg);
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.footer-links a {
+  opacity: 0.8;
+  transition: opacity 0.2s;
+}
+
+.footer-links a:hover {
+  opacity: 1;
+}
+
+.footer-bottom {
+  margin-top: var(--spacing-xl);
+  font-size: 0.9rem;
+  opacity: 0.6;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .nav-links {
+    display: none; /* Simplificado para la maqueta - idealmente un menú hamburguesa */
+  }
+}

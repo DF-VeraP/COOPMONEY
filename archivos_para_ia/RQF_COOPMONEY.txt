@@ -1,0 +1,85 @@
+🧑💼 Módulo: Super Administrador
+ID	Requisito
+RF001	Registrar una nueva cooperativa en el sistema (nombre, NIT, dirección, teléfono, correo)
+RF002	Listar todas las cooperativas registradas en el sistema
+RF003	Activar o desactivar una cooperativa (desactivada no permite acceso a sus usuarios)
+RF004	Ver métricas globales: total de cooperativas, total de socios activos por cooperativa, total de créditos aprobados por cooperativa
+RF005	Buscar una cooperativa por nombre o NIT
+👤 Módulo: Aspirante
+ID	Requisito
+RF006	Llenar formulario de solicitud de ingreso con: nombre completo, documento, correo, teléfono, dirección, ocupación, ingresos mensuales
+RF007	Enviar la solicitud al sistema (queda en estado "Pendiente")
+RF008	Recibir correo electrónico con el resultado de su solicitud (Aprobada o Rechazada)
+RF009	Si es rechazado, ver el motivo de rechazo en el correo
+📋 Módulo: Analista
+ID	Requisito
+RF010	Ver listado de solicitudes de aspirantes en estado "Pendiente"
+RF011	Ver los datos completos de un aspirante
+RF012	Aprobar una solicitud (el aspirante pasa automáticamente a ser Socio)
+RF013	Rechazar una solicitud con motivo obligatorio (campo de texto)
+RF014	Filtrar solicitudes por estado (Pendiente, Aprobada, Rechazada)
+RF015	Ver historial de solicitudes que ha revisado
+💰 Módulo: Socio
+ID	Requisito
+RF016	Ver su perfil con sus datos personales y financieros
+RF017	Ver su saldo actual de ahorros
+RF018	Ver listado de sus créditos (activos, pagados, rechazados)
+RF019	Solicitar un crédito con un botón (ingresando monto, plazo, propósito)
+RF020	Ver si cumple o no las reglas para solicitar crédito (tiempo como socio, ahorro mínimo, mora, etc.)
+RF021	Recibir notificaciones de créditos preaprobados según su capacidad de ahorro
+RF022	Ver tabla de amortización de cada crédito aprobado
+RF023	Pagar una cuota desde su interfaz (virtual)
+RF024	Al pagar una cuota, el sistema ofrece: "¿Deseas pagar con tus ahorros? (Saldo disponible: $X)"
+RF025	Decidir voluntariamente si usa sus ahorros para pagar la cuota o no
+RF026	Si paga anticipado (mayor valor a la cuota), el sistema recalcula intereses reducidos
+RF027	Descargar paz y salvo de un crédito pagado completamente
+RF028	Descargar certificado de deuda actualizado
+💵 Módulo: Cajero
+ID	Requisito
+RF029	Buscar a un socio por documento o nombre
+RF030	Ver el perfil del socio con sus créditos activos y saldo de ahorros
+RF031	Registrar un pago de cuota presencial
+RF032	Al registrar un pago, el sistema muestra: "El socio tiene $X en ahorros. ¿Usar ahorros para este pago?"
+RF033	El Cajero selecciona Sí o No según lo que decida el socio
+RF034	El sistema genera un recibo/factura del pago (PDF o impreso)
+RF035	Ver historial completo de pagos del socio con filtro por rango de fechas
+RF036	Entregar certificado de deuda impreso al socio que lo solicite
+📊 Módulo: Gerente
+ID	Requisito
+RF037	Ver reporte de cartera vigente (créditos al día)
+RF038	Ver reporte de cartera vencida (créditos en mora, con desglose por rangos: 1-10, 11-30, 31-60, 61+ días)
+RF039	Ver reporte de cartera castigada (créditos dados por perdidos)
+RF040	Ver indicadores: morosidad total, cobertura de cartera, índice de riesgo
+RF041	Exportar cualquier reporte a Excel
+RF042	Exportar cualquier reporte a PDF
+RF043	Consultar créditos de un socio específico
+RF044	Filtrar reportes por rango de fechas y por línea de crédito
+🛠️ Módulo: Administrador Local
+ID	Requisito
+RF045	Crear un nuevo usuario en su cooperativa con rol específico (Analista, Cajero, Gerente, Gestor Financiero)
+RF046	Asignar nombre, correo, documento y contraseña al nuevo usuario
+RF047	Desactivar un usuario existente (ya no trabaja en la cooperativa)
+RF048	Activar un usuario previamente desactivado
+RF049	Listar todos los usuarios activos e inactivos de su cooperativa
+RF050	Cambiar el rol de un usuario (ej: Cajero → Analista)
+RF051	Ver perfil de cualquier usuario de su cooperativa
+💼 Módulo: Gestor Financiero
+ID	Requisito
+RF052	Configurar tasas de interés por línea de crédito (ej: consumo, vivienda, educativo)
+RF053	Configurar plazos máximos y mínimos por línea de crédito
+RF054	Configurar montos máximos y mínimos por línea de crédito
+RF055	Ver listado de créditos en mora organizados por rangos: 1-10 días (leve), 11-30 días (preocupante), 31-60 días (crítica), 61+ días (castigada)
+RF056	En mora leve (1-10 días): el sistema envía recordatorios automáticos al socio. El Gestor puede enviar recordatorio manual adicional
+RF057	En mora preocupante (11-30 días): el Gestor registra una gestión de cobro (fecha, contacto, acuerdo)
+RF058	Reestructurar un crédito vencido: cambiar plazo, número de cuotas, tasa de interés renegociada
+RF059	Ver historial de reestructuraciones del crédito
+RF060	Proponer castigo de cartera para créditos con 61+ días de mora
+RF061	Ver datos de contacto del socio (teléfono, dirección, correo) para gestión de cobro
+🤖 Módulo: Sistema (Reglas Automáticas)
+ID	Requisito
+RF062	Calcular automáticamente la tabla de amortización (método francés) al aprobar un crédito
+RF063	Calcular intereses corrientes y de mora según días de retraso
+RF064	Preaprobar un crédito automáticamente si el socio cumple todas las reglas: tiempo como socio ≥ 2 meses, ahorro mínimo ≥ 15% del monto, mora activa = 0 días, créditos activos ≤ 2, monto ≤ (ahorros × 3)
+RF065	Si el socio no cumple alguna regla, mostrar mensaje claro indicando cuál
+RF066	Al pagar una cuota con ahorros (opción voluntaria), restar el valor de la cuenta de ahorros del socio
+RF067	Registrar el desembolso simulado de un crédito aprobado (fecha y monto, sin integración real)

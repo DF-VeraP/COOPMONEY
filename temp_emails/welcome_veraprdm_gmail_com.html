@@ -1,0 +1,136 @@
+
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <meta charset="utf-8">
+            <style>
+                body {
+                    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                    background-color: #f1f5f9;
+                    margin: 0;
+                    padding: 20px;
+                    color: #1e293b;
+                }
+                .email-card {
+                    max-width: 600px;
+                    background-color: #ffffff;
+                    margin: 0 auto;
+                    border-radius: 12px;
+                    box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06);
+                    overflow: hidden;
+                    border: 1px solid #e2e8f0;
+                }
+                .email-header {
+                    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+                    padding: 30px;
+                    text-align: center;
+                    color: #ffffff;
+                }
+                .email-header h1 {
+                    margin: 0;
+                    font-size: 1.6rem;
+                    font-weight: 700;
+                }
+                .email-body {
+                    padding: 30px;
+                    line-height: 1.6;
+                }
+                .email-body p {
+                    margin-bottom: 20px;
+                }
+                .cred-box {
+                    background-color: #f8fafc;
+                    border: 1px solid #e2e8f0;
+                    border-radius: 8px;
+                    padding: 20px;
+                    margin: 25px 0;
+                }
+                .cred-title {
+                    font-weight: 700;
+                    color: #0f172a;
+                    margin-bottom: 10px;
+                    font-size: 0.95rem;
+                    text-transform: uppercase;
+                    letter-spacing: 0.05em;
+                }
+                .cred-item {
+                    margin-bottom: 8px;
+                    font-size: 0.95rem;
+                }
+                .cred-label {
+                    font-weight: 600;
+                    color: #475569;
+                    width: 140px;
+                    display: inline-block;
+                }
+                .cred-val {
+                    font-family: monospace;
+                    font-weight: 700;
+                    color: #059669;
+                    background-color: #ecfdf5;
+                    padding: 2px 6px;
+                    border-radius: 4px;
+                }
+                .btn-cta {
+                    display: block;
+                    text-align: center;
+                    background-color: #10b981;
+                    color: #ffffff !important;
+                    text-decoration: none;
+                    font-weight: 600;
+                    padding: 12px 24px;
+                    border-radius: 8px;
+                    margin: 30px auto 10px auto;
+                    width: 200px;
+                    box-shadow: 0 4px 6px -1px rgba(16,185,129,0.2);
+                }
+                .email-footer {
+                    background-color: #f8fafc;
+                    padding: 20px;
+                    text-align: center;
+                    font-size: 0.8rem;
+                    color: #64748b;
+                    border-top: 1px solid #e2e8f0;
+                }
+            </style>
+        </head>
+        <body>
+            <div class="email-card">
+                <div class="email-header">
+                    <h1>¡Afiliación Aprobada Exitosamente!</h1>
+                </div>
+                <div class="email-body">
+                    <p>Estimado/a <strong>Tatiana Ramos</strong>,</p>
+                    <p>Nos complace darte la más cálida bienvenida como nuevo asociado de <strong>Cooperativa ALOHA</strong> a través de nuestra plataforma cooperativa virtual <strong>COOPMONEY</strong>.</p>
+                    <p>Tu solicitud ha sido revisada minuciosamente y aprobada por nuestro analista asignado. A partir de este momento, tienes acceso total a tu panel para simular y radicar créditos, revisar tus amortizaciones mensuales y controlar tus estados de ahorro.</p>
+                    
+                    <div class="cred-box">
+                        <div class="cred-title">Tus Credenciales de Ingreso</div>
+                        <div class="cred-item">
+                            <span class="cred-label">Plataforma:</span>
+                            <span style="color:#0f172a;">COOPMONEY Solidario</span>
+                        </div>
+                        <div class="cred-item">
+                            <span class="cred-label">Usuario / Correo:</span>
+                            <span class="cred-val">veraprdm@gmail.com</span>
+                        </div>
+                        <div class="cred-item">
+                            <span class="cred-label">Contraseña Temp:</span>
+                            <span class="cred-val">123456</span>
+                        </div>
+                    </div>
+                    
+                    <p style="font-size: 0.85rem; color: #64748b; font-style: italic;">
+                        ⚠️ Por tu seguridad, te recomendamos iniciar sesión de inmediato y cambiar esta contraseña predeterminada desde la pestaña "Mi Perfil".
+                    </p>
+                    
+                    <a href="http://localhost:3000" class="btn-cta" target="_blank">Ingresar a COOPMONEY</a>
+                </div>
+                <div class="email-footer">
+                    Este es un mensaje automático del sistema de afiliación de Cooperativa ALOHA.<br>
+                    &copy; 2026 COOPMONEY. Todos los derechos reservados.
+                </div>
+            </div>
+        </body>
+        </html>
+        

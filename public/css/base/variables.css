@@ -1,0 +1,42 @@
+:root {
+  /* Paleta de Colores - Tonos Verdes y Grises */
+  --color-primary: #1F7C54; /* Verde Institucional Cooperativo */
+  --color-primary-light: #2BAE76;
+  --color-primary-dark: #155539;
+  
+  --color-secondary: #0A3A2A; /* Verde Oscuro Profundo */
+  --color-accent: #F4A261; /* Naranja sutil para llamadas a la acción secundarias */
+  
+  --color-background: #F8FAF9; /* Gris muy claro para fondo */
+  --color-surface: #FFFFFF; /* Blanco puro para tarjetas */
+  
+  --color-text-main: #2D3748; /* Gris oscuro para texto */
+  --color-text-muted: #718096; /* Gris medio para descripciones */
+  --color-text-light: #E2E8F0; /* Texto sobre fondos oscuros */
+  
+  /* Estados */
+  --color-error: #E53E3E;
+  --color-success: #38A169;
+  
+  /* Tipografía */
+  --font-family-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  
+  /* Espaciado */
+  --spacing-xs: 0.25rem;
+  --spacing-sm: 0.5rem;
+  --spacing-md: 1rem;
+  --spacing-lg: 1.5rem;
+  --spacing-xl: 2rem;
+  --spacing-2xl: 3rem;
+  --spacing-3xl: 5rem;
+  
+  /* Bordes y Sombras */
+  --border-radius-sm: 4px;
+  --border-radius-md: 8px;
+  --border-radius-lg: 12px;
+  --border-radius-xl: 20px;
+  
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}

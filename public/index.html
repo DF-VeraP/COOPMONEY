@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>COOPMONEY - Gestión de Préstamos Cooperativos</title>
+    <meta name="description"
+        content="Sistema multi-cooperativa para control de créditos, ahorros y cartera, conforme a la normativa de la Superintendencia de Economía Solidaria.">
+    <!-- Google Fonts - Carga Asíncrona Optimizada -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preload" as="style"
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+        media="print" onload="this.media='all'">
+    <noscript>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+    </noscript>
+    <!-- Main CSS (importa todos los módulos) -->
+    <link rel="stylesheet" href="./css/main.css">
+</head>
+
+<body>
+
+    <!-- HEADER -->
+    <header class="main-header">
+        <div class="container nav-container">
+            <div class="logo-container">
+                <!-- Usando el logo real del usuario -->
+                <img src="./assets/images/LogoV1.1.png" alt="COOPMONEY Logo"
+                    onerror="this.src='https://via.placeholder.com/150x40?text=COOPMONEY'">
+                <div class="header-brand-text">
+                    <span class="header-brand-subtitle">Multi-cooperativa</span>
+                    <span class="header-brand-title">CoopMoney</span>
+                </div>
+            </div>
+
+            <nav class="nav-links">
+                <a href="#inicio">Inicio</a>
+                <a href="#simulador">Simulador de crédito</a>
+                <a href="#beneficios">¿Cómo funciona?</a>
+                <a href="#contacto">Contacto</a>
+            </nav>
+
+            <div class="nav-actions">
+                <button class="btn btn-outline action-login">Iniciar sesión</button>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <!-- HERO SECTION -->
+        <section id="inicio" class="hero">
+            <div class="container hero-grid">
+                <div class="hero-content">
+                    <h1>La gestión de préstamos cooperativos, <span>simplificada</span></h1>
+                    <p class="hero-subtitle">Sistema multi-cooperativa para control de créditos, ahorros y cartera,
+                        conforme a la normativa de la Superintendencia de Economía Solidaria.</p>
+                    <div class="hero-actions">
+                        <a href="#simulador" class="btn btn-primary">Simular crédito</a>
+                        <a href="solicitud-asociado.html" class="btn btn-secondary"
+                            style="text-decoration:none; display:inline-flex; align-items:center; justify-content:center;">Solicitar
+                            afiliación</a>
+                    </div>
+                    <div style="margin-top: 20px;">
+                        <a href="registro-cooperativa.html" class="btn btn-outline"
+                            style="color: var(--color-secondary); border-color: var(--color-secondary); display:inline-flex; align-items:center; justify-content:center; width: 100%;">Soy cooperativa, quiero sus servicios</a>
+                    </div>
+                </div>
+                <div class="hero-image">
+                    <!-- Placeholder premium design visual -->
+                    <img src="https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+                        alt="Gestión financiera cooperativa">
+                </div>
+            </div>
+        </section>
+
+        <!-- BENEFITS SECTION -->
+        <section id="beneficios" class="benefits-section">
+            <div class="container">
+                <div class="section-header">
+                    <h2>Todo lo que tu cooperativa necesita</h2>
+                    <p class="hero-subtitle" style="margin: 0 auto;">Control total para gerentes, analistas y socios en
+                        un solo lugar.</p>
+                </div>
+
+                <div class="benefits-grid">
+                    <!-- Beneficio 1 -->
+                    <div class="card benefit-card">
+                        <div class="benefit-icon">📊</div>
+                        <h3>Tablas de amortización</h3>
+                        <p>Generación automática de cuotas fijas con el método francés.</p>
+                    </div>
+                    <!-- Beneficio 2 -->
+                    <div class="card benefit-card">
+                        <div class="benefit-icon">💰</div>
+                        <h3>Pago con ahorros</h3>
+                        <p>Opción para que el socio decida voluntariamente si paga la cuota usando sus ahorros
+                            disponibles.</p>
+                    </div>
+                    <!-- Beneficio 3 -->
+                    <div class="card benefit-card">
+                        <div class="benefit-icon">📈</div>
+                        <h3>Reportes en tiempo real</h3>
+                        <p>Monitorea tu cartera vigente, vencida y castigada con indicadores gerenciales precisos.</p>
+                    </div>
+                    <!-- Beneficio 4 -->
+                    <div class="card benefit-card">
+                        <div class="benefit-icon">🔒</div>
+                        <h3>Acceso por roles</h3>
+                        <p>Seguridad absoluta: gerentes, cajeros, analistas y socios ven únicamente lo que necesitan
+                            ver.</p>
+                    </div>
+                    <!-- Beneficio 5 -->
+                    <div class="card benefit-card">
+                        <div class="benefit-icon">⚡</div>
+                        <h3>Reglas claras de crédito</h3>
+                        <p>Validación automática: exige 2 meses de antigüedad y 15% de ahorro mínimo para aprobar.</p>
+                    </div>
+                    <!-- Beneficio 6 -->
+                    <div class="card benefit-card">
+                        <div class="benefit-icon">🛡️</div>
+                        <h3>Gestión de mora inteligente</h3>
+                        <p>Clasificación automática por rangos: 1-10 días (leve), 11-30 (preocupante), 31-60 (crítica),
+                            61+ (castigada).</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SIMULATOR SECTION -->
+        <section id="simulador" class="simulator-section">
+            <div class="container">
+                <div class="section-header">
+                    <h2>Simulador de Crédito</h2>
+                    <p class="hero-subtitle" style="margin: 0 auto; color: var(--color-text-light);">Calcula tu cuota
+                        mensual estimada al instante.</p>
+                </div>
+
+                <div class="simulator-container">
+                    <!-- Formulario -->
+                    <div class="simulator-form-wrapper">
+                        <form id="simulator-form">
+                            <div class="form-group">
+                                <label class="form-label" for="sim-amount">Monto Solicitado</label>
+                                <input type="text" id="sim-amount" class="form-control" placeholder="Ej: $ 5.000.000"
+                                    required>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label" for="sim-line">Línea de Crédito</label>
+                                <select id="sim-line" class="form-control" required>
+                                    <option value="consumo">Consumo</option>
+                                    <option value="vivienda">Vivienda</option>
+                                    <option value="educativo">Educativo</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group"
+                                style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--spacing-md);">
+                                <div>
+                                    <label class="form-label" for="sim-term">Plazo (Meses)</label>
+                                    <select id="sim-term" class="form-control" required>
+                                        <option value="6">6 meses</option>
+                                        <option value="12" selected>12 meses</option>
+                                        <option value="24">24 meses</option>
+                                        <option value="36">36 meses</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="form-label" for="sim-rate">Tasa de Interés</label>
+                                    <input type="text" id="sim-rate" class="form-control" value="18% EA" readonly>
+                                </div>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary btn-block"
+                                style="margin-top: var(--spacing-lg);">Calcular Cuota</button>
+                        </form>
+                    </div>
+
+                    <!-- Resultados -->
+                    <div class="simulator-results">
+                        <div class="result-card">
+                            <div class="result-label">Cuota mensual estimada</div>
+                            <div class="result-value" id="result-quota">$ 0</div>
+                        </div>
+                        <div class="result-card">
+                            <div class="result-label">Total a pagar aproximado</div>
+                            <div class="result-value" id="result-total"
+                                style="font-size: 1.5rem; color: var(--color-text-main);">$ 0</div>
+                        </div>
+                        <div class="result-note">
+                            <strong>Nota importante:</strong> Esta es una simulación. Para solicitar el crédito, debes
+                            ser socio activo con mínimo 2 meses de antigüedad y ahorro mínimo del 15% del monto
+                            solicitado.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- FOOTER -->
+    <footer id="contacto" class="main-footer">
+        <div class="container footer-content">
+            <div class="logo-container" style="filter: brightness(0) invert(1);">
+                <img src="./assets/images/logo.png" alt="COOPMONEY Logo Blanco" onerror="this.style.display='none'">
+                <h3 style="color: white;">COOPMONEY</h3>
+            </div>
+            <p style="max-width: 400px;">Sistema multi-cooperativa para el sector solidario. Transparencia, seguridad y
+                eficiencia en un solo lugar.</p>
+
+            <div class="footer-links">
+                <a href="#">Términos y condiciones</a>
+                <a href="#">Política de privacidad</a>
+                <a href="#">Contacto Soporte</a>
+            </div>
+
+            <div class="footer-bottom">
+                &copy; <span id="current-year"></span> COOPMONEY. Todos los derechos reservados.
+            </div>
+        </div>
+    </footer>
+
+    <!-- LOGIN OFF-CANVAS -->
+    <div class="login-overlay" id="loginOverlay">
+        <div class="login-branding">
+            <img src="./assets/images/LogoV1.1.png" alt="Logo CoopMoney" class="branding-logo"
+                onerror="this.src='https://via.placeholder.com/300x100?text=COOPMONEY'">
+            <h1>Multi-Cooperativa<br><span>CoopMoney</span></h1>
+        </div>
+    </div>
+    <div class="login-sidebar" id="loginSidebar">
+        <button class="login-close-btn" id="btnCloseLogin">&times;</button>
+        <div class="login-header">
+            <h2>Iniciar Sesión</h2>
+            <p>Accede al sistema multi-cooperativa</p>
+        </div>
+
+        <div id="login-alert" class="alert"></div>
+
+        <form id="login-form">
+            <div class="form-group">
+                <label class="form-label" for="cooperativa">Cooperativa</label>
+                <div class="input-with-clear">
+                    <input type="text" id="cooperativa" class="form-control" autocomplete="off"
+                        placeholder="Escribe para buscar tu cooperativa...">
+                    <div id="cooperativas-suggestions" class="autocomplete-suggestions"></div>
+                    <button type="button" class="btn-clear" id="btn-clear-coop" title="Limpiar">&times;</button>
+                </div>
+                <small style="color: var(--color-text-muted); font-size: 0.75rem; margin-top: 2px; display: block;">
+                    Si eres Super Administrador, deja este campo vacío.
+                </small>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="usuario">Usuario o Correo</label>
+                <input type="text" id="usuario" class="form-control" placeholder="Ingresa tu usuario" required>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="password">Contraseña</label>
+                <div class="password-container">
+                    <input type="password" id="password" class="form-control" placeholder="••••••••" required>
+                </div>
+                <label class="toggle-password">
+                    <input type="checkbox" id="toggle-password"> Mostrar contraseña
+                </label>
+            </div>
+
+            <div class="login-actions">
+                <button type="submit" class="btn btn-primary btn-block">Ingresar al sistema</button>
+                <button type="reset" class="btn btn-outline btn-block"
+                    onclick="document.getElementById('btn-clear-coop').style.display='none'; document.getElementById('login-alert').className='alert';">Limpiar
+                    campos</button>
+            </div>
+        </form>
+
+        <div class="login-links">
+            <a href="#">¿Olvidaste tu contraseña?</a>
+        </div>
+    </div>
+
+    <!-- Scripts (Tipo Módulo) -->
+    <script type="module" src="./js/app.controller.js"></script>
+    <script type="module" src="./js/controllers/login.controller.js"></script>
+</body>
+
+</html>

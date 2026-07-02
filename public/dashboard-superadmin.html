@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="es" class="session-pending">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Super Admin | COOPMONEY</title>
+    <style>.session-pending body{display:none !important;}</style>
+    <script>
+        (function() {
+            function checkSession() {
+                var raw = sessionStorage.getItem('currentUser') || localStorage.getItem('currentUser');
+                var currentUser = null;
+                try { currentUser = JSON.parse(raw); } catch(e) {}
+                if (!currentUser || !currentUser.token || currentUser.rol !== 'super_admin') {
+                    sessionStorage.removeItem('currentUser');
+                    localStorage.removeItem('currentUser');
+                    window.location.replace('index.html');
+                    return;
+                }
+                document.documentElement.classList.remove('session-pending');
+            }
+            checkSession();
+            window.addEventListener('pageshow', function(event) {
+                if (event.persisted || (window.performance && window.performance.navigation.type === 2)) {
+                    checkSession();
+                }
+            });
+        })();
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="./css/main.css">
+</head>
+<body class="dashboard-layout">
+
+    <!-- HEADER -->
+    <header class="dash-header">
+        <div style="display: flex; align-items: center; gap: 12px;">
+            <div class="dash-logo-container" style="margin-bottom: 0;">
+                <img src="./assets/images/LogoV1.1.png" alt="COOPMONEY Logo" onerror="this.src='https://via.placeholder.com/150x40?text=COOPMONEY'" style="height: 50px; width: auto; object-fit: contain;">
+            </div>
+            <div class="header-brand-text">
+                <span class="header-brand-subtitle">Multi-cooperativa</span>
+                <span class="header-brand-title" style="font-size: 1.4rem;">CoopMoney</span>
+            </div>
+        </div>
+        
+        <nav class="dash-nav">
+            <div class="dash-nav-item active" data-tab-target="tab-dashboard">Dashboard</div>
+            <div class="dash-nav-item" data-tab-target="tab-cooperativas">Cooperativas</div>
+            <div class="dash-nav-item" data-tab-target="tab-reportes">Reportes Globales</div>
+            <div class="dash-nav-item" data-tab-target="tab-auditoria">Auditoría</div>
+        </nav>
+
+        <div class="dash-user-profile">
+            <div class="notification-bell action-mock" data-action="Ver Notificaciones">
+                <svg viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+            </div>
+            <div style="text-align: right; margin-left: 10px;">
+                <div style="font-weight: 600; font-size: 0.9rem; color: var(--color-text-main);">Super Admin</div>
+                <div style="font-size: 0.75rem; color: var(--color-text-muted);">
+                    <a href="#" id="logout-btn" style="color: var(--color-danger); text-decoration: none;">Cerrar sesión</a>
+                </div>
+            </div>
+            <div class="user-avatar">SA</div>
+        </div>
+    </header>
+
+    <!-- MAIN CONTENT -->
+    <main class="dash-main">
+
+        <!-- 1. PESTAÑA DASHBOARD -->
+        <section id="tab-dashboard" class="tab-pane active">
+            
+            <div class="kpi-grid">
+                <div class="dash-card kpi-item">
+                    <div class="kpi-header">
+                        <svg viewBox="0 0 24 24"><path d="M3 21h18"></path><path d="M9 8h1"></path><path d="M9 12h1"></path><path d="M9 16h1"></path><path d="M14 8h1"></path><path d="M14 12h1"></path><path d="M14 16h1"></path><path d="M5 21V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16"></path></svg>
+                        Cooperativas Registradas
+                    </div>
+                    <div class="kpi-value" id="kpi-cooperativas">...</div>
+                    <div class="kpi-trend up">Actualizado ahora</div>
+                </div>
+                
+                <div class="dash-card kpi-item">
+                    <div class="kpi-header">
+                        <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+                        Socios Totales
+                    </div>
+                    <div class="kpi-value" id="kpi-socios">...</div>
+                    <div class="kpi-trend up">Actualizado ahora</div>
+                </div>
+
+                <div class="dash-card kpi-item">
+                    <div class="kpi-header">
+                        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"></path><path d="M12 18V6"></path></svg>
+                        Créditos Desembolsados
+                    </div>
+                    <div class="kpi-value" id="kpi-creditos">...</div>
+                    <div class="kpi-trend up">Actualizado ahora</div>
+                </div>
+
+                <div class="dash-card kpi-item">
+                    <div class="kpi-header">
+                        <svg viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
+                        Cartera Total Activa
+                    </div>
+                    <div class="kpi-value" id="kpi-cartera">...</div>
+                    <div class="kpi-trend up">Actualizado ahora</div>
+                </div>
+            </div>
+
+            <div class="dashboard-grid">
+                
+                <!-- Gráfico de Evolución CSS -->
+                <div class="dash-card">
+                    <div class="card-header">
+                        <div class="card-title">Evolución Cooperativas (Últimos 6 meses)</div>
+                    </div>
+                    <div class="chart-container">
+                        <div class="bar-wrapper">
+                            <div class="bar" style="height: 50%;"><div class="bar-value-tooltip">6</div></div>
+                            <div class="bar-label">Sep</div>
+                        </div>
+                        <div class="bar-wrapper">
+                            <div class="bar" style="height: 58%;"><div class="bar-value-tooltip">7</div></div>
+                            <div class="bar-label">Oct</div>
+                        </div>
+                        <div class="bar-wrapper">
+                            <div class="bar" style="height: 66%;"><div class="bar-value-tooltip">8</div></div>
+                            <div class="bar-label">Nov</div>
+                        </div>
+                        <div class="bar-wrapper">
+                            <div class="bar" style="height: 75%;"><div class="bar-value-tooltip">9</div></div>
+                            <div class="bar-label">Dic</div>
+                        </div>
+                        <div class="bar-wrapper">
+                            <div class="bar" style="height: 83%;"><div class="bar-value-tooltip">10</div></div>
+                            <div class="bar-label">Ene</div>
+                        </div>
+                        <div class="bar-wrapper">
+                            <div class="bar" style="height: 100%;"><div class="bar-value-tooltip">12</div></div>
+                            <div class="bar-label">Feb</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Progreso Top 5 -->
+                <div class="dash-card">
+                    <div class="card-header">
+                        <div class="card-title">Top 5 por Cartera</div>
+                    </div>
+                    <div class="progress-list" id="top5-cartera-list">
+                        <div style="text-align: center; padding: 20px; color: var(--color-text-muted);">Cargando...</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Alertas -->
+            <div class="dash-card">
+                <div class="card-header">
+                    <div class="card-title">Alertas del Sistema</div>
+                </div>
+                <div class="alert-list">
+                    <div class="sys-alert critical">
+                        <svg style="color: var(--color-danger);" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+                        <div class="sys-alert-content">
+                            <h4>Nivel de morosidad crítico</h4>
+                            <p>La cooperativa "Futuro Seguro" ha superado el límite permitido con una morosidad del 23.4%.</p>
+                        </div>
+                    </div>
+                    <div class="sys-alert warning">
+                        <svg style="color: var(--color-warning);" viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+                        <div class="sys-alert-content">
+                            <h4>Atraso en pago de mensualidad</h4>
+                            <p>La cooperativa "Progreso Coop" registra 2 meses consecutivos sin pago de plataforma.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- 2. PESTAÑA COOPERATIVAS -->
+        <section id="tab-cooperativas" class="tab-pane">
+            <div class="dash-card">
+                <div class="table-toolbar">
+                    <div class="table-filters">
+                        <input type="text" id="filtro-coop-buscar" class="form-control" placeholder="Buscar por nombre o NIT" style="width: 250px;">
+                        <select id="filtro-coop-estado" class="form-control" style="min-width: 200px;">
+                            <option value="">Todos los estados</option>
+                            <option value="activo">Activas</option>
+                            <option value="inactivo">Inactivas</option>
+                            <option value="pendiente">Pendientes</option>
+                        </select>
+                    </div>
+                    <button class="btn btn-primary" onclick="openModal('modal-registro')">+ Nueva Cooperativa</button>
+                </div>
+
+                <div class="data-table-wrapper">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>NIT</th>
+                                <th>Nombre</th>
+                                <th>Socios</th>
+                                <th>Estado</th>
+                                <th>Cartera</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tabla-cooperativas-body">
+                            <!-- Filas dinámicas -->
+                            <tr><td colspan="6" style="text-align: center;">Cargando cooperativas...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. PESTAÑA REPORTES GLOBALES -->
+        <section id="tab-reportes" class="tab-pane">
+            <div class="table-toolbar" style="margin-bottom: var(--spacing-xl);">
+                <div class="table-filters">
+                    <input type="date" class="form-control" title="Desde">
+                    <input type="date" class="form-control" title="Hasta">
+                </div>
+                <div>
+                    <button class="btn btn-outline action-mock" data-action="Exportar a Excel" style="margin-right: 8px;">Exportar Excel</button>
+                    <button class="btn btn-primary action-mock" data-action="Exportar a PDF">Exportar PDF</button>
+                </div>
+            </div>
+
+            <div class="dashboard-grid">
+                <!-- Gráfico Cartera -->
+                <div class="dash-card">
+                    <div class="card-header"><div class="card-title">Evolución Cartera Total</div></div>
+                    <div class="chart-container">
+                        <div class="bar-wrapper"><div class="bar" style="height: 78%;"><div class="bar-value-tooltip">$30M</div></div><div class="bar-label">Sep</div></div>
+                        <div class="bar-wrapper"><div class="bar" style="height: 84%;"><div class="bar-value-tooltip">$32M</div></div><div class="bar-label">Oct</div></div>
+                        <div class="bar-wrapper"><div class="bar" style="height: 86%;"><div class="bar-value-tooltip">$33M</div></div><div class="bar-label">Nov</div></div>
+                        <div class="bar-wrapper"><div class="bar" style="height: 92%;"><div class="bar-value-tooltip">$35M</div></div><div class="bar-label">Dic</div></div>
+                        <div class="bar-wrapper"><div class="bar" style="height: 97%;"><div class="bar-value-tooltip">$37M</div></div><div class="bar-label">Ene</div></div>
+                        <div class="bar-wrapper"><div class="bar" style="height: 100%;"><div class="bar-value-tooltip">$38M</div></div><div class="bar-label">Feb</div></div>
+                    </div>
+                </div>
+
+                <!-- Morosidad -->
+                <div class="dash-card">
+                    <div class="card-header"><div class="card-title">Morosidad por Entidad</div></div>
+                    <div class="progress-list">
+                        <div>
+                            <div class="progress-item-header"><span>Futuro Seguro</span><strong style="color:var(--color-danger)">23.4%</strong></div>
+                            <div class="progress-track"><div class="progress-fill danger" style="width: 80%;"></div></div>
+                        </div>
+                        <div>
+                            <div class="progress-item-header"><span>Ahorro y Vida</span><strong style="color:var(--color-warning)">13.6%</strong></div>
+                            <div class="progress-track"><div class="progress-fill warning" style="width: 50%;"></div></div>
+                        </div>
+                        <div>
+                            <div class="progress-item-header"><span>Unidos Crecemos</span><strong>8.2%</strong></div>
+                            <div class="progress-track"><div class="progress-fill" style="width: 30%;"></div></div>
+                        </div>
+                        <div style="margin-top: 15px; border-top: 1px dashed var(--color-border); padding-top: 10px;">
+                            <div class="progress-item-header"><span>Promedio General</span><strong>12.8%</strong></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Gráfico Ingresos Mensualidades -->
+                <div class="dash-card" style="grid-column: 1 / -1;">
+                    <div class="card-header"><div class="card-title">Ingresos por Mensualidades (Plataforma)</div></div>
+                    <div class="chart-container" style="height: 200px;">
+                        <div class="bar-wrapper"><div class="bar" style="height: 50%; background-color: var(--color-success);"><div class="bar-value-tooltip">$1.2M</div></div><div class="bar-label">Sep</div></div>
+                        <div class="bar-wrapper"><div class="bar" style="height: 62%; background-color: var(--color-success);"><div class="bar-value-tooltip">$1.5M</div></div><div class="bar-label">Oct</div></div>
+                        <div class="bar-wrapper"><div class="bar" style="height: 37%; background-color: var(--color-success);"><div class="bar-value-tooltip">$0.9M</div></div><div class="bar-label">Nov</div></div>
+                        <div class="bar-wrapper"><div class="bar" style="height: 100%; background-color: var(--color-success);"><div class="bar-value-tooltip">$2.4M</div></div><div class="bar-label">Dic</div></div>
+                        <div class="bar-wrapper"><div class="bar" style="height: 75%; background-color: var(--color-success);"><div class="bar-value-tooltip">$1.8M</div></div><div class="bar-label">Ene</div></div>
+                        <div class="bar-wrapper"><div class="bar" style="height: 54%; background-color: var(--color-success);"><div class="bar-value-tooltip">$1.3M</div></div><div class="bar-label">Feb</div></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4. PESTAÑA AUDITORÍA -->
+        <section id="tab-auditoria" class="tab-pane">
+            <div class="dash-card">
+                <div class="table-toolbar">
+                    <div class="table-filters">
+                        <input type="text" class="form-control" placeholder="Buscar usuario o acción" style="width: 250px;">
+                        <input type="date" class="form-control" title="Fecha Auditoría">
+                    </div>
+                    <button class="btn btn-outline action-mock" data-action="Exportar Registro de Auditoría">Exportar</button>
+                </div>
+
+                <div class="data-table-wrapper">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Fecha y Hora</th>
+                                <th>Usuario</th>
+                                <th>Acción</th>
+                                <th>Detalle</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>15/03/2025 10:30:25</td>
+                                <td><strong>AdminSuper</strong></td>
+                                <td><span style="color:var(--color-danger)">Desactivó cooperativa</span></td>
+                                <td>Futuro Seguro</td>
+                            </tr>
+                            <tr>
+                                <td>14/03/2025 15:20:12</td>
+                                <td><strong>AdminSuper</strong></td>
+                                <td><span style="color:var(--color-success)">Registró cooperativa</span></td>
+                                <td>Progreso Coop</td>
+                            </tr>
+                            <tr>
+                                <td>13/03/2025 09:45:07</td>
+                                <td><strong>AdminSuper</strong></td>
+                                <td>Exportó reporte</td>
+                                <td>General PDF</td>
+                            </tr>
+                            <tr>
+                                <td>12/03/2025 08:00:00</td>
+                                <td><strong>AdminSuper</strong></td>
+                                <td>Inició sesión</td>
+                                <td>IP 192.168.1.1</td>
+                            </tr>
+                            <tr>
+                                <td>11/03/2025 14:30:00</td>
+                                <td><strong>AdminSuper</strong></td>
+                                <td><span style="color:var(--color-warning)">Editó cooperativa</span></td>
+                                <td>Ahorro y Vida</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div style="display: flex; justify-content: center; gap: 8px; margin-top: 20px;">
+                    <button class="btn-icon" style="background-color: var(--color-primary); color: white;">1</button>
+                    <button class="btn-icon">2</button>
+                    <button class="btn-icon">3</button>
+                    <button class="btn-icon">...</button>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- MODALES OCULTOS -->
+
+    <!-- Modal Registrar Cooperativa -->
+    <div class="modal-overlay" id="modal-registro">
+        <div class="modal-content" style="max-width: 720px;">
+            <div class="modal-header">
+                <h3>Nueva Cooperativa + Administrador Local</h3>
+                <button class="close-modal btn-icon">&times;</button>
+            </div>
+            <form id="form-nueva-cooperativa">
+                
+                <!-- Sección 1: Datos de la Cooperativa -->
+                <div style="background: var(--color-background); padding: 15px; border-radius: 8px; margin-bottom: 18px; border: 1px solid var(--color-border);">
+                    <h4 style="margin: 0 0 12px 0; font-size: 0.95rem; color: var(--color-primary);"><i class="bi bi-building"></i> Datos de la Cooperativa</h4>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                        <div class="form-group" style="margin-bottom:0;">
+                            <label class="form-label">NIT *</label>
+                            <input type="text" id="reg-nit" class="form-control" placeholder="Ej: 900.123.456-1" required>
+                        </div>
+                        <div class="form-group" style="margin-bottom:0;">
+                            <label class="form-label">Razón Social *</label>
+                            <input type="text" id="reg-nombre" class="form-control" placeholder="Cooperativa Ahorro y Vida" required>
+                        </div>
+                    </div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 12px;">
+                        <div class="form-group" style="margin-bottom:0;">
+                            <label class="form-label">Correo Institucional *</label>
+                            <input type="email" id="reg-correo" class="form-control" placeholder="contacto@cooperativa.com" required>
+                        </div>
+                        <div class="form-group" style="margin-bottom:0;">
+                            <label class="form-label">Teléfono *</label>
+                            <input type="tel" id="reg-telefono" class="form-control" placeholder="300 123 4567" required>
+                        </div>
+                    </div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 12px;">
+                        <div class="form-group" style="margin-bottom:0;">
+                            <label class="form-label">Dirección Principal *</label>
+                            <input type="text" id="reg-direccion" class="form-control" placeholder="Cra 10 #20-30, Bogotá" required>
+                        </div>
+                        <div class="form-group" style="margin-bottom:0;">
+                            <label class="form-label">Sitio Web (Opcional)</label>
+                            <input type="url" id="reg-web" class="form-control" placeholder="www.cooperativa.com">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sección 2: Representante Legal / Admin Local -->
+                <div style="background: var(--color-background); padding: 15px; border-radius: 8px; margin-bottom: 18px; border: 1px solid var(--color-border);">
+                    <h4 style="margin: 0 0 12px 0; font-size: 0.95rem; color: var(--color-primary);"><i class="bi bi-person-badge"></i> Representante Legal (Administrador Local)</h4>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                        <div class="form-group" style="margin-bottom:0;">
+                            <label class="form-label">Nombre Completo *</label>
+                            <input type="text" id="reg-nombre-rep" class="form-control" placeholder="Juan Pérez" required>
+                        </div>
+                        <div class="form-group" style="margin-bottom:0;">
+                            <label class="form-label">Cédula de Ciudadanía *</label>
+                            <input type="text" id="reg-cedula-rep" class="form-control" placeholder="80.123.456" required>
+                        </div>
+                    </div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 12px;">
+                        <div class="form-group" style="margin-bottom:0;">
+                            <label class="form-label">Cargo *</label>
+                            <input type="text" id="reg-cargo-rep" class="form-control" placeholder="Representante Legal / Gerente" required>
+                        </div>
+                        <div class="form-group" style="margin-bottom:0;">
+                            <label class="form-label">Teléfono de contacto *</label>
+                            <input type="tel" id="reg-tel-rep" class="form-control" placeholder="310 987 6543" required>
+                        </div>
+                    </div>
+
+                    <!-- Credenciales -->
+                    <div style="background: var(--color-surface); padding: 12px; border-radius: 8px; margin-top: 14px; border: 1px dashed var(--color-border);">
+                        <p style="font-size: 0.8rem; color: var(--color-text-muted); margin-bottom: 10px;">
+                            <strong><i class="bi bi-shield-lock"></i> Credenciales de Acceso:</strong> Con estas credenciales el admin local ingresará al sistema.
+                        </p>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                            <div class="form-group" style="margin-bottom:0;">
+                                <label class="form-label">Correo (Usuario) *</label>
+                                <input type="email" id="reg-correo-rep" class="form-control" placeholder="admin@cooperativa.com" required>
+                            </div>
+                            <div class="form-group" style="margin-bottom:0;">
+                                <label class="form-label">Contraseña *</label>
+                                <input type="password" id="reg-pass-rep" class="form-control" placeholder="••••••••" required minlength="6">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="reg-alert" style="display:none; padding: 10px; border-radius: 8px; font-size: 0.85rem; margin-bottom: 12px;"></div>
+
+                <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 10px;">
+                    <button type="button" class="btn btn-outline close-modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary" id="btn-registrar-coop">Registrar Cooperativa</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Editar Cooperativa -->
+    <div class="modal-overlay" id="modal-editar-coop">
+        <div class="modal-content" style="max-width: 720px;">
+            <div class="modal-header">
+                <h3>Editar Cooperativa</h3>
+                <button class="close-modal btn-icon">&times;</button>
+            </div>
+            <form id="form-editar-cooperativa">
+                <input type="hidden" id="edit-id-coop">
+                
+                <!-- Datos de la Cooperativa -->
+                <div style="background: var(--color-background); padding: 15px; border-radius: 8px; margin-bottom: 15px; border: 1px solid var(--color-border);">
+                    <h4 style="margin: 0 0 12px 0; font-size: 0.95rem; color: var(--color-primary);"><i class="bi bi-building"></i> Datos Empresariales</h4>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                        <div class="form-group" style="margin-bottom:0;">
+                            <label class="form-label">NIT (Solo lectura)</label>
+                            <input type="text" id="edit-nit" class="form-control" readonly style="background-color: #f1f5f9;">
+                        </div>
+                        <div class="form-group" style="margin-bottom:0;">
+                            <label class="form-label">Razón Social *</label>
+                            <input type="text" id="edit-nombre" class="form-control" required>
+                        </div>
+                    </div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 12px;">
+                        <div class="form-group" style="margin-bottom:0;">
+                            <label class="form-label">Correo Institucional *</label>
+                            <input type="email" id="edit-correo" class="form-control" required>
+                        </div>
+                        <div class="form-group" style="margin-bottom:0;">
+                            <label class="form-label">Teléfono *</label>
+                            <input type="tel" id="edit-telefono" class="form-control" required>
+                        </div>
+                    </div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 12px;">
+                        <div class="form-group" style="margin-bottom:0;">
+                            <label class="form-label">Dirección Principal *</label>
+                            <input type="text" id="edit-direccion" class="form-control" required>
+                        </div>
+                        <div class="form-group" style="margin-bottom:0;">
+                            <label class="form-label">Estado de la Cooperativa *</label>
+                            <select id="edit-estado" class="form-control" required>
+                                <option value="activo">Activa</option>
+                                <option value="inactivo">Inactiva</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Admin Local -->
+                <div style="background: var(--color-background); padding: 15px; border-radius: 8px; margin-bottom: 15px; border: 1px solid var(--color-border);">
+                    <h4 style="margin: 0 0 12px 0; font-size: 0.95rem; color: var(--color-primary);"><i class="bi bi-person-badge"></i> Administrador Local</h4>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                        <div class="form-group" style="margin-bottom:0;">
+                            <label class="form-label">Nombre Completo *</label>
+                            <input type="text" id="edit-admin-nombre" class="form-control" required>
+                        </div>
+                        <div class="form-group" style="margin-bottom:0;">
+                            <label class="form-label">Correo (Usuario) *</label>
+                            <input type="email" id="edit-admin-correo" class="form-control" required>
+                        </div>
+                    </div>
+                    
+                    <!-- Contraseña Admin -->
+                    <div style="background: #fffbeb; padding: 12px; border-radius: 8px; margin-top: 12px; border: 1px solid #fcd34d;">
+                        <p style="font-size: 0.8rem; color: #92400e; margin-bottom: 8px;">
+                            <strong><i class="bi bi-key"></i> Cambiar Contraseña:</strong> Déjalo en blanco si no deseas cambiar la contraseña del administrador local.
+                        </p>
+                        <div class="form-group" style="margin-bottom:0;">
+                            <input type="text" id="edit-admin-pass" class="form-control" placeholder="Nueva contraseña (Opcional)" minlength="6">
+                        </div>
+                    </div>
+                </div>
+
+                <div id="edit-alert" style="display:none; padding: 10px; border-radius: 8px; font-size: 0.85rem; margin-bottom: 12px;"></div>
+
+                <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 10px;">
+                    <button type="button" class="btn btn-outline close-modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary" id="btn-guardar-edicion">Guardar Cambios</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Detalle Avanzado Cooperativa -->
+    <div class="modal-overlay" id="modal-detalle-avanzado">
+        <div class="modal-content" style="max-width: 780px;">
+            <div class="modal-header" style="padding-bottom: 8px;">
+                <h3 style="font-size: 1.05rem;"><i class="bi bi-graph-up-arrow" style="color: var(--color-primary);"></i> Detalles: <span id="det-nombre-coop"></span></h3>
+                <button class="close-modal btn-icon">&times;</button>
+            </div>
+            
+            <div style="display: flex; align-items: center; margin-bottom: 10px; padding-bottom: 8px; border-bottom: 1px solid var(--color-border);">
+                <span id="det-estado-coop" class="status-badge"></span>
+            </div>
+
+            <div class="dashboard-grid" style="grid-template-columns: 1fr 1.5fr; gap: 12px; margin-bottom: 12px;">
+                
+                <!-- Bloque Izquierdo: Personal -->
+                <div style="background: var(--color-background); padding: 12px; border-radius: 10px; border: 1px solid var(--color-border);">
+                    <div style="font-size: 0.88rem; font-weight: 600; color: var(--color-primary); margin-bottom: 10px;">
+                        <i class="bi bi-people-fill"></i> Personal Administrativo
+                    </div>
+                    <ul id="det-lista-empleados" style="list-style: none; padding: 0; margin: 0; font-size: 0.84rem; display: flex; flex-direction: column; gap: 6px; max-height: 200px; overflow-y: auto;">
+                        <!-- Llenado por JS -->
+                    </ul>
+                </div>
+
+                <!-- Bloque Derecho: Métricas Financieras y Socios -->
+                <div style="background: var(--color-background); padding: 12px; border-radius: 10px; border: 1px solid var(--color-border);">
+                    <div style="font-size: 0.88rem; font-weight: 600; color: var(--color-primary); margin-bottom: 10px;">
+                        <i class="bi bi-pie-chart-fill"></i> Métricas Clave
+                    </div>
+                    
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                        <div style="background: #fff; padding: 10px; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
+                            <div style="font-size: 0.72rem; color: var(--color-text-muted); text-transform: uppercase;">Total Socios</div>
+                            <div style="font-size: 1.25rem; font-weight: 700; color: var(--color-text-main);" id="det-socios">0</div>
+                        </div>
+                        <div style="background: #fff; padding: 10px; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
+                            <div style="font-size: 0.72rem; color: var(--color-text-muted); text-transform: uppercase;">Ahorros Totales</div>
+                            <div style="font-size: 1rem; font-weight: 700; color: var(--color-success);" id="det-ahorros">$0</div>
+                        </div>
+                        <div style="background: #fff; padding: 10px; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
+                            <div style="font-size: 0.72rem; color: var(--color-text-muted); text-transform: uppercase;">Cartera Vigente</div>
+                            <div style="font-size: 1rem; font-weight: 700; color: var(--color-primary);" id="det-cartera-vigente">$0</div>
+                        </div>
+                        <div style="background: #fffbeb; border: 1px solid #fcd34d; padding: 10px; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
+                            <div style="font-size: 0.72rem; color: #92400e; text-transform: uppercase;">Cartera Vencida (Mora)</div>
+                            <div style="font-size: 1rem; font-weight: 700; color: #b45309;" id="det-cartera-vencida">$0</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div style="display: flex; justify-content: flex-end;">
+                <button type="button" class="btn btn-outline close-modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="./js/controllers/dashboard.controller.js"></script>
+</body>
+</html>
