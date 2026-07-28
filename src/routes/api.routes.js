@@ -502,13 +502,25 @@ router.get('/admin/usuarios', authenticateJWT, authorizeRoles('admin_local'), re
     if (!cooperativaId) {
       return res.status(400).json({ error: "Falta cooperativaId" });
     }
+
+    // Si se filtra por socio, hacer JOIN con la tabla socio
     const { rows } = await db.query(`
-      SELECT id_usuario, nombre_usuario, documento_usuario, correo_usuario, telefono_usuario, rol_usuario, estado_usuario, fecha_creacion_usuario
-      FROM usuario
-      WHERE id_cooperativa_usuario = $1 AND rol_usuario != 'super_admin' AND rol_usuario != 'admin_local'
-      ORDER BY id_usuario DESC
+      SELECT
+        u.id_usuario,
+        u.nombre_usuario,
+        u.documento_usuario,
+        u.correo_usuario,
+        u.telefono_usuario,
+        u.rol_usuario,
+        u.estado_usuario,
+        u.fecha_creacion_usuario
+      FROM usuario u
+      WHERE u.id_cooperativa_usuario = $1
+        AND u.rol_usuario != 'super_admin'
+        AND u.rol_usuario != 'admin_local'
+      ORDER BY u.id_usuario DESC
     `, [cooperativaId]);
-    
+
     res.json(rows);
   } catch (err) {
     console.error("Error obteniendo usuarios locales:", err);
@@ -2825,6 +2837,54 @@ router.post('/analista/solicitudes/:id/resolver', authenticateJWT, authorizeRole
     res.status(500).json({ error: "Error interno del servidor al procesar la resolución." });
   } finally {
     client.release();
+  }
+});
+
+// GET /api/analista/socio/:socioId/historial
+// Retorna ahorros + pagos de crédito del socio — accesible solo por analistas de la misma cooperativa
+router.get('/analista/socio/:socioId/historial', authenticateJWT, authorizeRoles('analista'), async (req, res) => {
+  try {
+    const { socioId } = req.params;
+
+    // Verificar que el socio pertenece a la misma cooperativa del analista
+    const scopeRes = await db.query(`
+      SELECT id_cooperativa_socio FROM socio WHERE id_socio = $1
+    `, [socioId]);
+
+    if (scopeRes.rows.length === 0) {
+      return res.status(404).json({ error: "Socio no encontrado." });
+    }
+    if (String(scopeRes.rows[0].id_cooperativa_socio) !== String(req.user.id_cooperativa)) {
+      return res.status(403).json({ error: "No autorizado. El socio no pertenece a tu cooperativa." });
+    }
+
+    // Ahorros + pagos de crédito unificados, ordenados por fecha DESC
+    const { rows } = await db.query(`
+      SELECT
+        fecha_movimiento AS fecha,
+        tipo_movimiento::TEXT AS tipo,
+        monto_movimiento AS monto,
+        descripcion_movimiento AS descripcion
+      FROM movimiento_ahorro
+      WHERE id_socio_movimiento = $1
+
+      UNION ALL
+
+      SELECT
+        p.fecha_pago AS fecha,
+        'pago_credito' AS tipo,
+        p.monto_total_pago AS monto,
+        'Pago de crédito — Recibo #' || p.numero_recibo_pago || ' (' || p.canal_pago || ')' AS descripcion
+      FROM pago p
+      WHERE p.id_socio_pago = $1
+
+      ORDER BY fecha DESC
+    `, [socioId]);
+
+    res.json(rows);
+  } catch (err) {
+    console.error("Error al cargar historial del socio (analista):", err);
+    res.status(500).json({ error: "Error interno del servidor al cargar el historial." });
   }
 });
 

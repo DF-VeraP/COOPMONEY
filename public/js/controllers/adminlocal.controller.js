@@ -65,6 +65,8 @@ document.addEventListener('DOMContentLoaded', () => {
             // Cargar datos frescos según la pestaña
             if (target === 'tab-dashboard' || target === 'tab-usuarios') {
                 loadLocalUsers();
+            } else if (target === 'tab-socios') {
+                loadSocios();
             }
         });
     });

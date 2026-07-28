@@ -99,65 +99,87 @@ document.addEventListener('DOMContentLoaded', async () => {
                 card.className = 'dash-card analista-solicitud-card';
                 card.id = `card-sol-${sol.id_solicitud}`;
                 card.innerHTML = `
-                    <div class="analista-solicitud-top">
-                        <div class="analista-socio-block">
-                            <div class="analista-socio-header">
-                                <span class="analista-socio-icon">
-                                    <i class="bi bi-person-fill"></i>
-                                </span>
-                                <span class="analista-socio-name">${sol.asociado}</span>
-                                <span class="analista-score-badge" style="background: ${sol.scoring_color};">${sol.scoring}</span>
-                            </div>
-                            <div class="analista-meta-grid">
-                                <div class="analista-meta-item"><i class="bi bi-calendar3"></i> Solicitado: <strong>${fechaSol}</strong></div>
-                                <div class="analista-meta-item"><i class="bi bi-cash-stack"></i> Monto: <strong>${formatCurrency(sol.monto)}</strong></div>
-                                <div class="analista-meta-item"><i class="bi bi-calendar-range"></i> Plazo: <strong>${sol.plazo} meses</strong></div>
-                                <div class="analista-meta-item"><i class="bi bi-tags"></i> Línea: <strong>${sol.linea}</strong></div>
-                                <div class="analista-meta-item full"><i class="bi bi-chat-left-text"></i> Propósito: <strong>${sol.proposito || 'No especificado'}</strong></div>
+                    <div class="analista-card-header">
+                        <div class="analista-avatar">
+                            <i class="bi bi-person-fill"></i>
+                        </div>
+                        <div class="analista-identity">
+                            <span class="analista-socio-name">${sol.asociado}</span>
+                            <div class="analista-solicitud-meta">
+                                <span><i class="bi bi-calendar3"></i> ${fechaSol}</span>
+                                <span><i class="bi bi-tags"></i> <strong>${sol.linea}</strong></span>
                             </div>
                         </div>
+                        <span class="analista-score-badge" style="background: ${sol.scoring_color};">${sol.scoring}</span>
                     </div>
 
-                    <!-- DATOS FINANCIEROS DEL SOCIO -->
+                    <!-- PILLS: datos de la solicitud -->
+                    <div class="analista-solicitud-pills">
+                        <span class="analista-pill highlight">
+                            <i class="bi bi-cash-stack"></i> Monto: <strong>${formatCurrency(sol.monto)}</strong>
+                        </span>
+                        <span class="analista-pill">
+                            <i class="bi bi-calendar-range"></i> Plazo: <strong>${sol.plazo} meses</strong>
+                        </span>
+                        <span class="analista-pill">
+                            <i class="bi bi-clock-history"></i> Socio hace: <strong>${sol.meses_socio} meses</strong>
+                        </span>
+                        <span class="analista-pill">
+                            <i class="bi bi-credit-card"></i> Créditos activos: <strong>${sol.creditos_activos}</strong>
+                        </span>
+                    </div>
+
+                    <!-- KPIs FINANCIEROS -->
                     <div class="analista-financial-panel">
                         <div class="analista-financial-title">
-                            <i class="bi bi-bar-chart-line"></i> DATOS FINANCIEROS DEL SOCIO
+                            <i class="bi bi-bar-chart-line"></i> Datos financieros del socio
                         </div>
-                        <div class="analista-financial-grid">
-                            <div class="analista-financial-item">
-                                <i class="bi bi-piggy-bank"></i>
-                                <span>Saldo de ahorros:</span> <strong>${formatCurrency(sol.saldo_ahorros)}</strong>
-                                <span style="color: ${ahorroPctColor};">(${sol.porcentaje_ahorro}% del monto)</span>
-                                <i class="bi ${ahorroPctIcon}" style="color: ${ahorroPctColor};"></i>
+                        <div class="analista-kpi-row">
+                            <div class="analista-kpi-item">
+                                <span class="analista-kpi-label">Saldo de ahorros</span>
+                                <span class="analista-kpi-value">
+                                    ${formatCurrency(sol.saldo_ahorros)}
+                                    <i class="bi ${ahorroPctIcon}" style="color:${ahorroPctColor};" title="${sol.porcentaje_ahorro}% del monto solicitado"></i>
+                                </span>
                             </div>
-                            <div class="analista-financial-item">
-                                <i class="bi bi-credit-card"></i>
-                                <span>Créditos activos:</span> <strong>${sol.creditos_activos}</strong>
-                                <span style="color: ${moraColor};">(mora: ${sol.dias_mora} días)</span>
-                                <i class="bi ${moraIcon}" style="color: ${moraColor};"></i>
+                            <div class="analista-kpi-item">
+                                <span class="analista-kpi-label">Mora actual</span>
+                                <span class="analista-kpi-value">
+                                    ${sol.dias_mora} días
+                                    <i class="bi ${moraIcon}" style="color:${moraColor};"></i>
+                                </span>
                             </div>
-                            <div class="analista-financial-item">
-                                <i class="bi bi-calendar-check"></i>
-                                <span>Tiempo como socio:</span> <strong>${sol.meses_socio} meses</strong>
-                                <i class="bi ${mesesIcon}" style="color: ${mesesColor};"></i>
+                            <div class="analista-kpi-item">
+                                <span class="analista-kpi-label">Historial de pagos</span>
+                                <span class="analista-kpi-value" style="color:${sol.historial_color};">
+                                    ${sol.historial_label}
+                                </span>
                             </div>
-                            <div class="analista-financial-item">
-                                <i class="bi bi-graph-up-arrow"></i>
-                                <span>Historial de pagos:</span>
-                                <strong style="color: ${sol.historial_color};">${sol.historial_label}</strong>
+                            <div class="analista-kpi-item">
+                                <span class="analista-kpi-label">Ahorro vs monto</span>
+                                <span class="analista-kpi-value">
+                                    ${sol.porcentaje_ahorro}%
+                                    <i class="bi ${ahorroPctIcon}" style="color:${ahorroPctColor};"></i>
+                                </span>
                             </div>
                         </div>
                     </div>
 
-                    <!-- BOTONES DE ACCIÓN -->
+                    <!-- PROPÓSITO -->
+                    <div class="analista-proposito">
+                        <i class="bi bi-chat-left-text"></i>
+                        <span><strong>Propósito:</strong> ${sol.proposito || 'No especificado'}</span>
+                    </div>
+
+                    <!-- ACCIONES -->
                     <div class="analista-actions">
                         <button class="btn btn-secondary" onclick="verHistorial(${sol.id_socio}, '${sol.asociado.replace(/'/g, "\\'")}')">
-                            <i class="bi bi-eye"></i> Ver historial completo
+                            <i class="bi bi-clock-history"></i> Ver historial
                         </button>
-                        <button class="btn btn-primary" style="background-color: #10B981;" onclick="aprobarSolicitud(${sol.id_solicitud}, '${sol.asociado.replace(/'/g, "\\'")}')">
+                        <button class="btn btn-primary" style="background-color:#10B981;" onclick="aprobarSolicitud(${sol.id_solicitud}, '${sol.asociado.replace(/'/g, "\\'")}')">
                             <i class="bi bi-check-circle"></i> Aprobar
                         </button>
-                        <button class="btn btn-primary" style="background-color: #EF4444;" onclick="abrirRechazo(${sol.id_solicitud}, '${sol.asociado.replace(/'/g, "\\'")}')">
+                        <button class="btn btn-primary" style="background-color:#EF4444;" onclick="abrirRechazo(${sol.id_solicitud}, '${sol.asociado.replace(/'/g, "\\'")}')">
                             <i class="bi bi-x-circle"></i> Rechazar
                         </button>
                     </div>
@@ -235,7 +257,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         document.getElementById('modal-historial-socio').classList.add('open');
 
         try {
-            const res = await fetch(`/api/socio/historial/${idSocio}`);
+            const res = await fetch(`/api/analista/socio/${idSocio}/historial`);
             if (!res.ok) throw new Error();
             const history = await res.json();
 
@@ -247,12 +269,18 @@ document.addEventListener('DOMContentLoaded', async () => {
             let html = `<table class="data-table" style="font-size: 0.85rem;">
                 <thead><tr><th>Fecha</th><th>Operación</th><th>Monto</th><th>Descripción</th></tr></thead><tbody>`;
             history.forEach(h => {
-                const color = h.tipo === 'deposito' ? 'var(--color-success)' : 'var(--color-danger)';
-                const sign = h.tipo === 'deposito' ? '+' : '-';
-                const badge = h.tipo === 'deposito' ? 'active' : 'inactive';
+                const esDeposito = h.tipo === 'deposito';
+                const esPago = h.tipo === 'pago_credito';
+                const color = esDeposito ? 'var(--color-success)' : esPago ? '#3B82F6' : 'var(--color-danger)';
+                const sign = esDeposito ? '+' : '-';
+                let badge, label;
+                if (esDeposito) { badge = 'active'; label = 'Depósito'; }
+                else if (esPago) { badge = 'pending'; label = 'Pago Crédito'; }
+                else { badge = 'inactive'; label = 'Retiro'; }
+
                 html += `<tr>
                     <td>${new Date(h.fecha).toLocaleDateString('es-CO')}</td>
-                    <td><span class="status-badge ${badge}">${h.tipo === 'deposito' ? 'Depósito' : 'Retiro'}</span></td>
+                    <td><span class="status-badge ${badge}">${label}</span></td>
                     <td style="font-weight: 600; color: ${color};">${sign}${formatCurrency(h.monto)}</td>
                     <td>${h.descripcion || '-'}</td>
                 </tr>`;
