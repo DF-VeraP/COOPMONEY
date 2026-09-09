@@ -9,7 +9,7 @@ if (!process.env.JWT_SECRET) {
 }
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 5000;
 
 // Cabeceras de seguridad HTTP (protección contra clickjacking, MIME sniffing, oculta X-Powered-By)
 app.use(helmet({
