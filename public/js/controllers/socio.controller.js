@@ -1577,59 +1577,89 @@ document.addEventListener('DOMContentLoaded', async () => {
     const changePassForm = document.getElementById('change-password-form');
     const passAlert = document.getElementById('password-alert');
 
-    changePassForm.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        passAlert.style.display = 'none';
-        passAlert.className = 'alert';
+    // Toggle de visibilidad de contraseñas (mostrar/ocultar con el ojo)
+    document.querySelectorAll('.btn-toggle-pass').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            e.preventDefault();
+            const targetId = btn.getAttribute('data-target');
+            const input = document.getElementById(targetId);
+            const icon = btn.querySelector('i');
+            if (input) {
+                if (input.type === 'password') {
+                    input.type = 'text';
+                    if (icon) {
+                        icon.classList.remove('bi-eye');
+                        icon.classList.add('bi-eye-slash');
+                    }
+                } else {
+                    input.type = 'password';
+                    if (icon) {
+                        icon.classList.remove('bi-eye-slash');
+                        icon.classList.add('bi-eye');
+                    }
+                }
+            }
+        });
+    });
 
-        const curr = document.getElementById('pass-current').value;
-        const newPass = document.getElementById('pass-new').value;
-        const confPass = document.getElementById('pass-confirm').value;
+    if (changePassForm) {
+        changePassForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            passAlert.style.display = 'none';
+            passAlert.className = 'alert';
 
-        if (newPass !== confPass) {
-            passAlert.textContent = 'La nueva contraseña y la confirmación no coinciden.';
-            passAlert.style.display = 'block';
-            passAlert.classList.add('show', 'alert-danger');
-            return;
-        }
+            const curr = document.getElementById('pass-current').value;
+            const newPass = document.getElementById('pass-new').value;
+            const confPass = document.getElementById('pass-confirm').value;
 
-        if (newPass.length < 6) {
-            passAlert.textContent = 'La nueva contraseña debe tener al menos 6 caracteres.';
-            passAlert.style.display = 'block';
-            passAlert.classList.add('show', 'alert-danger');
-            return;
-        }
-
-        try {
-            const response = await fetch('/api/admin/perfil/contrasena', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    id_usuario: currentUser.id,
-                    contrasenaActual: curr,
-                    contrasenaNueva: newPass
-                })
-            });
-            const data = await response.json();
-
-            if (!response.ok) {
-                passAlert.textContent = data.error || 'Error al actualizar la contraseña.';
+            if (newPass !== confPass) {
+                passAlert.textContent = 'La nueva contraseña y la confirmación no coinciden.';
                 passAlert.style.display = 'block';
                 passAlert.classList.add('show', 'alert-danger');
                 return;
             }
 
-            passAlert.textContent = data.message;
-            passAlert.style.display = 'block';
-            passAlert.classList.add('show', 'alert-success');
-            changePassForm.reset();
+            if (newPass.length < 6) {
+                passAlert.textContent = 'La nueva contraseña debe tener al menos 6 caracteres.';
+                passAlert.style.display = 'block';
+                passAlert.classList.add('show', 'alert-danger');
+                return;
+            }
 
-        } catch (error) {
-            passAlert.textContent = 'Error de conexión con el servidor.';
-            passAlert.style.display = 'block';
-            passAlert.classList.add('show', 'alert-danger');
-        }
-    });
+            try {
+                const response = await fetch('/api/admin/perfil/contrasena', {
+                    method: 'POST',
+                    headers: { 
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + (currentUser.token || '')
+                    },
+                    body: JSON.stringify({
+                        id_usuario: currentUser.id,
+                        contrasenaActual: curr,
+                        contrasenaNueva: newPass
+                    })
+                });
+                const data = await response.json();
+
+                if (!response.ok) {
+                    passAlert.textContent = data.error || 'Error al actualizar la contraseña.';
+                    passAlert.style.display = 'block';
+                    passAlert.classList.add('show', 'alert-danger');
+                    return;
+                }
+
+                passAlert.textContent = data.message;
+                passAlert.style.display = 'block';
+                passAlert.classList.add('show', 'alert-success');
+                changePassForm.reset();
+
+            } catch (error) {
+                passAlert.textContent = 'Error de conexión con el servidor.';
+                passAlert.style.display = 'block';
+                passAlert.classList.add('show', 'alert-danger');
+            }
+        });
+    }
 
     // TOGGLE PLAN DE AMORTIZACIÓN (llamado desde las tarjetas de crédito)
     window.togglePlan = (creditoId) => {

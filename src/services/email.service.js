@@ -375,6 +375,179 @@ class EmailService {
             return false;
         }
     }
+
+    /**
+     * Envío de correo de recuperación de contraseña con clave temporal segura
+     */
+    static async enviarRecuperacionContrasena({ correo, nombre, contrasenaTemp, nombreCooperativa = 'COOPMONEY' }) {
+        const subject = `Recuperación de Contraseña - ${nombreCooperativa} 🔐`;
+        
+        const htmlContent = `
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <meta charset="utf-8">
+            <style>
+                body {
+                    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                    background-color: #f1f5f9;
+                    margin: 0;
+                    padding: 20px;
+                    color: #1e293b;
+                }
+                .email-card {
+                    max-width: 600px;
+                    background-color: #ffffff;
+                    margin: 0 auto;
+                    border-radius: 12px;
+                    box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+                    overflow: hidden;
+                    border: 1px solid #e2e8f0;
+                }
+                .email-header {
+                    background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+                    padding: 30px;
+                    text-align: center;
+                    color: #ffffff;
+                }
+                .email-header h1 {
+                    margin: 0;
+                    font-size: 1.5rem;
+                    font-weight: 700;
+                }
+                .email-body {
+                    padding: 30px;
+                    line-height: 1.6;
+                }
+                .cred-box {
+                    background-color: #f8fafc;
+                    border: 1px solid #e2e8f0;
+                    border-radius: 8px;
+                    padding: 20px;
+                    margin: 25px 0;
+                    text-align: center;
+                }
+                .cred-title {
+                    font-weight: 700;
+                    color: #475569;
+                    margin-bottom: 10px;
+                    font-size: 0.9rem;
+                    text-transform: uppercase;
+                }
+                .temp-pass {
+                    font-family: monospace;
+                    font-size: 1.4rem;
+                    font-weight: 700;
+                    color: #1d4ed8;
+                    background-color: #eff6ff;
+                    padding: 8px 16px;
+                    border-radius: 6px;
+                    letter-spacing: 2px;
+                    display: inline-block;
+                }
+                .warning-box {
+                    background-color: #fffbeb;
+                    border-left: 4px solid #f59e0b;
+                    padding: 12px 16px;
+                    margin: 20px 0;
+                    font-size: 0.9rem;
+                    color: #92400e;
+                    border-radius: 0 6px 6px 0;
+                }
+                .email-footer {
+                    background-color: #f8fafc;
+                    padding: 20px;
+                    text-align: center;
+                    font-size: 0.8rem;
+                    color: #64748b;
+                    border-top: 1px solid #e2e8f0;
+                }
+            </style>
+        </head>
+        <body>
+            <div class="email-card">
+                <div class="email-header">
+                    <h1>Restablecimiento de Contraseña</h1>
+                </div>
+                <div class="email-body">
+                    <p>Hola, <strong>${nombre}</strong>:</p>
+                    <p>Hemos recibido una solicitud para restablecer la contraseña de acceso a tu cuenta en <strong>${nombreCooperativa}</strong>.</p>
+                    
+                    <div class="cred-box">
+                        <div class="cred-title">Tu nueva contraseña temporal es:</div>
+                        <div class="temp-pass">${contrasenaTemp}</div>
+                    </div>
+                    
+                    <div class="warning-box">
+                        ⚠️ <strong>Importante:</strong> Por motivos de seguridad, te recomendamos cambiar esta contraseña temporal una vez ingreses al sistema desde tu perfil.
+                    </div>
+                    
+                    <p>Si no realizaste esta solicitud, puedes ignorar este mensaje o contactar al administrador de tu cooperativa.</p>
+                </div>
+                <div class="email-footer">
+                    &copy; 2026 ${nombreCooperativa} - Plataforma COOPMONEY. Todos los derechos reservados.
+                </div>
+            </div>
+        </body>
+        </html>
+        `;
+
+        const rawHost = process.env.SMTP_HOST || '';
+        const rawUser = process.env.SMTP_USER || '';
+        const rawPass = process.env.SMTP_PASS || '';
+        const rawFrom = process.env.SMTP_FROM || '';
+
+        const smtpHost = rawHost.replace(/^['"]|['"]$/g, '').trim();
+        const smtpUser = rawUser.replace(/^['"]|['"]$/g, '').trim();
+        const smtpPass = rawPass.replace(/^['"]|['"]$/g, '').trim();
+        const smtpFrom = rawFrom.replace(/^['"]|['"]$/g, '').replace(/\\/g, '').trim();
+
+        const isSmtpConfigured = smtpHost && 
+                                 smtpUser && smtpUser !== 'tu_correo_emisor@gmail.com' && 
+                                 smtpPass && smtpPass !== 'tu_clave_de_aplicacion_aqui';
+
+        if (isSmtpConfigured) {
+            try {
+                const transporter = nodemailer.createTransport({
+                    host: smtpHost,
+                    port: parseInt(process.env.SMTP_PORT || '465'),
+                    secure: smtpHost === 'smtp.gmail.com' || process.env.SMTP_SECURE === 'true' || process.env.SMTP_PORT === '465',
+                    auth: { user: smtpUser, pass: smtpPass },
+                    tls: { rejectUnauthorized: false }
+                });
+
+                const remitente = smtpFrom || `"${nombreCooperativa}" <${smtpUser}>`;
+
+                await transporter.sendMail({
+                    from: remitente,
+                    to: correo,
+                    subject: subject,
+                    html: htmlContent
+                });
+
+                console.log(`✉️ [REAL] Correo de recuperación enviado con éxito a: ${correo}`);
+                return true;
+            } catch (err) {
+                console.error("❌ Error enviando correo de recuperación con SMTP:", err.message);
+                throw err;
+            }
+        } else {
+            console.log(`\n⚠️ [Simulación] Copia local del correo de recuperación generada para: ${correo}`);
+            try {
+                const tempDir = path.join(__dirname, '..', '..', 'temp_emails');
+                if (!fs.existsSync(tempDir)) {
+                    fs.mkdirSync(tempDir, { recursive: true });
+                }
+                const cleanEmailName = correo.replace(/[^a-zA-Z0-9]/g, '_');
+                const filePath = path.join(tempDir, `recovery_${cleanEmailName}.html`);
+                fs.writeFileSync(filePath, htmlContent, 'utf-8');
+                console.log(`📁 Correo guardado en: ${filePath}`);
+            } catch (fsErr) {
+                // Silent
+            }
+            return false;
+        }
+    }
 }
 
 module.exports = EmailService;

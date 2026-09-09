@@ -5,376 +5,484 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Afiliación de Cooperativa | COOPMONEY</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="./css/main.css">
-    <style>
-        .registro-layout {
-            background-color: var(--color-background);
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: var(--spacing-3xl) var(--spacing-md);
-            position: relative;
-        }
+    <meta name="description" content="Inscribe tu cooperativa en la plataforma COOPMONEY para gestionar cartera, créditos y asociados con tecnología de vanguardia.">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
-        /* Franja decorativa superior */
-        .registro-layout::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 35vh;
-            background: linear-gradient(135deg, var(--color-secondary) 0%, var(--color-primary-dark) 100%);
-            z-index: 0;
-            border-bottom-left-radius: 50px;
-            border-bottom-right-radius: 50px;
-        }
-
-        .registro-container {
-            background-color: var(--color-surface);
-            border-radius: var(--border-radius-xl);
-            box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.15);
-            width: 100%;
-            max-width: 800px;
-            padding: var(--spacing-2xl);
-            position: relative;
-            z-index: 1;
-            border-top: 6px solid var(--color-primary);
-        }
-
-        .registro-header {
-            text-align: center;
-            margin-bottom: var(--spacing-xl);
-            padding-bottom: var(--spacing-lg);
-            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
-        }
-
-        .registro-logo-container {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 12px;
-            margin-bottom: var(--spacing-lg);
-            text-decoration: none;
-        }
-
-        .registro-logo {
-            height: 60px;
-            object-fit: contain;
-        }
-
-        .brand-text-registro {
-            display: flex;
-            flex-direction: column;
-            text-align: left;
-        }
-
-        .brand-text-registro span:first-child {
-            font-size: 0.75rem;
-            color: var(--color-text-muted);
-            font-weight: 500;
-            line-height: 1;
-        }
-
-        .brand-text-registro span:last-child {
-            font-size: 1.4rem;
-            color: var(--color-primary);
-            font-weight: 800;
-            line-height: 1;
-            margin-top: 4px;
-        }
-
-        .registro-title {
-            font-size: 1.8rem;
-            color: var(--color-secondary);
-            margin-bottom: 10px;
-            font-weight: 800;
-        }
-
-        .registro-subtitle {
-            color: var(--color-text-muted);
-            font-size: 0.95rem;
-            line-height: 1.5;
-            max-width: 480px;
-            margin: 0 auto;
-        }
-
-        /* Inputs estilizados */
-        .form-label {
-            font-weight: 600;
-            color: var(--color-text-main);
-            margin-bottom: 6px;
-            font-size: 0.9rem;
-            display: block;
-        }
-
-        .form-control {
-            width: 100%;
-            background-color: #F7FAFC;
-            border: 1px solid #E2E8F0;
-            border-radius: var(--border-radius-md);
-            padding: 0.8rem 1rem;
-            font-size: 0.95rem;
-            color: var(--color-text-main);
-            transition: all 0.3s ease;
-        }
-
-        .form-control:focus {
-            outline: none;
-            background-color: #FFFFFF;
-            border-color: var(--color-primary);
-            box-shadow: 0 0 0 3px rgba(31, 124, 84, 0.15);
-        }
-
-        .form-control::placeholder {
-            color: #A0AEC0;
-        }
-
-        .section-title {
-            font-size: 1.2rem;
-            color: var(--color-primary);
-            margin-bottom: 1rem;
-            padding-bottom: 0.5rem;
-            border-bottom: 2px solid var(--color-background);
-            font-weight: 700;
-        }
-
-        /* Botón de envío */
-        .btn-submit-registro {
-            background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-light) 100%);
-            color: white;
-            border: none;
-            border-radius: var(--border-radius-md);
-            box-shadow: 0 4px 15px rgba(31, 124, 84, 0.3);
-            transition: all 0.3s ease;
-            height: 50px;
-            font-weight: 600;
-            font-size: 1.05rem;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .btn-submit-registro:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(31, 124, 84, 0.4);
-        }
-
-        .btn-outline-registro {
-            height: 50px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-    </style>
+    <!-- Estilos -->
+    <link rel="stylesheet" href="./css/pages/registro-cooperativa.css">
 </head>
 
 <body class="registro-layout">
 
-    <div class="registro-container">
+    <!-- Barra de Navegación Superior -->
+    <header class="reg-top-nav">
+        <a href="index.html" class="reg-nav-brand" title="Volver al inicio">
+            <img src="./assets/images/LogoV1.1.png" alt="COOPMONEY" class="reg-nav-logo"
+                onerror="this.src='https://via.placeholder.com/150x40?text=COOPMONEY'">
+            <div class="reg-brand-meta">
+                <span class="reg-brand-sub">Multi-cooperativa</span>
+                <span class="reg-brand-title">CoopMoney</span>
+            </div>
+        </a>
 
-        <div class="loading-overlay" id="loadingOverlay">
-            <div class="spinner"></div>
-            <h3 style="color: var(--color-primary);">Registrando solicitud...</h3>
-            <p>Conectando con la base de datos central</p>
-        </div>
-
-        <div class="registro-header">
-            <a href="index.html" class="registro-logo-container">
-                <img src="./assets/images/LogoV1.1.png" alt="COOPMONEY" class="registro-logo"
-                    onerror="this.src='https://via.placeholder.com/150x40?text=COOPMONEY'">
-                <div class="brand-text-registro">
-                    <span>Multi-cooperativa</span>
-                    <span>CoopMoney</span>
-                </div>
+        <div class="reg-nav-actions">
+            <a href="index.html" class="reg-btn-ghost">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="19" y1="12" x2="5" y2="12"></line>
+                    <polyline points="12 19 5 12 12 5"></polyline>
+                </svg>
+                Inicio
             </a>
-            <h1 class="registro-title">Solicitud de Afiliación</h1>
-            <p class="registro-subtitle">Únete a la red cooperativa más avanzada de Colombia</p>
+            <a href="index.html" class="reg-btn-login">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path>
+                    <polyline points="10 17 15 12 10 7"></polyline>
+                    <line x1="15" y1="12" x2="3" y2="12"></line>
+                </svg>
+                Iniciar sesión
+            </a>
         </div>
+    </header>
 
-        <div class="info-box">
-            <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none">
-                <circle cx="12" cy="12" r="10"></circle>
-                <line x1="12" y1="16" x2="12" y2="12"></line>
-                <line x1="12" y1="8" x2="12.01" y2="8"></line>
-            </svg>
-            <div>
-                <strong>Información Importante:</strong>
-                <p style="margin-top: 4px;">Tu solicitud será evaluada por el Super Administrador. Una vez aprobada, se
-                    activará tu cooperativa y <strong>el correo del representante</strong> especificado aquí será
-                    utilizado como el <strong>Administrador Local</strong> para acceder al sistema y gestionar tus
-                    usuarios.</p>
+    <!-- Contenido Principal -->
+    <main class="registro-main-wrap">
+        <div class="registro-container">
+
+            <!-- Overlay de Carga -->
+            <div class="loading-overlay" id="loadingOverlay">
+                <div class="reg-spinner"></div>
+                <h3 style="color: var(--reg-primary); margin: 0 0 6px 0; font-size: 1.15rem; font-weight: 700;">Procesando solicitud...</h3>
+                <p style="color: var(--reg-muted); margin: 0; font-size: 0.88rem;">Validando datos y conectando con el sistema central</p>
             </div>
-        </div>
 
-        <div class="progress-container">
-            <div class="progress-step active" title="Datos Básicos">1</div>
-            <div class="progress-step active" title="Representante y Admin">2</div>
-            <div class="progress-step" title="Configuración">3</div>
-            <div class="progress-step" title="Finalizar">4</div>
-        </div>
-
-        <form id="registroForm">
-
-            <!-- SECCIÓN 1: Cooperativa -->
-            <div class="form-section">
-                <h3 class="section-title">1. Datos de la Cooperativa</h3>
-                <div class="form-row">
-                    <div class="form-group">
-                        <label class="form-label">NIT *</label>
-                        <input type="text" id="nit" class="form-control" placeholder="Ej: 900.123.456-1" required>
-                        <span class="error-message">Formato inválido. Ej: 900123456-1</span>
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">Nombre de la cooperativa *</label>
-                        <input type="text" id="nombreCoop" class="form-control" placeholder="Cooperativa Ahorro y Vida"
-                            required>
-                    </div>
+            <!-- Encabezado de la Tarjeta -->
+            <div class="reg-card-header">
+                <div class="reg-badge-tag">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                        <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                    </svg>
+                    Afiliación Oficial de Entidades
                 </div>
-                <div class="form-row">
-                    <div class="form-group">
-                        <label class="form-label">Correo Institucional *</label>
-                        <input type="email" id="correoCoop" class="form-control" placeholder="contacto@cooperativa.com"
-                            required>
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">Teléfono *</label>
-                        <input type="tel" id="telCoop" class="form-control" placeholder="300 123 4567" required>
-                        <span class="error-message">Debe tener al menos 10 dígitos.</span>
-                    </div>
+                <h1 class="reg-main-title">Solicitud de Afiliación</h1>
+                <p class="reg-main-desc">Integra tu cooperativa a la red de gestión financiera más segura y moderna de Colombia.</p>
+            </div>
+
+            <!-- Stepper / Indicador de Pasos -->
+            <div class="reg-stepper-container" id="stepper">
+                <div class="reg-stepper-track">
+                    <div class="reg-stepper-progress" id="stepperProgress"></div>
                 </div>
-                <div class="form-row">
-                    <div class="form-group">
-                        <label class="form-label">Dirección Principal *</label>
-                        <input type="text" id="dirCoop" class="form-control" placeholder="Cra 10 #20-30, Bogotá"
-                            required>
+                <div class="reg-stepper-steps">
+                    <div class="reg-step-item active" data-step="1">
+                        <div class="reg-step-circle">1</div>
+                        <span class="reg-step-label">Cooperativa</span>
                     </div>
-                    <div class="form-group">
-                        <label class="form-label">Sitio Web (Opcional)</label>
-                        <input type="url" id="webCoop" class="form-control" placeholder="www.cooperativa.com">
+                    <div class="reg-step-item" data-step="2">
+                        <div class="reg-step-circle">2</div>
+                        <span class="reg-step-label">Representante</span>
+                    </div>
+                    <div class="reg-step-item" data-step="3">
+                        <div class="reg-step-circle">3</div>
+                        <span class="reg-step-label">Operación</span>
+                    </div>
+                    <div class="reg-step-item" data-step="4">
+                        <div class="reg-step-circle">4</div>
+                        <span class="reg-step-label">Confirmación</span>
                     </div>
                 </div>
             </div>
 
-            <!-- SECCIÓN 2: Representante Legal / Admin Local -->
-            <div class="form-section">
-                <h3 class="section-title">2. Representante Legal (Admin Local)</h3>
-                <div class="form-row">
-                    <div class="form-group">
-                        <label class="form-label">Nombre Completo *</label>
-                        <input type="text" id="nombreRep" class="form-control" placeholder="Juan Pérez" required>
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">Cédula de Ciudadanía *</label>
-                        <input type="text" id="cedulaRep" class="form-control" placeholder="80.123.456" required>
-                    </div>
-                </div>
-                <div class="form-row">
-                    <div class="form-group">
-                        <label class="form-label">Cargo *</label>
-                        <input type="text" id="cargoRep" class="form-control"
-                            placeholder="Representante Legal / Gerente" required>
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">Teléfono de contacto *</label>
-                        <input type="tel" id="telRep" class="form-control" placeholder="310 987 6543" required>
-                    </div>
-                </div>
-
-                <div class="form-group"
-                    style="background-color: var(--color-background); padding: 15px; border-radius: 8px; margin-top: 15px; border: 1px solid var(--color-border);">
-                    <p style="font-size: 0.85rem; color: var(--color-text-muted); margin-bottom: 10px;">
-                        <strong>🔐 Credenciales de Acceso:</strong> Estas serán las credenciales de administrador una
-                        vez que tu solicitud sea aprobada.
-                    </p>
-                    <div class="form-row">
-                        <div class="form-group" style="margin-bottom: 0;">
-                            <label class="form-label">Correo (Usuario) *</label>
-                            <input type="email" id="correoRep" class="form-control"
-                                placeholder="juan.perez@cooperativa.com" required>
-                        </div>
-                        <div class="form-group" style="margin-bottom: 0;">
-                            <label class="form-label">Contraseña de acceso *</label>
-                            <input type="password" id="passAdmin" class="form-control" placeholder="••••••••" required
-                                minlength="6">
-                            <span class="error-message">Mínimo 6 caracteres.</span>
-                        </div>
-                    </div>
+            <!-- Cuadro de Información Importante -->
+            <div class="reg-callout">
+                <svg class="reg-callout-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <line x1="12" y1="16" x2="12" y2="12"></line>
+                    <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                </svg>
+                <div>
+                    <strong>Información clave:</strong> Su solicitud será revisada por el Super Administrador. Una vez aprobada, el correo del representante legal quedará habilitado como <strong>Administrador Local</strong> para gestionar su cooperativa.
                 </div>
             </div>
 
-            <!-- SECCIÓN 3: Configuración -->
-            <div class="form-section">
-                <h3 class="section-title">3. Configuración Inicial</h3>
-                <div class="form-group">
-                    <label class="form-label">Líneas de crédito a utilizar (Puedes elegir varias)</label>
-                    <div class="checkbox-group">
-                        <label class="checkbox-label"><input type="checkbox" name="linea" value="Consumo" checked>
-                            Consumo</label>
-                        <label class="checkbox-label"><input type="checkbox" name="linea" value="Vivienda">
-                            Vivienda</label>
-                        <label class="checkbox-label"><input type="checkbox" name="linea" value="Educativo">
-                            Educativo</label>
-                    </div>
-                </div>
-                <div class="form-row">
-                    <div class="form-group">
-                        <label class="form-label">Cantidad aproximada de socios *</label>
-                        <select id="cantSocios" class="form-control" required>
-                            <option value="">Seleccione una opción</option>
-                            <option value="Menos de 100">Menos de 100</option>
-                            <option value="100-500">100 a 500</option>
-                            <option value="500-1000">500 a 1000</option>
-                            <option value="Más de 1000">Más de 1000</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">¿Necesita migración de datos previos? *</label>
-                        <div class="checkbox-group">
-                            <label class="checkbox-label"><input type="radio" name="migracion" value="true" required>
-                                Sí</label>
-                            <label class="checkbox-label"><input type="radio" name="migracion" value="false"> No,
-                                empezaremos de cero</label>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- SECCIÓN 4: Términos -->
-            <div class="form-section">
-                <div class="form-group">
-                    <label class="checkbox-label" style="align-items: flex-start; margin-bottom: 10px;">
-                        <input type="checkbox" id="terminos" required style="margin-top: 4px;">
-                        <span>Acepto los <a href="#">términos y condiciones</a> del servicio COOPMONEY, asumiendo la
-                            veracidad de la información proporcionada.</span>
-                    </label>
-                    <label class="checkbox-label" style="align-items: flex-start;">
-                        <input type="checkbox" id="datos" required style="margin-top: 4px;">
-                        <span>Autorizo el tratamiento de datos personales y empresariales según la <a href="#">política
-                                de privacidad</a> vigente.</span>
-                    </label>
-                </div>
-            </div>
-
+            <!-- Alerta de Errores / Avisos -->
             <div id="formAlert" class="alert"></div>
 
-            <div style="display: flex; gap: 15px; margin-top: var(--spacing-xl);">
-                <button type="reset" class="btn btn-outline btn-outline-registro" style="flex: 1;">Limpiar
-                    formulario</button>
-                <button type="submit" class="btn-submit-registro" style="flex: 2;">Enviar Solicitud Segura</button>
+            <!-- Formulario Principal -->
+            <form id="registroForm" novalidate>
+
+                <!-- ==================== PASO 1: DATOS DE LA COOPERATIVA ==================== -->
+                <div class="reg-form-step active" id="step-1">
+                    <div class="reg-section-header">
+                        <div class="reg-section-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M3 21h18M3 7v14M21 7v14M6 7V3h12v4M9 10h1M14 10h1M9 14h1M14 14h1M9 18h1M14 18h1"></path>
+                            </svg>
+                        </div>
+                        <div>
+                            <h2 class="reg-section-title">1. Datos de la Cooperativa</h2>
+                            <p class="reg-section-subtitle">Información jurídica e institucional de la entidad</p>
+                        </div>
+                    </div>
+
+                    <div class="reg-grid-2">
+                        <div class="reg-form-group">
+                            <label for="nit" class="reg-label">NIT de la Cooperativa *</label>
+                            <div class="reg-input-wrap">
+                                <span class="reg-input-icon">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="16" rx="2"/><line x1="7" y1="8" x2="17" y2="8"/><line x1="7" y1="12" x2="17" y2="12"/><line x1="7" y1="16" x2="11" y2="16"/></svg>
+                                </span>
+                                <input type="text" id="nit" class="reg-input" placeholder="Ej: 900.123.456-1" required>
+                            </div>
+                            <span class="reg-error-msg">Formato de NIT inválido. Ej: 900123456-1</span>
+                        </div>
+
+                        <div class="reg-form-group">
+                            <label for="nombreCoop" class="reg-label">Razón Social *</label>
+                            <div class="reg-input-wrap">
+                                <span class="reg-input-icon">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 21h18M3 10h18M5 6l7-3 7 3M4 10v11M20 10v11M8 14v4M12 14v4M16 14v4"/></svg>
+                                </span>
+                                <input type="text" id="nombreCoop" class="reg-input" placeholder="Cooperativa de Ahorro y Crédito..." required>
+                            </div>
+                            <span class="reg-error-msg">El nombre de la cooperativa es obligatorio.</span>
+                        </div>
+                    </div>
+
+                    <div class="reg-grid-2">
+                        <div class="reg-form-group">
+                            <label for="correoCoop" class="reg-label">Correo Institucional *</label>
+                            <div class="reg-input-wrap">
+                                <span class="reg-input-icon">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                                </span>
+                                <input type="email" id="correoCoop" class="reg-input" placeholder="contacto@cooperativa.com" required>
+                            </div>
+                            <span class="reg-error-msg">Ingrese un correo institucional válido.</span>
+                        </div>
+
+                        <div class="reg-form-group">
+                            <label for="telCoop" class="reg-label">Teléfono de Sede *</label>
+                            <div class="reg-input-wrap">
+                                <span class="reg-input-icon">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                                </span>
+                                <input type="tel" id="telCoop" class="reg-input" placeholder="Ej: 601 234 5678 o 300 123 4567" required>
+                            </div>
+                            <span class="reg-error-msg">Debe tener al menos 7 a 10 dígitos.</span>
+                        </div>
+                    </div>
+
+                    <div class="reg-grid-2">
+                        <div class="reg-form-group">
+                            <label for="dirCoop" class="reg-label">Dirección Principal *</label>
+                            <div class="reg-input-wrap">
+                                <span class="reg-input-icon">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                                </span>
+                                <input type="text" id="dirCoop" class="reg-input" placeholder="Cra 10 #20-30, Oficina 401" required>
+                            </div>
+                            <span class="reg-error-msg">La dirección principal es obligatoria.</span>
+                        </div>
+
+                        <div class="reg-form-group">
+                            <label for="webCoop" class="reg-label">
+                                Sitio Web
+                                <span class="reg-label-optional">(Opcional)</span>
+                            </label>
+                            <div class="reg-input-wrap">
+                                <span class="reg-input-icon">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+                                </span>
+                                <input type="url" id="webCoop" class="reg-input" placeholder="https://www.cooperativa.com">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ==================== PASO 2: REPRESENTANTE & ADMIN ==================== -->
+                <div class="reg-form-step" id="step-2">
+                    <div class="reg-section-header">
+                        <div class="reg-section-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                <circle cx="12" cy="7" r="4"></circle>
+                            </svg>
+                        </div>
+                        <div>
+                            <h2 class="reg-section-title">2. Representante Legal & Administrador Local</h2>
+                            <p class="reg-section-subtitle">Persona encargada ante COOPMONEY y primer administrador</p>
+                        </div>
+                    </div>
+
+                    <div class="reg-grid-2">
+                        <div class="reg-form-group">
+                            <label for="nombreRep" class="reg-label">Nombre Completo *</label>
+                            <div class="reg-input-wrap">
+                                <span class="reg-input-icon">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                                </span>
+                                <input type="text" id="nombreRep" class="reg-input" placeholder="Ej: Dr. Juan Carlos Pérez" required>
+                            </div>
+                            <span class="reg-error-msg">El nombre del representante es obligatorio.</span>
+                        </div>
+
+                        <div class="reg-form-group">
+                            <label for="cedulaRep" class="reg-label">Cédula de Ciudadanía *</label>
+                            <div class="reg-input-wrap">
+                                <span class="reg-input-icon">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="2"/><line x1="15" y1="8" x2="17" y2="8"/><line x1="15" y1="12" x2="17" y2="12"/><line x1="7" y1="16" x2="17" y2="16"/></svg>
+                                </span>
+                                <input type="text" id="cedulaRep" class="reg-input" placeholder="Ej: 80123456" required>
+                            </div>
+                            <span class="reg-error-msg">La cédula es obligatoria.</span>
+                        </div>
+                    </div>
+
+                    <div class="reg-grid-2">
+                        <div class="reg-form-group">
+                            <label for="cargoRep" class="reg-label">Cargo Directivo *</label>
+                            <div class="reg-input-wrap">
+                                <span class="reg-input-icon">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+                                </span>
+                                <input type="text" id="cargoRep" class="reg-input" placeholder="Gerente General / Representante" required>
+                            </div>
+                            <span class="reg-error-msg">El cargo es obligatorio.</span>
+                        </div>
+
+                        <div class="reg-form-group">
+                            <label for="telRep" class="reg-label">Teléfono Móvil Personal *</label>
+                            <div class="reg-input-wrap">
+                                <span class="reg-input-icon">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
+                                </span>
+                                <input type="tel" id="telRep" class="reg-input" placeholder="Ej: 310 987 6543" required>
+                            </div>
+                            <span class="reg-error-msg">Ingrese un número telefónico de contacto.</span>
+                        </div>
+                    </div>
+
+                    <!-- Tarjeta de Credenciales -->
+                    <div class="reg-credential-card">
+                        <div class="reg-credential-header">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                                <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                            </svg>
+                            Credenciales para el Administrador Local
+                        </div>
+                        <p class="reg-credential-hint">
+                            Estos accesos permitirán al representante ingresar a la plataforma y administrar roles, socios y créditos una vez que la cooperativa sea aprobada.
+                        </p>
+
+                        <div class="reg-grid-2" style="margin-bottom: 0;">
+                            <div class="reg-form-group" style="margin-bottom: 0;">
+                                <label for="correoRep" class="reg-label">Correo de Acceso (Usuario) *</label>
+                                <div class="reg-input-wrap">
+                                    <span class="reg-input-icon">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                                    </span>
+                                    <input type="email" id="correoRep" class="reg-input" placeholder="admin@cooperativa.com" required>
+                                </div>
+                                <span class="reg-error-msg">Ingrese un correo válido de administración.</span>
+                            </div>
+
+                            <div class="reg-form-group" style="margin-bottom: 0;">
+                                <label for="passAdmin" class="reg-label">Contraseña Maestra Inicial *</label>
+                                <div class="reg-input-wrap">
+                                    <span class="reg-input-icon">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                                    </span>
+                                    <input type="password" id="passAdmin" class="reg-input" placeholder="Mínimo 6 caracteres" minlength="6" required>
+                                    <button type="button" class="reg-toggle-pwd" id="togglePassBtn" title="Mostrar/Ocultar contraseña">
+                                        <svg id="eyeIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                            <circle cx="12" cy="12" r="3"></circle>
+                                        </svg>
+                                    </button>
+                                </div>
+                                <span class="reg-error-msg">La contraseña debe tener al menos 6 caracteres.</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ==================== PASO 3: OPERACIÓN Y CONFIGURACIÓN ==================== -->
+                <div class="reg-form-step" id="step-3">
+                    <div class="reg-section-header">
+                        <div class="reg-section-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="3"></circle>
+                                <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+                            </svg>
+                        </div>
+                        <div>
+                            <h2 class="reg-section-title">3. Parámetros Operativos</h2>
+                            <p class="reg-section-subtitle">Personalización de cartera y tamaño de la entidad</p>
+                        </div>
+                    </div>
+
+                    <!-- Líneas de Crédito -->
+                    <div class="reg-form-group">
+                        <label class="reg-label">Líneas de crédito a habilitar (Seleccione las deseadas)</label>
+                        <div class="reg-chip-group">
+                            <label class="reg-chip-label checked">
+                                <input type="checkbox" name="linea" value="Consumo" checked>
+                                <span>💳 Crédito de Consumo</span>
+                            </label>
+                            <label class="reg-chip-label">
+                                <input type="checkbox" name="linea" value="Vivienda">
+                                <span>🏠 Crédito de Vivienda</span>
+                            </label>
+                            <label class="reg-chip-label">
+                                <input type="checkbox" name="linea" value="Educativo">
+                                <span>🎓 Crédito Educativo</span>
+                            </label>
+                            <label class="reg-chip-label">
+                                <input type="checkbox" name="linea" value="Comercial">
+                                <span>💼 Microcrédito / Libre</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Cantidad de Socios -->
+                    <div class="reg-grid-2">
+                        <div class="reg-form-group">
+                            <label for="cantSocios" class="reg-label">Cantidad estimada de asociados *</label>
+                            <div class="reg-input-wrap">
+                                <span class="reg-input-icon">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                                </span>
+                                <select id="cantSocios" class="reg-input reg-select" required>
+                                    <option value="">Seleccione una escala</option>
+                                    <option value="Menos de 100">Menos de 100 socios</option>
+                                    <option value="100-500">100 a 500 socios</option>
+                                    <option value="500-1000">500 a 1,000 socios</option>
+                                    <option value="Más de 1000">Más de 1,000 socios</option>
+                                </select>
+                            </div>
+                            <span class="reg-error-msg">Seleccione el rango de asociados.</span>
+                        </div>
+
+                        <!-- Migración de Datos -->
+                        <div class="reg-form-group">
+                            <label class="reg-label">¿Requiere migración de datos previos? *</label>
+                            <div class="reg-radio-cards">
+                                <label class="reg-radio-card">
+                                    <input type="radio" name="migracion" value="true" required>
+                                    <div>
+                                        <strong>Sí, migración</strong>
+                                        <span>Importar datos de cartera</span>
+                                    </div>
+                                </label>
+                                <label class="reg-radio-card checked">
+                                    <input type="radio" name="migracion" value="false" checked>
+                                    <div>
+                                        <strong>No, desde cero</strong>
+                                        <span>Empezar con base limpia</span>
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ==================== PASO 4: CONFIRMACIÓN Y ENVÍO ==================== -->
+                <div class="reg-form-step" id="step-4">
+                    <div class="reg-section-header">
+                        <div class="reg-section-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                <polyline points="14 2 14 8 20 8"></polyline>
+                                <line x1="16" y1="13" x2="8" y2="13"></line>
+                                <line x1="16" y1="17" x2="8" y2="17"></line>
+                                <polyline points="10 9 9 9 8 9"></polyline>
+                            </svg>
+                        </div>
+                        <div>
+                            <h2 class="reg-section-title">4. Confirmación y Envío</h2>
+                            <p class="reg-section-subtitle">Verifique los datos antes de radicar la solicitud</p>
+                        </div>
+                    </div>
+
+                    <!-- Resumen Ejecutivo -->
+                    <div class="reg-summary-card">
+                        <div class="reg-summary-grid">
+                            <div class="reg-summary-item">
+                                <span>Cooperativa</span>
+                                <span id="summaryNombreCoop">--</span>
+                            </div>
+                            <div class="reg-summary-item">
+                                <span>NIT Registrado</span>
+                                <span id="summaryNit">--</span>
+                            </div>
+                            <div class="reg-summary-item">
+                                <span>Representante Legal</span>
+                                <span id="summaryNombreRep">--</span>
+                            </div>
+                            <div class="reg-summary-item">
+                                <span>Usuario Administrador</span>
+                                <span id="summaryCorreoAdmin">--</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Términos y Tratamiento de Datos -->
+                    <div class="reg-terms-box">
+                        <label class="reg-checkbox-label">
+                            <input type="checkbox" id="terminos" required>
+                            <span>Acepto los <a href="#" target="_blank">Términos y Condiciones</a> del servicio COOPMONEY, declarando bajo gravedad de juramento la veracidad de la información jurídica y financiera suministrada.</span>
+                        </label>
+                        <label class="reg-checkbox-label">
+                            <input type="checkbox" id="datos" required>
+                            <span>Autorizo el tratamiento de datos personales y corporativos conforme a la <a href="#" target="_blank">Política de Privacidad</a> y la Ley 1581 de Protección de Datos Personales.</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Barra de Botones de Navegación -->
+                <div class="reg-action-bar">
+                    <button type="button" class="reg-btn-prev" id="prevBtn" style="visibility: hidden;">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="19" y1="12" x2="5" y2="12"></line>
+                            <polyline points="12 19 5 12 12 5"></polyline>
+                        </svg>
+                        Paso anterior
+                    </button>
+
+                    <div style="display: flex; gap: 10px;">
+                        <button type="button" class="reg-btn-next" id="nextBtn">
+                            Continuar
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <line x1="5" y1="12" x2="19" y2="12"></line>
+                                <polyline points="12 5 19 12 12 19"></polyline>
+                            </svg>
+                        </button>
+                        <button type="submit" class="reg-btn-submit" id="submitBtn" style="display: none;">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                                <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                            </svg>
+                            Enviar Solicitud Segura
+                        </button>
+                    </div>
+                </div>
+
+            </form>
+
+            <div class="reg-footer-note">
+                ¿Tu cooperativa ya cuenta con registro aprobado? <a href="index.html">Inicia sesión en la plataforma</a>
             </div>
 
-            <div style="text-align: center; margin-top: 20px;">
-                <a href="index.html" style="color: var(--color-primary); font-weight: 500; font-size: 0.9rem;">¿Ya
-                    tienes una cuenta? Inicia sesión aquí</a>
-            </div>
+        </div>
+    </main>
 
-        </form>
-    </div>
-
+    <!-- Controlador de Lógica -->
     <script src="./js/controllers/registro.controller.js"></script>
 </body>
 

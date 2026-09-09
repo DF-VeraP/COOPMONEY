@@ -17,6 +17,7 @@
     <noscript>
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
     </noscript>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <!-- Main CSS (importa todos los módulos) -->
     <link rel="stylesheet" href="./css/main.css">
 </head>
@@ -88,39 +89,39 @@
                 <div class="benefits-grid">
                     <!-- Beneficio 1 -->
                     <div class="card benefit-card">
-                        <div class="benefit-icon">📊</div>
+                        <div class="benefit-icon"><i class="bi bi-file-earmark-spreadsheet"></i></div>
                         <h3>Tablas de amortización</h3>
                         <p>Generación automática de cuotas fijas con el método francés.</p>
                     </div>
                     <!-- Beneficio 2 -->
                     <div class="card benefit-card">
-                        <div class="benefit-icon">💰</div>
+                        <div class="benefit-icon"><i class="bi bi-wallet2"></i></div>
                         <h3>Pago con ahorros</h3>
                         <p>Opción para que el socio decida voluntariamente si paga la cuota usando sus ahorros
                             disponibles.</p>
                     </div>
                     <!-- Beneficio 3 -->
                     <div class="card benefit-card">
-                        <div class="benefit-icon">📈</div>
+                        <div class="benefit-icon"><i class="bi bi-graph-up-arrow"></i></div>
                         <h3>Reportes en tiempo real</h3>
                         <p>Monitorea tu cartera vigente, vencida y castigada con indicadores gerenciales precisos.</p>
                     </div>
                     <!-- Beneficio 4 -->
                     <div class="card benefit-card">
-                        <div class="benefit-icon">🔒</div>
+                        <div class="benefit-icon"><i class="bi bi-person-lock"></i></div>
                         <h3>Acceso por roles</h3>
                         <p>Seguridad absoluta: gerentes, cajeros, analistas y socios ven únicamente lo que necesitan
                             ver.</p>
                     </div>
                     <!-- Beneficio 5 -->
                     <div class="card benefit-card">
-                        <div class="benefit-icon">⚡</div>
+                        <div class="benefit-icon"><i class="bi bi-check2-circle"></i></div>
                         <h3>Reglas claras de crédito</h3>
                         <p>Validación automática: exige 2 meses de antigüedad y 15% de ahorro mínimo para aprobar.</p>
                     </div>
                     <!-- Beneficio 6 -->
                     <div class="card benefit-card">
-                        <div class="benefit-icon">🛡️</div>
+                        <div class="benefit-icon"><i class="bi bi-shield-check"></i></div>
                         <h3>Gestión de mora inteligente</h3>
                         <p>Clasificación automática por rangos: 1-10 días (leve), 11-30 (preocupante), 31-60 (crítica),
                             61+ (castigada).</p>
@@ -143,13 +144,17 @@
                     <div class="simulator-form-wrapper">
                         <form id="simulator-form">
                             <div class="form-group">
-                                <label class="form-label" for="sim-amount">Monto Solicitado</label>
+                                <label class="form-label" for="sim-amount">
+                                    <i class="bi bi-cash-stack"></i> Monto Solicitado
+                                </label>
                                 <input type="text" id="sim-amount" class="form-control" placeholder="Ej: $ 5.000.000"
                                     required>
                             </div>
 
                             <div class="form-group">
-                                <label class="form-label" for="sim-line">Línea de Crédito</label>
+                                <label class="form-label" for="sim-line">
+                                    <i class="bi bi-diagram-3"></i> Línea de Crédito
+                                </label>
                                 <select id="sim-line" class="form-control" required>
                                     <option value="consumo">Consumo</option>
                                     <option value="vivienda">Vivienda</option>
@@ -160,7 +165,9 @@
                             <div class="form-group"
                                 style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--spacing-md);">
                                 <div>
-                                    <label class="form-label" for="sim-term">Plazo (Meses)</label>
+                                    <label class="form-label" for="sim-term">
+                                        <i class="bi bi-calendar3"></i> Plazo (Meses)
+                                    </label>
                                     <select id="sim-term" class="form-control" required>
                                         <option value="6">6 meses</option>
                                         <option value="12" selected>12 meses</option>
@@ -169,31 +176,41 @@
                                     </select>
                                 </div>
                                 <div>
-                                    <label class="form-label" for="sim-rate">Tasa de Interés</label>
+                                    <label class="form-label" for="sim-rate">
+                                        <i class="bi bi-percent"></i> Tasa de Interés
+                                    </label>
                                     <input type="text" id="sim-rate" class="form-control" value="18% EA" readonly>
                                 </div>
                             </div>
 
                             <button type="submit" class="btn btn-primary btn-block"
-                                style="margin-top: var(--spacing-lg);">Calcular Cuota</button>
+                                style="margin-top: var(--spacing-lg); display: flex; align-items: center; justify-content: center; gap: 8px;">
+                                <i class="bi bi-calculator-fill"></i> Calcular Cuota
+                            </button>
                         </form>
                     </div>
 
                     <!-- Resultados -->
                     <div class="simulator-results">
                         <div class="result-card">
+                            <div class="result-badge">
+                                <i class="bi bi-check-circle-fill"></i> Proyección Mensual
+                            </div>
                             <div class="result-label">Cuota mensual estimada</div>
                             <div class="result-value" id="result-quota">$ 0</div>
                         </div>
                         <div class="result-card">
                             <div class="result-label">Total a pagar aproximado</div>
                             <div class="result-value" id="result-total"
-                                style="font-size: 1.5rem; color: var(--color-text-main);">$ 0</div>
+                                style="font-size: 1.55rem; color: #1e293b; font-weight: 700;">$ 0</div>
                         </div>
                         <div class="result-note">
-                            <strong>Nota importante:</strong> Esta es una simulación. Para solicitar el crédito, debes
-                            ser socio activo con mínimo 2 meses de antigüedad y ahorro mínimo del 15% del monto
-                            solicitado.
+                            <i class="bi bi-info-circle-fill result-note-icon"></i>
+                            <div>
+                                <strong>Nota importante:</strong> Esta es una simulación orientativa. Para solicitar el crédito, debes
+                                ser socio activo con mínimo 2 meses de antigüedad y ahorro mínimo del 15% del monto
+                                solicitado.
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -278,7 +295,33 @@
         </form>
 
         <div class="login-links">
-            <a href="#">¿Olvidaste tu contraseña?</a>
+            <a href="javascript:void(0)" id="btn-forgot-password">¿Olvidaste tu contraseña?</a>
+        </div>
+    </div>
+
+    <!-- Modal Recuperación de Contraseña -->
+    <div id="modal-forgot-password" class="modal-recovery-overlay">
+        <div class="modal-recovery-card">
+            <div class="modal-recovery-header">
+                <h3>Recuperar Contraseña</h3>
+                <button type="button" class="btn-close-recovery" id="btn-close-forgot" title="Cerrar">&times;</button>
+            </div>
+            <div class="modal-recovery-body">
+                <p style="color: var(--color-text-muted, #64748b); font-size: 0.88rem; line-height: 1.5; margin-bottom: 1.25rem;">
+                    Ingresa el correo electrónico asociado a tu cuenta. Si está registrado, te enviaremos una contraseña temporal de acceso.
+                </p>
+                <div id="forgot-alert" class="alert" style="margin-bottom: 1rem;"></div>
+                <form id="forgot-password-form">
+                    <div class="form-group" style="margin-bottom: 1.25rem;">
+                        <label for="forgot-email" class="form-label" style="display: block; margin-bottom: 0.35rem; font-size: 0.85rem; font-weight: 600;">Correo Electrónico</label>
+                        <input type="email" id="forgot-email" class="form-control" placeholder="ejemplo@coopmoney.com" required style="width: 100%; box-sizing: border-box;">
+                    </div>
+                    <div style="display: flex; gap: 0.75rem; justify-content: flex-end;">
+                        <button type="button" class="btn btn-outline" id="btn-cancel-forgot" style="padding: 0.6rem 1.2rem;">Cancelar</button>
+                        <button type="submit" class="btn btn-primary" id="btn-submit-forgot" style="padding: 0.6rem 1.2rem;">Enviar instrucciones</button>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
 

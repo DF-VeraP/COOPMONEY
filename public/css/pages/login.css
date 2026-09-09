@@ -305,3 +305,71 @@
     padding: 1.25rem;
   }
 }
+
+/* Modal Recuperar Contraseña */
+.modal-recovery-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(15, 23, 42, 0.65);
+  backdrop-filter: blur(4px);
+  z-index: 2000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.modal-recovery-overlay.open {
+  opacity: 1;
+  visibility: visible;
+}
+
+.modal-recovery-card {
+  background: var(--color-surface, #ffffff);
+  border-radius: 14px;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.25), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  width: 100%;
+  max-width: 440px;
+  padding: 1.75rem;
+  position: relative;
+  transform: translateY(20px);
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  border: 1px solid var(--color-border, #e2e8f0);
+}
+
+.modal-recovery-overlay.open .modal-recovery-card {
+  transform: translateY(0);
+}
+
+.modal-recovery-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.75rem;
+}
+
+.modal-recovery-header h3 {
+  margin: 0;
+  font-size: 1.25rem;
+  color: var(--color-secondary, #0f172a);
+}
+
+.btn-close-recovery {
+  background: none;
+  border: none;
+  font-size: 1.75rem;
+  color: var(--color-text-muted, #94a3b8);
+  cursor: pointer;
+  line-height: 1;
+  padding: 0;
+}
+
+.btn-close-recovery:hover {
+  color: var(--color-error, #ef4444);
+}

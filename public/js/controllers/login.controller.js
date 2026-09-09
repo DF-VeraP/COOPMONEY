@@ -148,4 +148,93 @@ document.addEventListener('DOMContentLoaded', () => {
       alertBox.classList.add('show', 'alert-danger');
     });
   });
+
+  // 5. Modal Recuperar Contraseña
+  const btnForgotPassword = document.getElementById('btn-forgot-password');
+  const modalForgotPassword = document.getElementById('modal-forgot-password');
+  const btnCloseForgot = document.getElementById('btn-close-forgot');
+  const btnCancelForgot = document.getElementById('btn-cancel-forgot');
+  const forgotForm = document.getElementById('forgot-password-form');
+  const forgotEmailInput = document.getElementById('forgot-email');
+  const forgotAlert = document.getElementById('forgot-alert');
+  const btnSubmitForgot = document.getElementById('btn-submit-forgot');
+
+  function openForgotModal() {
+    if (modalForgotPassword) {
+      modalForgotPassword.classList.add('open');
+      forgotAlert.style.display = 'none';
+      forgotAlert.className = 'alert';
+      forgotAlert.textContent = '';
+      forgotEmailInput.value = '';
+      setTimeout(() => forgotEmailInput.focus(), 150);
+    }
+  }
+
+  function closeForgotModal() {
+    if (modalForgotPassword) {
+      modalForgotPassword.classList.remove('open');
+    }
+  }
+
+  if (btnForgotPassword) {
+    btnForgotPassword.addEventListener('click', (e) => {
+      e.preventDefault();
+      openForgotModal();
+    });
+  }
+
+  if (btnCloseForgot) btnCloseForgot.addEventListener('click', closeForgotModal);
+  if (btnCancelForgot) btnCancelForgot.addEventListener('click', closeForgotModal);
+
+  // Cerrar al hacer clic en el backdrop oscuro
+  if (modalForgotPassword) {
+    modalForgotPassword.addEventListener('click', (e) => {
+      if (e.target === modalForgotPassword) {
+        closeForgotModal();
+      }
+    });
+  }
+
+  if (forgotForm) {
+    forgotForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const correo = forgotEmailInput.value.trim();
+      if (!correo) return;
+
+      btnSubmitForgot.disabled = true;
+      btnSubmitForgot.textContent = 'Enviando...';
+      forgotAlert.style.display = 'none';
+
+      try {
+        const res = await fetch('/api/auth/recuperar-contrasena', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ correo })
+        });
+
+        const data = await res.json();
+        
+        if (!res.ok) {
+          throw new Error(data.error || 'Error al procesar solicitud');
+        }
+
+        forgotAlert.textContent = data.message;
+        forgotAlert.className = 'alert alert-success show';
+        forgotAlert.style.display = 'block';
+        forgotForm.reset();
+
+        setTimeout(() => {
+          closeForgotModal();
+        }, 3500);
+
+      } catch (err) {
+        forgotAlert.textContent = err.message;
+        forgotAlert.className = 'alert alert-danger show';
+        forgotAlert.style.display = 'block';
+      } finally {
+        btnSubmitForgot.disabled = false;
+        btnSubmitForgot.textContent = 'Enviar instrucciones';
+      }
+    });
+  }
 });

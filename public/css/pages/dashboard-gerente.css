@@ -1,0 +1,37 @@
+.kpi-grid-5 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: var(--spacing-md);
+            margin-bottom: var(--spacing-2xl);
+        }
+
+        .kpi-sm-card {
+            background-color: #fff;
+            border-radius: 12px;
+            padding: var(--spacing-lg);
+            border-left: 4px solid var(--color-primary);
+            transition: transform 0.2s;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .kpi-sm-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .kpi-sm-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.8rem;
+            color: var(--color-text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: var(--spacing-xs);
+        }
+
+        .kpi-sm-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--color-text-main);
+        }

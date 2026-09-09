@@ -115,40 +115,17 @@
                 <!-- Gráfico de Evolución CSS -->
                 <div class="dash-card">
                     <div class="card-header">
-                        <div class="card-title">Evolución Cooperativas (Últimos 6 meses)</div>
+                        <div class="card-title">Cooperativas Registradas (Últimos 6 meses)</div>
                     </div>
-                    <div class="chart-container">
-                        <div class="bar-wrapper">
-                            <div class="bar" style="height: 50%;"><div class="bar-value-tooltip">6</div></div>
-                            <div class="bar-label">Sep</div>
-                        </div>
-                        <div class="bar-wrapper">
-                            <div class="bar" style="height: 58%;"><div class="bar-value-tooltip">7</div></div>
-                            <div class="bar-label">Oct</div>
-                        </div>
-                        <div class="bar-wrapper">
-                            <div class="bar" style="height: 66%;"><div class="bar-value-tooltip">8</div></div>
-                            <div class="bar-label">Nov</div>
-                        </div>
-                        <div class="bar-wrapper">
-                            <div class="bar" style="height: 75%;"><div class="bar-value-tooltip">9</div></div>
-                            <div class="bar-label">Dic</div>
-                        </div>
-                        <div class="bar-wrapper">
-                            <div class="bar" style="height: 83%;"><div class="bar-value-tooltip">10</div></div>
-                            <div class="bar-label">Ene</div>
-                        </div>
-                        <div class="bar-wrapper">
-                            <div class="bar" style="height: 100%;"><div class="bar-value-tooltip">12</div></div>
-                            <div class="bar-label">Feb</div>
-                        </div>
+                    <div class="chart-container" id="dash-chart-coops">
+                        <div style="text-align:center;width:100%;color:var(--color-text-muted);padding:20px;">Cargando...</div>
                     </div>
                 </div>
 
-                <!-- Progreso Top 5 -->
+                <!-- Top cooperativas por socios -->
                 <div class="dash-card">
                     <div class="card-header">
-                        <div class="card-title">Top 5 por Cartera</div>
+                        <div class="card-title">Top Cooperativas por Socios</div>
                     </div>
                     <div class="progress-list" id="top5-cartera-list">
                         <div style="text-align: center; padding: 20px; color: var(--color-text-muted);">Cargando...</div>
@@ -220,63 +197,71 @@
 
         <!-- 3. PESTAÑA REPORTES GLOBALES -->
         <section id="tab-reportes" class="tab-pane">
-            <div class="table-toolbar" style="margin-bottom: var(--spacing-xl);">
-                <div class="table-filters">
-                    <input type="date" class="form-control" title="Desde">
-                    <input type="date" class="form-control" title="Hasta">
+
+            <!-- KPIs de reporte -->
+            <div class="kpi-grid" id="reportes-kpi-grid" style="margin-bottom: var(--spacing-xl);">
+                <div class="dash-card kpi-item">
+                    <div class="kpi-header">
+                        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"/><path d="M12 18V6"/></svg>
+                        Cartera Total Activa
+                    </div>
+                    <div class="kpi-value" id="rep-cartera-total">...</div>
+                    <div class="kpi-trend up" id="rep-creditos-activos">0 créditos activos</div>
                 </div>
-                <div>
-                    <button class="btn btn-outline action-mock" data-action="Exportar a Excel" style="margin-right: 8px;">Exportar Excel</button>
-                    <button class="btn btn-primary action-mock" data-action="Exportar a PDF">Exportar PDF</button>
+                <div class="dash-card kpi-item">
+                    <div class="kpi-header">
+                        <svg viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                        Cartera Vencida
+                    </div>
+                    <div class="kpi-value" id="rep-cartera-vencida" style="color: var(--color-danger);">...</div>
+                    <div class="kpi-trend" id="rep-tasa-mora" style="color: var(--color-danger);">0% mora global</div>
+                </div>
+                <div class="dash-card kpi-item">
+                    <div class="kpi-header">
+                        <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+                        Total Socios Activos
+                    </div>
+                    <div class="kpi-value" id="rep-socios">...</div>
+                    <div class="kpi-trend up" id="rep-ahorros">Total ahorros: $0</div>
+                </div>
+                <div class="dash-card kpi-item">
+                    <div class="kpi-header">
+                        <svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+                        Cuotas Vencidas
+                    </div>
+                    <div class="kpi-value" id="rep-cuotas-vencidas" style="color: var(--color-warning);">...</div>
+                    <div class="kpi-trend" id="rep-cuotas-total">de 0 cuotas pendientes</div>
                 </div>
             </div>
 
             <div class="dashboard-grid">
-                <!-- Gráfico Cartera -->
+                <!-- Evolución Cartera Mensual — barras dinámicas -->
                 <div class="dash-card">
-                    <div class="card-header"><div class="card-title">Evolución Cartera Total</div></div>
-                    <div class="chart-container">
-                        <div class="bar-wrapper"><div class="bar" style="height: 78%;"><div class="bar-value-tooltip">$30M</div></div><div class="bar-label">Sep</div></div>
-                        <div class="bar-wrapper"><div class="bar" style="height: 84%;"><div class="bar-value-tooltip">$32M</div></div><div class="bar-label">Oct</div></div>
-                        <div class="bar-wrapper"><div class="bar" style="height: 86%;"><div class="bar-value-tooltip">$33M</div></div><div class="bar-label">Nov</div></div>
-                        <div class="bar-wrapper"><div class="bar" style="height: 92%;"><div class="bar-value-tooltip">$35M</div></div><div class="bar-label">Dic</div></div>
-                        <div class="bar-wrapper"><div class="bar" style="height: 97%;"><div class="bar-value-tooltip">$37M</div></div><div class="bar-label">Ene</div></div>
-                        <div class="bar-wrapper"><div class="bar" style="height: 100%;"><div class="bar-value-tooltip">$38M</div></div><div class="bar-label">Feb</div></div>
+                    <div class="card-header">
+                        <div class="card-title">Evolución Cartera — Últimos 6 Meses</div>
+                    </div>
+                    <div class="chart-container" id="rep-chart-cartera">
+                        <div style="text-align:center; width:100%; color:var(--color-text-muted);">Cargando...</div>
                     </div>
                 </div>
 
-                <!-- Morosidad -->
+                <!-- Morosidad por cooperativa — barras dinámicas -->
                 <div class="dash-card">
-                    <div class="card-header"><div class="card-title">Morosidad por Entidad</div></div>
-                    <div class="progress-list">
-                        <div>
-                            <div class="progress-item-header"><span>Futuro Seguro</span><strong style="color:var(--color-danger)">23.4%</strong></div>
-                            <div class="progress-track"><div class="progress-fill danger" style="width: 80%;"></div></div>
-                        </div>
-                        <div>
-                            <div class="progress-item-header"><span>Ahorro y Vida</span><strong style="color:var(--color-warning)">13.6%</strong></div>
-                            <div class="progress-track"><div class="progress-fill warning" style="width: 50%;"></div></div>
-                        </div>
-                        <div>
-                            <div class="progress-item-header"><span>Unidos Crecemos</span><strong>8.2%</strong></div>
-                            <div class="progress-track"><div class="progress-fill" style="width: 30%;"></div></div>
-                        </div>
-                        <div style="margin-top: 15px; border-top: 1px dashed var(--color-border); padding-top: 10px;">
-                            <div class="progress-item-header"><span>Promedio General</span><strong>12.8%</strong></div>
-                        </div>
+                    <div class="card-header">
+                        <div class="card-title">Morosidad por Cooperativa</div>
+                    </div>
+                    <div class="progress-list" id="rep-morosidad-list">
+                        <div style="text-align:center; padding:20px; color:var(--color-text-muted);">Cargando...</div>
                     </div>
                 </div>
 
-                <!-- Gráfico Ingresos Mensualidades -->
+                <!-- Créditos desembolsados por mes — barras dinámicas -->
                 <div class="dash-card" style="grid-column: 1 / -1;">
-                    <div class="card-header"><div class="card-title">Ingresos por Mensualidades (Plataforma)</div></div>
-                    <div class="chart-container" style="height: 200px;">
-                        <div class="bar-wrapper"><div class="bar" style="height: 50%; background-color: var(--color-success);"><div class="bar-value-tooltip">$1.2M</div></div><div class="bar-label">Sep</div></div>
-                        <div class="bar-wrapper"><div class="bar" style="height: 62%; background-color: var(--color-success);"><div class="bar-value-tooltip">$1.5M</div></div><div class="bar-label">Oct</div></div>
-                        <div class="bar-wrapper"><div class="bar" style="height: 37%; background-color: var(--color-success);"><div class="bar-value-tooltip">$0.9M</div></div><div class="bar-label">Nov</div></div>
-                        <div class="bar-wrapper"><div class="bar" style="height: 100%; background-color: var(--color-success);"><div class="bar-value-tooltip">$2.4M</div></div><div class="bar-label">Dic</div></div>
-                        <div class="bar-wrapper"><div class="bar" style="height: 75%; background-color: var(--color-success);"><div class="bar-value-tooltip">$1.8M</div></div><div class="bar-label">Ene</div></div>
-                        <div class="bar-wrapper"><div class="bar" style="height: 54%; background-color: var(--color-success);"><div class="bar-value-tooltip">$1.3M</div></div><div class="bar-label">Feb</div></div>
+                    <div class="card-header">
+                        <div class="card-title">Créditos Desembolsados por Mes</div>
+                    </div>
+                    <div class="chart-container" style="height: 200px;" id="rep-chart-creditos">
+                        <div style="text-align:center; width:100%; color:var(--color-text-muted);">Cargando...</div>
                     </div>
                 </div>
             </div>

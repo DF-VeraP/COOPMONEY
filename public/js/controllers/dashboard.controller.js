@@ -32,6 +32,9 @@ document.addEventListener('DOMContentLoaded', () => {
             item.classList.add('active');
             const targetId = item.getAttribute('data-tab-target');
             document.getElementById(targetId).classList.add('active');
+
+            // Cargar datos según pestaña
+            if (targetId === 'tab-reportes') cargarReportes();
         });
     });
 
@@ -115,52 +118,72 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    function renderTop5Cartera(lista) {
+    async function cargarDashboard() {
+        try {
+            const [porMes, topSocios] = await Promise.all([
+                fetch('/api/superadmin/dashboard/cooperativas-por-mes').then(r => r.json()),
+                fetch('/api/superadmin/dashboard/top-socios').then(r => r.json())
+            ]);
+            renderCoopsPorMes(porMes);
+            renderTopSocios(topSocios);
+        } catch (err) {
+            console.error('Error cargando dashboard:', err);
+        }
+    }
+
+    function renderCoopsPorMes(rows) {
+        const container = document.getElementById('dash-chart-coops');
+        if (!container) return;
+
+        if (!rows || rows.length === 0) {
+            container.innerHTML = '<div style="text-align:center;width:100%;color:var(--color-text-muted);padding:20px;">Sin cooperativas registradas en los últimos 6 meses.<br><small>Las cooperativas existentes se registrarán desde ahora.</small></div>';
+            return;
+        }
+
+        const maxVal = Math.max(...rows.map(r => r.total), 1);
+        container.innerHTML = rows.map(r => {
+            const pct = Math.max(6, (r.total / maxVal) * 100);
+            return `
+                <div class="bar-wrapper">
+                    <div class="bar" style="height:${pct}%; background:var(--color-primary);">
+                        <span class="bar-value-label">${r.total}</span>
+                        <span class="bar-value-tooltip">${r.total} cooperativa${r.total !== 1 ? 's' : ''} registrada${r.total !== 1 ? 's' : ''}</span>
+                    </div>
+                    <div class="bar-label">${r.mes_label}</div>
+                </div>
+            `;
+        }).join('');
+    }
+
+    function renderTopSocios(rows) {
         const container = document.getElementById('top5-cartera-list');
         if (!container) return;
 
         const formatoMoneda = new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', maximumFractionDigits: 0 });
 
-        // Filtrar solo cooperativas registradas (excluir solicitudes pendientes) y con cartera > 0
-        const registradas = lista
-            .filter(c => c.tipo === 'registrada' && parseFloat(c.cartera || 0) > 0)
-            .sort((a, b) => parseFloat(b.cartera) - parseFloat(a.cartera))
-            .slice(0, 5);
-
-        if (registradas.length === 0) {
-            container.innerHTML = '<div style="text-align: center; padding: 20px; color: var(--color-text-muted);">No hay cooperativas con cartera activa.</div>';
+        if (!rows || rows.length === 0) {
+            container.innerHTML = '<div style="text-align:center;padding:20px;color:var(--color-text-muted);">Sin datos de socios.</div>';
             return;
         }
 
-        // El máximo es la cartera de la primera cooperativa (para la barra al 100%)
-        const maxCartera = parseFloat(registradas[0].cartera);
-        // Sumar cartera total de TODAS las registradas para calcular el porcentaje real
-        const totalCartera = lista
-            .filter(c => c.tipo === 'registrada')
-            .reduce((sum, c) => sum + parseFloat(c.cartera || 0), 0);
+        const maxSocios = Math.max(...rows.map(r => r.total_socios), 1);
+        const totalSocios = rows.reduce((s, r) => s + r.total_socios, 0);
+        const colores = ['var(--color-primary)', '#3b82f6', '#10b981', '#f59e0b', '#8b5cf6', '#64748b'];
 
-        const colores = [
-            'var(--color-primary)',
-            'var(--color-info, #3b82f6)',
-            'var(--color-success)',
-            'var(--color-warning)',
-            'var(--color-text-muted)'
-        ];
-
-        container.innerHTML = registradas.map((coop, i) => {
-            const cartera = parseFloat(coop.cartera);
-            const pctBarra = maxCartera > 0 ? (cartera / maxCartera) * 100 : 0;
-            const pctTotal = totalCartera > 0 ? ((cartera / totalCartera) * 100).toFixed(1) : '0.0';
-            const color = colores[i] || colores[colores.length - 1];
-
+        container.innerHTML = rows.map((coop, i) => {
+            const pct = maxSocios > 0 ? (coop.total_socios / maxSocios) * 100 : 0;
+            const pctTotal = totalSocios > 0 ? ((coop.total_socios / totalSocios) * 100).toFixed(1) : '0.0';
             return `
                 <div>
                     <div class="progress-item-header">
-                        <span>${coop.nombre}</span>
-                        <strong>${formatoMoneda.format(cartera)} (${pctTotal}%)</strong>
+                        <span>${coop.nombre_cooperativa}</span>
+                        <strong style="color:${colores[i]}">${coop.total_socios} socios (${pctTotal}%)</strong>
                     </div>
                     <div class="progress-track">
-                        <div class="progress-fill" style="width: ${pctBarra}%; background: ${color};"></div>
+                        <div class="progress-fill" style="width:${pct}%; background:${colores[i]};"></div>
+                    </div>
+                    <div style="font-size:0.75rem;color:var(--color-text-muted);margin-top:2px;">
+                        Ahorros: ${formatoMoneda.format(coop.total_ahorros)}
                     </div>
                 </div>
             `;
@@ -250,9 +273,8 @@ document.addEventListener('DOMContentLoaded', () => {
             if(!res.ok) throw new Error("Error obteniendo cooperativas");
             const lista = await res.json();
             
-            // Guardar en caché y renderizar Top 5
+            // Guardar en caché
             listaCooperativasCache = lista;
-            renderTop5Cartera(lista);
 
             // Renderizar tabla aplicando filtros actuales
             filtrarCooperativas();
@@ -536,5 +558,129 @@ document.addEventListener('DOMContentLoaded', () => {
     // Iniciar carga de datos
     cargarEstadisticas();
     cargarCooperativas();
+    cargarDashboard();
+
+    // ==========================================
+    // REPORTES GLOBALES
+    // ==========================================
+
+    const fmt = new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', maximumFractionDigits: 0 });
+    const fmtM = v => {
+        const n = parseFloat(v);
+        if (n >= 1_000_000) return `$${(n / 1_000_000).toFixed(1)}M`;
+        if (n >= 1_000) return `$${(n / 1_000).toFixed(0)}K`;
+        return fmt.format(n);
+    };
+
+    async function cargarReportes() {
+        try {
+            const [resumen, cartera, morosidad] = await Promise.all([
+                fetch('/api/superadmin/reportes/resumen').then(r => r.json()),
+                fetch('/api/superadmin/reportes/cartera-mensual').then(r => r.json()),
+                fetch('/api/superadmin/reportes/morosidad').then(r => r.json())
+            ]);
+
+            // --- KPIs ---
+            document.getElementById('rep-cartera-total').textContent    = fmt.format(resumen.cartera_total);
+            document.getElementById('rep-creditos-activos').textContent = `${resumen.creditos_activos} créditos activos`;
+            document.getElementById('rep-cartera-vencida').textContent  = fmt.format(resumen.cartera_vencida);
+            document.getElementById('rep-tasa-mora').textContent        = `${resumen.tasa_morosidad_global_pct}% mora global`;
+            document.getElementById('rep-socios').textContent           = parseInt(resumen.total_socios).toLocaleString('es-CO');
+            document.getElementById('rep-ahorros').textContent          = `Total ahorros: ${fmt.format(resumen.total_ahorros)}`;
+            document.getElementById('rep-cuotas-vencidas').textContent  = parseInt(resumen.cuotas_vencidas_total).toLocaleString('es-CO');
+            document.getElementById('rep-cuotas-total').textContent     = `de ${parseInt(resumen.cuotas_pendientes_total).toLocaleString('es-CO')} cuotas pendientes`;
+
+            // Color dinámico de mora
+            const moraEl = document.getElementById('rep-tasa-mora');
+            const mora = parseFloat(resumen.tasa_morosidad_global_pct);
+            moraEl.style.color = mora >= 10 ? 'var(--color-danger)' : mora >= 5 ? 'var(--color-warning)' : 'var(--color-success)';
+
+            // --- Gráfico: saldo pendiente por mes ---
+            renderBarChart('rep-chart-cartera', cartera, row => ({
+                label: row.mes_label,
+                value: parseFloat(row.saldo_pendiente),
+                shortLabel: fmtM(row.saldo_pendiente),
+                tooltip: `Saldo pendiente: ${fmt.format(row.saldo_pendiente)}`
+            }), 'var(--color-primary)');
+
+            // --- Gráfico: créditos desembolsados por mes ---
+            renderBarChart('rep-chart-creditos', cartera, row => ({
+                label: row.mes_label,
+                value: row.total_creditos,
+                shortLabel: `${row.total_creditos}`,
+                tooltip: `${row.total_creditos} crédito${row.total_creditos !== 1 ? 's' : ''} — ${fmtM(row.monto_desembolsado)} desembolsados`
+            }), 'var(--color-success)');
+
+            // --- Morosidad por cooperativa ---
+            renderMorosidad('rep-morosidad-list', morosidad);
+
+        } catch (err) {
+            console.error('Error cargando reportes:', err);
+        }
+    }
+
+    function renderBarChart(containerId, rows, mapper, color) {
+        const container = document.getElementById(containerId);
+        if (!container) return;
+
+        if (!rows || rows.length === 0) {
+            container.innerHTML = '<div style="text-align:center;width:100%;color:var(--color-text-muted);padding:20px;">Sin datos para el período seleccionado.</div>';
+            return;
+        }
+
+        const items = rows.map(mapper);
+        const maxVal = Math.max(...items.map(i => i.value), 1);
+
+        container.innerHTML = items.map(item => {
+            const pct = Math.max(6, (item.value / maxVal) * 100);
+            return `
+                <div class="bar-wrapper">
+                    <div class="bar" style="height:${pct}%; background:${color};">
+                        <span class="bar-value-label">${item.shortLabel}</span>
+                        <span class="bar-value-tooltip">${item.tooltip}</span>
+                    </div>
+                    <div class="bar-label">${item.label}</div>
+                </div>
+            `;
+        }).join('');
+    }
+
+    function renderMorosidad(containerId, rows) {
+        const container = document.getElementById(containerId);
+        if (!container) return;
+
+        if (!rows || rows.length === 0) {
+            container.innerHTML = '<div style="text-align:center;padding:20px;color:var(--color-text-muted);">Sin cooperativas activas.</div>';
+            return;
+        }
+
+        const maxMora = Math.max(...rows.map(r => parseFloat(r.tasa_morosidad_pct)), 1);
+        const promedio = (rows.reduce((s, r) => s + parseFloat(r.tasa_morosidad_pct), 0) / rows.length).toFixed(1);
+
+        container.innerHTML = rows.map(r => {
+            const pct = parseFloat(r.tasa_morosidad_pct);
+            const barPct = Math.max(2, (pct / maxMora) * 100);
+            const color = pct >= 15 ? 'var(--color-danger)' : pct >= 7 ? 'var(--color-warning)' : 'var(--color-success)';
+            const fillClass = pct >= 15 ? 'danger' : pct >= 7 ? 'warning' : '';
+            return `
+                <div>
+                    <div class="progress-item-header">
+                        <span>${r.nombre_cooperativa}</span>
+                        <strong style="color:${color}">${pct}%</strong>
+                    </div>
+                    <div class="progress-track">
+                        <div class="progress-fill ${fillClass}" style="width:${barPct}%; ${!fillClass ? 'background:var(--color-success);' : ''}"></div>
+                    </div>
+                </div>
+            `;
+        }).join('') + `
+            <div style="margin-top:15px; border-top:1px dashed var(--color-border); padding-top:10px;">
+                <div class="progress-item-header">
+                    <span>Promedio general</span>
+                    <strong>${promedio}%</strong>
+                </div>
+            </div>
+        `;
+    }
 
 });

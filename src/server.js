@@ -1,6 +1,7 @@
 const express = require('express');
 const path = require('path');
 const cors = require('cors');
+const helmet = require('helmet');
 require('dotenv').config();
 
 if (!process.env.JWT_SECRET) {
@@ -9,6 +10,12 @@ if (!process.env.JWT_SECRET) {
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+
+// Cabeceras de seguridad HTTP (protección contra clickjacking, MIME sniffing, oculta X-Powered-By)
+app.use(helmet({
+  contentSecurityPolicy: false,
+  crossOriginEmbedderPolicy: false
+}));
 
 // Middlewares
 app.use(cors());
